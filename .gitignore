@@ -1,0 +1,11 @@
+.DS_Store
+a.out*
+*.sw*
+ref
+cpy
+*.o
+*.a
+*.d
+*.vim
+test*
+tags
