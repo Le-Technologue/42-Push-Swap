@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 13:09:27 by wetieven          #+#    #+#             */
-/*   Updated: 2021/05/23 16:40:23 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/05/24 10:20:14 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ typedef struct s_val {
 typedef struct s_metadata {
 	size_t	qty;
 	t_val	*min;
-	t_val	*median;
+	t_val	*med;
 	t_val	*max;
 }	t_metadata;
 
