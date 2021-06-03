@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/05/22 15:08:25 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/06/03 10:54:27 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ PRGS		=	push_swap #checker
 # ~~~ Folders ~~~ #
 
 DDIR		=	deps/
-ODIR		=	obj/
+ODIR		=	objs/
 LDIR		=	libs/
 SUBDIRS		=	$(ODIR) $(DDIR)
 
@@ -37,9 +37,9 @@ ESRC		=	push_swap.c #checker.c
 
 # ~~~ Folders ~~~ #
 
-HDIR		=	include/
-SDIR		=	$(shell find src -type d)
-LDIR		=	$(shell find libs -type d)
+HDIR		=	incs/
+SDIR		=	$(shell find srcs -type d)
+LDIR		=	$(shell find libs -type d) ## Couldn't we use $(LDIR) here ?
 
 vpath %.h $(HDIR)
 vpath %.c $(SDIR)
