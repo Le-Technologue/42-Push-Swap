@@ -6,9 +6,11 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 13:09:27 by wetieven          #+#    #+#             */
-/*   Updated: 2021/05/24 10:20:14 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/07/21 18:11:05 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 typedef struct s_val {
 	size_t	idx;
