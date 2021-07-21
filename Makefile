@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/06/03 10:54:27 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/07/21 17:42:39 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,36 +17,48 @@
 LIBS		=	psw.a
 PRGS		=	push_swap #checker
 
-# ~~~ Folders ~~~ #
+DEPS		=	$(SRCS:%.c=$(DDIR)%.d)
+OBJS		=	$(SRCS:%.c=$(ODIR)%.o)
+LIBS		=	$(shell find $(LDIR) -name '*.a' -exec basename {} ';')
+
+### ~~~ Folders ~~~ ###
 
 DDIR		=	deps/
 ODIR		=	objs/
 LDIR		=	libs/
-SUBDIRS		=	$(ODIR) $(DDIR)
 
-vpath %.d $(DDIR)
-vpath %.o $(ODIR)
-vpath %.a $(LDIR)
+## ~~~ Placeholders ~~~ ##
+
+SUBDIRS		=	$(ODIR) $(DDIR)
+LDIR		:=	$(shell find $(LDIR) -mindepth 1 -maxdepth 1 -type d)
 
 # =============== #
 # === SOURCES === #
 # =============== #
 
+INCS		=	$(shell find $(HDIR) -name '*.h')
 SRCS		=	.c
 ESRC		=	push_swap.c #checker.c
 
-# ~~~ Folders ~~~ #
+### ~~~ Folders ~~~ ###
 
 HDIR		=	incs/
+SDIR		=	srcs/
+
+## ~~ Placeholders ~~ ##
+
+HDIR		:=	$(LDIR)/incs # ~ Library headers folders
 SDIR		=	$(shell find srcs -type d)
-LDIR		=	$(shell find libs -type d) ## Couldn't we use $(LDIR) here ?
 
 vpath %.h $(HDIR)
 vpath %.c $(SDIR)
 
+vpath %.d $(DDIR)
+vpath %.o $(ODIR)
+vpath %.a $(LDIR)
+
 # ~~~ Placeholders ~~~ #
 
-INCS		=	$(shell find $(HDIR) -name '*.h')
 DEPS		=	$(SRCS:%.c=$(DDIR)%.d)
 OBJS		=	$(SRCS:%.c=$(ODIR)%.o)
 
@@ -55,11 +67,16 @@ OBJS		=	$(SRCS:%.c=$(ODIR)%.o)
 # ====================== #
 
 CC			=	gcc
-CFLGS		=	-Wall -Wextra -Werror -O3 -fno-builtin
-DFLGS		=	-MT $@ -MMD -MP -MF $(DDIR)$*.d
+
+WRNFL		=	-Wall -Wextra -Werror
+OPTFL		=	-O3 -march=native #-fno-builtin
+DBGFL		=	-g
+CFLGS		=	$(WRNFL) $(OPTFL)#$(DBGFL)
+DEPFL		=	-MT $@ -MMD -MP -MF $(DDIR)$*.d
 
 CINCS		=	$(addprefix -I, $(HDIR))
-CLIBS		=	$(addprefix -L, $(LDIR))
+CLDIR		=	$(addprefix -L, $(LDIR))
+CLIBS		=	$(LIBS:lib%.a=-l%)
 
 # ============= #
 # === RULES === #
@@ -67,7 +84,7 @@ CLIBS		=	$(addprefix -L, $(LDIR))
 
 # ~~~ Default ~~~ #
 
-all			:	$(SUBDIRS) $(LIBS) $(PRGS)
+all			:	make_libs $(SUBDIRS) $(OBJS) #executables
 
 $(SUBDIRS)	:
 				mkdir -p $(DDIR)
@@ -77,7 +94,12 @@ $(SUBDIRS)	:
 # ~~~ Compiling  ~~~ #
 
 $(ODIR)%.o	:	%.c $(DDIR)%.d
-				$(CC) $(CFLGS) $(CINCS) $(DFLGS) -c $< -o $@
+				$(CC) $(CFLGS) $(CINCS) $(DEPFL) -c $< -o $@
+
+$(LIBS)		:	make_libs
+
+make_libs	:
+				$(MAKE) -C $(LDIR)
 
 $(PRGS)		:	$(LIBS) $(ESRC)
 				$(CC) $(CFLGS) $(CINCS) $(LIBS) $(ESRC) -o $(PRGS)
@@ -98,7 +120,7 @@ fclean		:	clean
 
 re			:	fclean all
 
-.PHONY : all exec bonus clean fclean re
+.PHONY : all make_libs bonus clean fclean re
 
 $(DEPS)		:
 include $(wildcard $(DEPS))
