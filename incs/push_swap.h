@@ -1,42 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   data.h                                             :+:      :+:    :+:   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/23 13:09:27 by wetieven          #+#    #+#             */
-/*   Updated: 2021/07/22 15:03:12 by wetieven         ###   ########lyon.fr   */
+/*   Created: 2021/07/22 10:43:12 by wetieven          #+#    #+#             */
+/*   Updated: 2021/07/22 14:55:31 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DATA_H
-# define DATA_H
+#ifndef PUSH_SWAP_H
+# define PUSH_SWAP_H
 
-#include "libft.h"
-
-typedef struct s_val {
-	size_t	idx;
-	int		val;
-}	t_val;
-
-typedef struct s_metadata {
-	size_t	qty;
-	t_val	*min;
-	t_val	*med;
-	t_val	*max;
-}	t_metadata;
-
-typedef struct s_stck {
-	t_val	*stk;
-	size_t	top;
-}	t_stck;
-
-typedef struct s_game {
-	t_metadata	info;
-	t_stck		a;
-	t_stck		b;
-	t_val		*set;
-}	t_game;
+typedef enum e_fid {
+	main,
+	arg_parse,
+	game_init,
+}	t_fid;
 
 #endif
