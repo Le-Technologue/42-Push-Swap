@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/07/21 17:42:39 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/07/31 10:55:58 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,41 +14,40 @@
 # === TARGETS === #
 # =============== #
 
-LIBS		=	psw.a
-PRGS		=	push_swap #checker
+LIB			=	libpsw.a
 
 DEPS		=	$(SRCS:%.c=$(DDIR)%.d)
 OBJS		=	$(SRCS:%.c=$(ODIR)%.o)
 LIBS		=	$(shell find $(LDIR) -name '*.a' -exec basename {} ';')
 
+EXEC		=	push_swap#checker
+
+EOBJ		=	$(EXEC:%=$(ODIR)%.o)
+
 ### ~~~ Folders ~~~ ###
 
 DDIR		=	deps/
 ODIR		=	objs/
+#ODIR		:=	$(SDIR:$(SDIR)=$(ODIR))
 LDIR		=	libs/
-
-## ~~~ Placeholders ~~~ ##
+LDIR		:=	$(shell find $(LDIR) -mindepth 1 -maxdepth 1 -type d)
 
 SUBDIRS		=	$(ODIR) $(DDIR)
-LDIR		:=	$(shell find $(LDIR) -mindepth 1 -maxdepth 1 -type d)
 
 # =============== #
 # === SOURCES === #
 # =============== #
 
 INCS		=	$(shell find $(HDIR) -name '*.h')
-SRCS		=	.c
-ESRC		=	push_swap.c #checker.c
+SRCS		=	algo.c push_swap.c
+
+ESRC		=	$(EXEC:%=$(SRCS)%.c)
 
 ### ~~~ Folders ~~~ ###
 
-HDIR		=	incs/
+HDIR		=	incs/ $(LDIR)/incs
 SDIR		=	srcs/
-
-## ~~ Placeholders ~~ ##
-
-HDIR		:=	$(LDIR)/incs # ~ Library headers folders
-SDIR		=	$(shell find srcs -type d)
+SDIR		:=	$(shell find $(SDIR) -mindepth 1 -maxdepth 1 -type d)
 
 vpath %.h $(HDIR)
 vpath %.c $(SDIR)
@@ -56,11 +55,6 @@ vpath %.c $(SDIR)
 vpath %.d $(DDIR)
 vpath %.o $(ODIR)
 vpath %.a $(LDIR)
-
-# ~~~ Placeholders ~~~ #
-
-DEPS		=	$(SRCS:%.c=$(DDIR)%.d)
-OBJS		=	$(SRCS:%.c=$(ODIR)%.o)
 
 # ====================== #
 # === COMPILER SETUP === #
@@ -84,43 +78,49 @@ CLIBS		=	$(LIBS:lib%.a=-l%)
 
 # ~~~ Default ~~~ #
 
-all			:	make_libs $(SUBDIRS) $(OBJS) #executables
+all			:	make_libs $(SUBDIRS) $(OBJS) $(EXEC)
 
 $(SUBDIRS)	:
-				mkdir -p $(DDIR)
-				mkdir -p $(ODIR)
-				mkdir -p $(LDIR)
+				mkdir -p $(SUBDIRS)
 
-# ~~~ Compiling  ~~~ #
+# ~~~ Objects Compiling  ~~~ #
 
 $(ODIR)%.o	:	%.c $(DDIR)%.d
 				$(CC) $(CFLGS) $(CINCS) $(DEPFL) -c $< -o $@
+
+# ~~~ Libs compiling and archiving ~~~ #
+
+$(LIB)		:	$(OBJS)
+				ar rcs $(LDIR)$(LIBS) $(OBJS)
 
 $(LIBS)		:	make_libs
 
 make_libs	:
 				$(MAKE) -C $(LDIR)
 
-$(PRGS)		:	$(LIBS) $(ESRC)
-				$(CC) $(CFLGS) $(CINCS) $(LIBS) $(ESRC) -o $(PRGS)
+# ~~~ Executables Compiling  ~~~ #
 
-# ~~~ Lib archiving ~~~ #
-
-$(LDIR)$(LIBS)	:	$(OBJS)
-					ar rcs $(LIBS) $(OBJS)
+$(EXEC)		:	$(EOBJ)
+				$(CC) $< -o $@ $(CLDIR) $(CLIBS)
 
 # ~~~ Actions ~~~ #
 
+norm		:
+				norminette incs srcs
+
 clean		:
 				rm -rf $(ODIR)
+				rm -rf $(DDIR)
+#				$(MAKE) -C $(LDIR) clean
 
 fclean		:	clean
-				rm -rf $(DDIR)
-				$(RM) $(LIBS)
+#				$(MAKE) -C $(LDIR) fclean
+#				$(RM) $(LIBS)
+				$(RM) $(EXEC)
 
 re			:	fclean all
 
-.PHONY : all make_libs bonus clean fclean re
+.PHONY : all make_libs norm bonus clean fclean re
 
 $(DEPS)		:
 include $(wildcard $(DEPS))

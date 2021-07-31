@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 13:09:27 by wetieven          #+#    #+#             */
-/*   Updated: 2021/07/22 15:03:12 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/07/28 15:30:02 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct s_metadata {
 }	t_metadata;
 
 typedef struct s_stck {
-	t_val	*stk;
+	t_val	**stk;
 	size_t	top;
 }	t_stck;
 
