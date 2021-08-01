@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/08/01 21:32:34 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/08/01 22:17:33 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,11 +18,29 @@
 EXEC		=	push_swap#checker
 #BONUS		=	checker
 
+## ~~ Folders ~~ ##
+
+DDIR		=	deps/
+ODIR		=	objs/
+
 # =============== #
 # === SOURCES === #
 # =============== #
 
-SRCS		=	algo.c push_swap.c
+SRCS		=	push_swap.c \
+				algo.c 
+
+## ~~ Folders ~~ ##
+
+HDIR		=	incs/ $(LDIR)/incs
+SDIR		=	srcs/
+
+# ================= #
+# === RESOURCES === #
+# ================= #
+
+LDIR		=	libs/
+RSRC		=	libs/
 
 # ==================== #
 # === PLACEHOLDERS === #
@@ -38,27 +56,22 @@ EOBJ		=	$(EXEC:%=$(ODIR)%.o)
 
 ## ~~ Folders ~~ ##
 
-DDIR		=	deps/
-ODIR		=	objs/
-#ODIR		:=	$(SDIR:$(SDIR)=$(ODIR))
-LDIR		=	libs/
 LDIR		:=	$(shell find $(LDIR) -mindepth 1 -maxdepth 1 -type d)
 
+#SUBDIRS		=	$(SDIR:srcs/%=$(ODIR)%) $(SDIR:srcs/%=$(DDIR)%)
 SUBDIRS		=	$(ODIR) $(DDIR)
 
 ### ~~~ SOURCES ~~~ ###
 
 INCS		=	$(shell find $(HDIR) -name '*.h')
+#SRCS		:=	$(realpath $(SRCS))
 
 ESRC		=	$(EXEC:%=$(SRCS)%.c)
 
 ## ~~ Folders ~~ ##
 
-HDIR		=	incs/ $(LDIR)/incs
-SDIR		=	srcs/
 SDIR		:=	$(shell find $(SDIR) -mindepth 1 -maxdepth 1 -type d)
 
-RSRC		=	libs/
 SUBMAKES	=	$(shell find $(RSRC) -mindepth 1 -maxdepth 1 -type d)
 
 vpath %.d $(DDIR)
