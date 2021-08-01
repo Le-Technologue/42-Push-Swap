@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/07/31 10:55:58 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/08/01 21:32:34 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,17 +14,29 @@
 # === TARGETS === #
 # =============== #
 
-LIB			=	libpsw.a
+#LIB			=	libpsw.a
+EXEC		=	push_swap#checker
+#BONUS		=	checker
+
+# =============== #
+# === SOURCES === #
+# =============== #
+
+SRCS		=	algo.c push_swap.c
+
+# ==================== #
+# === PLACEHOLDERS === #
+# ==================== #
+
+### ~~~ TARGETS ~~~ ###
 
 DEPS		=	$(SRCS:%.c=$(DDIR)%.d)
 OBJS		=	$(SRCS:%.c=$(ODIR)%.o)
 LIBS		=	$(shell find $(LDIR) -name '*.a' -exec basename {} ';')
 
-EXEC		=	push_swap#checker
-
 EOBJ		=	$(EXEC:%=$(ODIR)%.o)
 
-### ~~~ Folders ~~~ ###
+## ~~ Folders ~~ ##
 
 DDIR		=	deps/
 ODIR		=	objs/
@@ -34,27 +46,27 @@ LDIR		:=	$(shell find $(LDIR) -mindepth 1 -maxdepth 1 -type d)
 
 SUBDIRS		=	$(ODIR) $(DDIR)
 
-# =============== #
-# === SOURCES === #
-# =============== #
+### ~~~ SOURCES ~~~ ###
 
 INCS		=	$(shell find $(HDIR) -name '*.h')
-SRCS		=	algo.c push_swap.c
 
 ESRC		=	$(EXEC:%=$(SRCS)%.c)
 
-### ~~~ Folders ~~~ ###
+## ~~ Folders ~~ ##
 
 HDIR		=	incs/ $(LDIR)/incs
 SDIR		=	srcs/
 SDIR		:=	$(shell find $(SDIR) -mindepth 1 -maxdepth 1 -type d)
 
-vpath %.h $(HDIR)
-vpath %.c $(SDIR)
+RSRC		=	libs/
+SUBMAKES	=	$(shell find $(RSRC) -mindepth 1 -maxdepth 1 -type d)
 
 vpath %.d $(DDIR)
 vpath %.o $(ODIR)
 vpath %.a $(LDIR)
+
+vpath %.h $(HDIR)
+vpath %.c $(SDIR)
 
 # ====================== #
 # === COMPILER SETUP === #
@@ -88,15 +100,15 @@ $(SUBDIRS)	:
 $(ODIR)%.o	:	%.c $(DDIR)%.d
 				$(CC) $(CFLGS) $(CINCS) $(DEPFL) -c $< -o $@
 
-# ~~~ Libs compiling and archiving ~~~ #
+# ~~~ Library archiving ~~~ #
 
 $(LIB)		:	$(OBJS)
-				ar rcs $(LDIR)$(LIBS) $(OBJS)
+				ar rcs $(LDIR)$(LIB) $(OBJS)
 
 $(LIBS)		:	make_libs
 
 make_libs	:
-				$(MAKE) -C $(LDIR)
+				$(MAKE) -C $(SUBMAKES)
 
 # ~~~ Executables Compiling  ~~~ #
 
