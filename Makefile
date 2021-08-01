@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/08/01 22:22:34 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/08/01 22:54:39 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -125,8 +125,8 @@ make_libs	:
 
 # ~~~ Executables Compiling  ~~~ #
 
-$(EXEC)		:	$(OBJS)
-				$(CC) $^ -o $@ $(CLDIR) $(CLIBS)
+$(EXEC)		:	$(EOBJ) | $(filter-out $(EOBJ),$(OBJS))
+				$(CC) $< $| -o $@ $(CLDIR) $(CLIBS)
 
 # ~~~ Actions ~~~ #
 
