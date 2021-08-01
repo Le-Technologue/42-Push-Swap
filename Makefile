@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/08/01 22:17:33 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/08/01 22:22:34 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,8 @@
 # === TARGETS === #
 # =============== #
 
-#LIB			=	libpsw.a
-EXEC		=	push_swap#checker
+#LIB		=	libpsw.a
+EXEC		=	push_swap
 #BONUS		=	checker
 
 ## ~~ Folders ~~ ##
@@ -52,7 +52,7 @@ DEPS		=	$(SRCS:%.c=$(DDIR)%.d)
 OBJS		=	$(SRCS:%.c=$(ODIR)%.o)
 LIBS		=	$(shell find $(LDIR) -name '*.a' -exec basename {} ';')
 
-EOBJ		=	$(EXEC:%=$(ODIR)%.o)
+#EOBJ		=	$(EXEC:%=$(ODIR)%.o)
 
 ## ~~ Folders ~~ ##
 
@@ -125,8 +125,8 @@ make_libs	:
 
 # ~~~ Executables Compiling  ~~~ #
 
-$(EXEC)		:	$(EOBJ)
-				$(CC) $< -o $@ $(CLDIR) $(CLIBS)
+$(EXEC)		:	$(OBJS)
+				$(CC) $^ -o $@ $(CLDIR) $(CLIBS)
 
 # ~~~ Actions ~~~ #
 
@@ -134,8 +134,7 @@ norm		:
 				norminette incs srcs
 
 clean		:
-				rm -rf $(ODIR)
-				rm -rf $(DDIR)
+				rm -rf $(SUBDIRS)
 #				$(MAKE) -C $(LDIR) clean
 
 fclean		:	clean
