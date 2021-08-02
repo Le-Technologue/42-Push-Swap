@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/08/02 08:50:25 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/08/02 22:16:53 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ ODIR		=	objs/
 # =============== #
 
 SRCS		=	push_swap.c \
-				algo.c 
+				parsing.c 
 
 ## ~~ Folders ~~ ##
 
@@ -91,7 +91,7 @@ CC			=	gcc
 WRNFL		=	-Wall -Wextra -Werror
 OPTFL		=	-O3 -march=native #-fno-builtin
 DBGFL		=	-g
-CFLGS		=	$(WRNFL) $(OPTFL)#$(DBGFL)
+CFLGS		=	$(WRNFL) $(DBGFL)#$(OPTFL)
 DEPFL		=	-MT $@ -MMD -MP -MF $(DDIR)$*.d
 
 CINCS		=	$(addprefix -I, $(HDIR))
@@ -111,7 +111,7 @@ $(SUBDIRS)	:
 
 # ~~~ Objects Compiling  ~~~ #
 
-$(ODIR)%.o	:	%.c $(DDIR)%.d
+$(ODIR)%.o	:	%.c $(DDIR)%.d#$(LIBS) How to trigger a recompilation if the libft is modified ? Check older, simpler makefiles
 				$(CC) $(CFLGS) $(CINCS) $(DEPFL) -c $< -o $@
 
 # ~~~ Library archiving ~~~ #
@@ -136,10 +136,10 @@ norm		:
 
 clean		:
 				rm -rf $(SUBDIRS)
-#				$(MAKE) -C $(LDIR) clean
+				$(MAKE) -C $(LDIR) clean
 
 fclean		:	clean
-#				$(MAKE) -C $(LDIR) fclean
+				$(MAKE) -C $(LDIR) fclean
 #				$(RM) $(LIBS)
 				$(RM) $(EXEC)
 
