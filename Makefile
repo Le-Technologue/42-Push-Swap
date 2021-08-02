@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/08/01 22:54:39 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/08/02 08:50:25 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,8 @@ DEPS		=	$(SRCS:%.c=$(DDIR)%.d)
 OBJS		=	$(SRCS:%.c=$(ODIR)%.o)
 LIBS		=	$(shell find $(LDIR) -name '*.a' -exec basename {} ';')
 
-#EOBJ		=	$(EXEC:%=$(ODIR)%.o)
+EOBJ		=	$(EXEC:%=$(ODIR)%.o)
+SOBJ		=	$(filter-out $(EOBJ),$(OBJS))
 
 ## ~~ Folders ~~ ##
 
@@ -125,7 +126,7 @@ make_libs	:
 
 # ~~~ Executables Compiling  ~~~ #
 
-$(EXEC)		:	$(EOBJ) | $(filter-out $(EOBJ),$(OBJS))
+$(EXEC)		:	$(EOBJ) | $(SOBJ)
 				$(CC) $< $| -o $@ $(CLDIR) $(CLIBS)
 
 # ~~~ Actions ~~~ #
