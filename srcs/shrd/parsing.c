@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 21:40:25 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/02 22:14:05 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/03 19:23:45 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,19 @@
 #include "libft.h"
 #include "data.h"
 
-t_error	assign_keys(t_val **set, size_t range)
+static t_error	assign_keys(t_val **set, size_t range)
 {
 	size_t	i;
 
 	i = 0;
 	while (i < range - 1)
 	{
-		if ((*set)[i].val == (*set)[i + 1].val)
+		if (set[i]->val == set[i + 1]->val)
 			return (ERROR);
-		(*set)[i].key = i;
+		set[i]->key = i;
 		i++;
 	}
-	i++;
-	(*set)[i].key = i;
+	set[i]->key = i;
 	return (CLEAR);
 }
 
@@ -83,5 +82,29 @@ t_error	psw_mrgsort(t_val **set, const size_t start, const size_t end)
 	}
 	if (end + 1 == buf_size && start == 0)
 		free(buf);
+	return (CLEAR);
+}
+
+t_error	game_setup(t_game *game)
+{
+	size_t	i;
+	t_val	**wrk_set;
+
+	wrk_set = malloc(sizeof(t_val **) * game->info.qty);
+	if (!wrk_set)
+		return (MEM_ALLOC);
+	i = 0;
+	while (i < game->info.qty)
+	{
+		wrk_set[i] = &game->set[i];
+		i++;
+	}
+	psw_mrgsort(wrk_set, 0, game->info.qty - 1);
+	if (assign_keys(wrk_set, game->info.qty))
+		return (PARSE);
+	game->info.min = wrk_set[0];
+	game->info.med = wrk_set[game->info.qty / 2];
+	game->info.max = wrk_set[game->info.qty - 1];
+	free(wrk_set);
 	return (CLEAR);
 }

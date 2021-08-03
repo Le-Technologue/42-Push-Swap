@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/02 22:14:29 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/03 10:08:44 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 {
 	if (cause == MEM_ALLOC)
 		ft_putendl_fd("Memory is lacking, please close Google Chrome", 1);
-	if (function == ARG_PARSE)
+	if (function == PSW_PARSING)
 		if (cause == PARSE)
-			ft_putendl_fd("Arguments should belong to the int set and exclude any duplicates", 1);
-	if (function == GAME_INIT)
+			ft_putendl_fd("Arguments should belong to the int set and exclude duplicates", 1);
+	if (function == PSW_GAME)
 	{	
 		free(game->a.stk);
 		free(game->b.stk);
@@ -33,7 +33,7 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 	return (CLEAR);
 }
 
-t_error	game_init(t_game *game)
+t_error	psw_game(t_game *game)
 {
 	size_t	i;
 
@@ -62,12 +62,12 @@ t_error	game_init(t_game *game)
 	dll_push(game->a->top, new_dln(game->val[i].val));
 */
 
-t_error	arg_parse(t_game *game, char **av)
+t_error	psw_parsing(t_game *game, char **av)
 {
 	size_t	i;
 	long	buf;
 	char	*ptr;
-	t_val	**wrk_set;
+	t_error	outcome;
 
 	i = 0;
 	while (i < game->info.qty)
@@ -81,17 +81,8 @@ t_error	arg_parse(t_game *game, char **av)
 		game->set[i].val = buf;
 		i++;
 	}
-	wrk_set = malloc(sizeof(t_val **) * game->info.qty);
-	if (!wrk_set)
-		return (MEM_ALLOC);
-	i = -1;
-	while (++i < game->info.qty)
-		wrk_set[i] = &game->set[i];
-	psw_mrgsort(wrk_set, 0, game->info.qty - 1);
-	if (assign_keys(wrk_set, game->info.qty))
-		return (PARSE);
-// Then produce according metadata, free the wrkset
-	return (CLEAR);
+	outcome = game_setup(game);
+	return (outcome);
 }
 
 int main(int ac, char **av)
@@ -108,10 +99,8 @@ int main(int ac, char **av)
 	game.set = malloc(sizeof(t_val) * game.info.qty);
 	if (!game.set)
 		return (psw_shutdown(&game, MEM_ALLOC, MAIN));
-	if (arg_parse(&game, av) != CLEAR)
-		return (psw_shutdown(&game, PARSE, ARG_PARSE));
-	error = game_init(&game);
+	error = psw_parsing(&game, av);
 	if (error)
-		return (psw_shutdown(&game, ERROR, GAME_INIT));
-	return (psw_shutdown(&game, CLEAR, GAME_INIT));
+		return (psw_shutdown(&game, error, PSW_PARSING));
+	return (psw_shutdown(&game, psw_game(&game), PSW_GAME));
 }

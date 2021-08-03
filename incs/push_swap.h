@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/22 10:43:12 by wetieven          #+#    #+#             */
-/*   Updated: 2021/07/28 11:11:20 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/03 10:05:59 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 typedef enum e_fid {
 	MAIN,
-	ARG_PARSE,
-	GAME_INIT,
+	PSW_PARSING,
+	PSW_GAME,
 }	t_fid;
 
 #endif
