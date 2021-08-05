@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/04 16:28:27 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/05 14:54:07 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 	return (CLEAR);
 }
 
+void	psw_display(t_game *game)
+{
+
+}
+
 t_error	psw_game(t_game *game)
 {
 	size_t	i;
@@ -48,8 +53,9 @@ t_error	psw_game(t_game *game)
 		game->a.stk[i] = game->set[i];
 		i++;
 	}
-	game->a.top = game->info.qty;
+	game->a.top = game->info.qty - 1;
 	game->b.top = 0;
+	psw_solver(game);
 	return (CLEAR);
 }
 /*	while (game->info.qty)
@@ -101,5 +107,9 @@ int main(int ac, char **av)
 	error = psw_parsing(&game, av);
 	if (error)
 		return (psw_shutdown(&game, error, PSW_PARSING));
-	return (psw_shutdown(&game, psw_game(&game), PSW_GAME));
+	error = psw_game(&game);
+	if (error)
+		return (psw_shutdown(&game, error, PSW_GAME));
+	//Display solution
+	return ();
 }
