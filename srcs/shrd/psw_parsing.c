@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   psw_parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/02 21:40:25 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/03 19:23:45 by wetieven         ###   ########lyon.fr   */
+/*   Created: 2021/08/04 16:18:55 by wetieven          #+#    #+#             */
+/*   Updated: 2021/08/04 16:28:59 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "libft.h"
-#include "data.h"
+#include "push_swap.h"
 
 static t_error	assign_keys(t_val **set, size_t range)
 {

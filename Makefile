@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/08/02 22:16:53 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/08/04 16:28:41 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ ODIR		=	objs/
 # =============== #
 
 SRCS		=	push_swap.c \
-				parsing.c 
+				psw_parsing.c 
 
 ## ~~ Folders ~~ ##
 
@@ -135,13 +135,14 @@ norm		:
 				norminette incs srcs
 
 clean		:
-				rm -rf $(SUBDIRS)
+				rm -rf $(ODIR)
 				$(MAKE) -C $(LDIR) clean
 
 fclean		:	clean
+				rm -rf $(DDIR)
 				$(MAKE) -C $(LDIR) fclean
-#				$(RM) $(LIBS)
 				$(RM) $(EXEC)
+#				$(RM) $(LIBS)
 
 re			:	fclean all
 

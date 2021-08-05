@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/03 10:08:44 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/04 16:28:27 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 #include <limits.h>
 #include "libft.h"
 #include "push_swap.h"
-#include "data.h"
-#include "parsing.h"
+#include "psw_parsing.h"
 
 t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 {
@@ -46,7 +45,7 @@ t_error	psw_game(t_game *game)
 	i = 0;
 	while (i < game->info.qty)
 	{
-		game->a.stk[i] = &game->set[i];
+		game->a.stk[i] = game->set[i];
 		i++;
 	}
 	game->a.top = game->info.qty;

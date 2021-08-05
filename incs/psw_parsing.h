@@ -1,42 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   data.h                                             :+:      :+:    :+:   */
+/*   psw_parsing.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/23 13:09:27 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/02 22:07:20 by wetieven         ###   ########lyon.fr   */
+/*   Created: 2021/08/04 16:21:57 by wetieven          #+#    #+#             */
+/*   Updated: 2021/08/04 16:22:06 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DATA_H
-# define DATA_H
+#ifndef PARSING_H
+# define PARSING_H
 
-# include "libft.h"
-
-typedef struct s_val {
-	size_t	key;
-	int		val;
-}	t_val;
-
-typedef struct s_metadata {
-	size_t	qty;
-	t_val	*min;
-	t_val	*med;
-	t_val	*max;
-}	t_metadata;
-
-typedef struct s_stck {
-	t_val	**stk;
-	size_t	top;
-}	t_stck;
-
-typedef struct s_game {
-	t_metadata	info;
-	t_stck		a;
-	t_stck		b;
-	t_val		*set;
-}	t_game;
+t_error	game_setup(t_game *game);
+t_error	psw_mrgsort(t_val **set, const size_t start, const size_t end);
+t_error	psw_chkdupl(t_val **set, size_t size);
+t_error	assign_keys(t_val **set, size_t range);
 
 #endif

@@ -1,23 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   inst.c                                             :+:      :+:    :+:   */
+/*   psw_inst.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/23 13:04:02 by wetieven          #+#    #+#             */
-/*   Updated: 2021/07/21 18:36:28 by wetieven         ###   ########lyon.fr   */
+/*   Created: 2021/08/04 17:01:34 by wetieven          #+#    #+#             */
+/*   Updated: 2021/08/04 18:59:36 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-sa // swap top of stack a
-sb // swap top of stack b
-ss // swap both stacks tops
-pa // push top of b to a
-pb // push a summit on top of b
-ra // queue top of a - shift values up the stack
-rb
-rr
-rra // push bottom of a - shift values down the stack
-rrb
-rrr
+#ifndef PSW_INST_H
+# define PSW_INST_H
+
+typedef	void (*t_inst)(t_game *game);
+
+typedef struct s_inst_swtch {
+	t_inst	inst;
+	char	*call;
+} t_inst_swtch;
+
+typedef enum e_inst_id {
+	SA,
+	SB,
+	SS,
+	PA,
+	PB,
+	RA,
+	RB,
+	RR,
+	RRA,
+	RRB,
+	RRR,
+	NaI
+} t_inst_id;
+
+typedef enum e_swb_mode {
+	SOLVER,
+	CHECKER,
+} t_swb_mode;
+
+#endif
