@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 17:01:34 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/06 09:33:34 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/06 19:04:30 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef enum e_inst_id {
 	RRA,
 	RRB,
 	RRR,
-	NaI
+	END
 } t_inst_id;
 
 t_inst	switchboard(char *inst_call);

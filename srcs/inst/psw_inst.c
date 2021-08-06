@@ -6,14 +6,14 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:43:03 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/06 09:43:10 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/06 19:03:34 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 #include "psw_inst.h"
 
-t_inst	switchboard(char *inst_call)
+t_inst_swtch	*switchboard()
 {
 	static t_inst_swtch	inst_set[] = {
 	[SA] = {.inst = &sa, .call = "sa"},
@@ -27,8 +27,14 @@ t_inst	switchboard(char *inst_call)
 	[RRA] = {.inst = &rra, .call = "rra"},
 	[RRB] = {.inst = &rrb, .call = "rrb"},
 	[RRR] = {.inst = &rrr, .call = "rrr"},
-	[NaI] = {.inst = NULL}
+	[END] = {.inst = NULL}
 	};
+	
+	return (inst_set);
+}
+
+t_inst		fetch_inst(t_inst_swtch *inst_set, char *inst_call)
+{
 	t_inst_id		slot;
 
 	slot = 0;

@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/22 10:43:12 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/06 09:53:24 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/06 17:49:39 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 # define PUSH_SWAP_H
 
 typedef enum e_fid {
-	MAIN,
+	MAIN_START,
 	PSW_PARSING,
 	PSW_GAME,
+	MAIN_END
 }	t_fid;
 
 typedef struct s_val {

@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/06 10:43:31 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/06 18:31:35 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,17 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 	if (function == PSW_PARSING)
 		if (cause == PARSE)
 			ft_putendl_fd("Arguments should belong to the int set and exclude duplicates", 1);
-	if (function == PSW_GAME)
+	if (function >= PSW_GAME)
 	{	
-		free(game->a.stk);
-		free(game->b.stk);
+		if (game->a.stk)
+			free(game->a.stk);
+		if (game->b.stk)
+			free(game->b.stk);
+		if (game->cue)
+			vctr_exit(game->cue);
 	}
 	free(game->set);
 	return (CLEAR);
-}
-
-void	psw_display(t_game *game)
-{
-
 }
 
 t_error	psw_game(t_game *game)
@@ -47,7 +46,7 @@ t_error	psw_game(t_game *game)
 	game->b.stk = malloc(sizeof(t_val *) * game->info.qty);
 	if (!game->b.stk)
 		return (MEM_ALLOC);
-	if (vctr_init(&game->cue, sizeof(), 100))
+	if (vctr_init(&game->cue, sizeof(char), 512))
 		return (MEM_ALLOC);
 	i = 0;
 	while (i < game->info.qty)
@@ -105,13 +104,13 @@ int main(int ac, char **av)
 	game.info.qty = ac - 1;
 	game.set = malloc(sizeof(t_val) * game.info.qty);
 	if (!game.set)
-		return (psw_shutdown(&game, MEM_ALLOC, MAIN));
+		return (psw_shutdown(&game, MEM_ALLOC, MAIN_START));
 	error = psw_parsing(&game, av);
 	if (error)
 		return (psw_shutdown(&game, error, PSW_PARSING));
 	error = psw_game(&game);
 	if (error)
 		return (psw_shutdown(&game, error, PSW_GAME));
-	//Display solution
-	return ();
+	write(1, &game.cue->data, game.cue->entries);
+	return (psw_shutdown(&game, CLEAR, MAIN_END));
 }
