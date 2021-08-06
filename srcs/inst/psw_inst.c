@@ -6,15 +6,12 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:43:03 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/05 15:25:58 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/06 09:43:10 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-#include "psw_push.h"
-#include "psw_swap.h"
-#include "psw_rotate.h"
-#include "psw_rev_rotate.h"
+#include "psw_inst.h"
 
 t_inst	switchboard(char *inst_call)
 {

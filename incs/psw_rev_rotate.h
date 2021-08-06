@@ -1,27 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   psw_push.c                                         :+:      :+:    :+:   */
+/*   psw_rev_rotate.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/05 14:45:42 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/05 14:47:13 by wetieven         ###   ########lyon.fr   */
+/*   Created: 2021/08/06 09:19:59 by wetieven          #+#    #+#             */
+/*   Updated: 2021/08/06 09:20:54 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-// push top of b to a
-void	pa(t_game *game)
-{
-	game->a.top++;
-	game->a.stk[game->a.top] = game->b.stk[game->b.top];
-	game->b.top--;
-}
+#ifndef PSW_REV_ROTATE_H
+# define PSW_REV_ROTATE_H
 
-// push a summit on top of b
-void	pb(t_game *game)
-{
-	game->b.top++;
-	game->b.stk[game->b.top] = game->a.stk[game->a.top];
-	game->a.top--;
-}
+void	rra(t_game *game);
+void	rrb(t_game *game);
+void	rrr(t_game *game);
+
+#endif

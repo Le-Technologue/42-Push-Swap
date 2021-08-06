@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/05 14:54:07 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/06 10:43:31 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ t_error	psw_game(t_game *game)
 	game->b.stk = malloc(sizeof(t_val *) * game->info.qty);
 	if (!game->b.stk)
 		return (MEM_ALLOC);
+	if (vctr_init(&game->cue, sizeof(), 100))
+		return (MEM_ALLOC);
 	i = 0;
 	while (i < game->info.qty)
 	{
@@ -83,7 +85,7 @@ t_error	psw_parsing(t_game *game, char **av)
 		buf = ptr_atol_base(&ptr, "0123456789");
 		if (*ptr != '\0' || INT_MIN > buf || buf > INT_MAX)
 			return (PARSE);
-		game->set[i].val = buf;
+		game->set[game->info.qty - 1 - i].val = buf;
 		i++;
 	}
 	outcome = game_setup(game);
