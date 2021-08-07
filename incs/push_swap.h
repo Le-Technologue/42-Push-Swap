@@ -6,12 +6,15 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/22 10:43:12 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/06 17:49:39 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/07 13:41:59 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
+
+#include <stdlib.h>
+#include "libft.h"
 
 typedef enum e_fid {
 	MAIN_START,

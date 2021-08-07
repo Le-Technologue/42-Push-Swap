@@ -6,13 +6,11 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/06 18:31:35 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/07 14:09:28 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include <limits.h>
-#include "libft.h"
 #include "push_swap.h"
 #include "psw_parsing.h"
 
@@ -56,7 +54,7 @@ t_error	psw_game(t_game *game)
 	}
 	game->a.top = game->info.qty - 1;
 	game->b.top = 0;
-	psw_solver(game);
+//	psw_solver(game);
 	return (CLEAR);
 }
 /*	while (game->info.qty)

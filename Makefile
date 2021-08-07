@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/08/04 16:28:41 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/08/07 13:58:12 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,12 @@ ODIR		=	objs/
 # =============== #
 
 SRCS		=	push_swap.c \
-				psw_parsing.c 
+				psw_parsing.c \
+				psw_inst.c \
+				psw_push.c \
+				psw_swap.c \
+				psw_rotate.c \
+				psw_rev_rotate.c
 
 ## ~~ Folders ~~ ##
 

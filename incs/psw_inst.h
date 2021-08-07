@@ -6,24 +6,24 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 17:01:34 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/07 12:14:07 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/07 13:56:02 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PSW_INST_H
 # define PSW_INST_H
 
-#include "psw_push.h"
-#include "psw_swap.h"
-#include "psw_rotate.h"
-#include "psw_rev_rotate.h"
+# include "psw_push.h"
+# include "psw_swap.h"
+# include "psw_rotate.h"
+# include "psw_rev_rotate.h"
 
-typedef	void (*t_inst)(t_game *game);
+typedef void	(*t_inst)(t_game *game);
 
 typedef struct s_inst_swtch {
 	t_inst	inst;
 	char	*call;
-} t_inst_swtch;
+}	t_inst_swtch;
 
 typedef enum e_inst_id {
 	SA,
@@ -38,12 +38,14 @@ typedef enum e_inst_id {
 	RRB,
 	RRR,
 	END
-} t_inst_id;
+}	t_inst_id;
 
-t_inst	switchboard(char *inst_call);
-t_inst	fetch_inst(t_inst_swtch *inst_set, char *inst_call);
-void	buf_inst(t_game *game, t_inst_swtch *inst_set, t_inst_id inst);
-void	cancel_inst(t_game *game, t_inst_id *buf, int i);
-void	unload_buf(t_game *game, t_inst_swtch *inst_set, int load);
+t_inst_swtch	*switchboard(void);
+t_inst			fetch_inst(t_inst_swtch *inst_set, char *inst_call);
+void			buf_inst(t_game *game, t_inst_id inst);
+void			join_inst(t_game *game, t_inst_id *buf,
+					int *load, t_inst_id substitute);
+void			unload_buf(t_game *game, t_inst_swtch *inst_set,
+					t_inst_id *buf, int *load);
 
 #endif

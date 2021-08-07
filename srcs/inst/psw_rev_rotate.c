@@ -6,9 +6,11 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/05 14:34:12 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/06 09:20:56 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/07 14:01:01 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "push_swap.h"
 
 // push bottom up the top of the stack - shift remaining values down the stack
 static void	rot_stk_botm_up(t_val *stk, size_t top)

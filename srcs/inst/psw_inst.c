@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:43:03 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/07 12:12:44 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/07 13:57:03 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,41 +44,46 @@ t_inst	fetch_inst(t_inst_swtch *inst_set, char *inst_call)
 	return (inst_set[slot].inst);
 }
 
-void	cancel_inst(t_game *game, t_inst_id *buf, int i)
+void	join_inst(t_game *game, t_inst_id *buf, int *load, t_inst_id substitute)
 {
-	while (--i >= 0)
+	while (--(*load) >= 0)
 	{
-		if (buf[i] == SA)
+		if (buf[*load] == SA)
 			sa(game);
-		else if (buf[i] == SB)
+		else if (buf[*load] == SB)
 			sb(game);
-		else if (buf[i] == PA)
+		else if (buf[*load] == PA)
 			pb(game);
-		else if (buf[i] == PB)
+		else if (buf[*load] == PB)
 			pa(game);
-		else if (buf[i] == RA)
+		else if (buf[*load] == RA)
 			rra(game);
-		else if (buf[i] == RB)
+		else if (buf[*load] == RB)
 			rrb(game);
-		else if (buf[i] == RRA)
+		else if (buf[*load] == RRA)
 			ra(game);
-		else if (buf[i] == RRB)
+		else if (buf[*load] == RRB)
 			rb(game);
 	}
+	(switchboard()[substitute].inst)(game);
+	buf[0] = substitute;
+	*load = 1;
 }
 
 //Commit latest instructions in cue sheet
-void	unload_buf(t_game *game, t_inst_swtch *inst_set, int load)
+void	unload_buf(t_game *game, t_inst_swtch *inst_set,
+				t_inst_id *buf, int *load)
 {
 	int	i;
 
 	i = 0;
-	while (i < load)
+	while (i < *load)
 	{
 		str_to_vctr(game->cue, inst_set[buf[i]].call);
 		str_to_vctr(game->cue, "\n");
 		i++;
 	}
+	*load = 0;
 }
 
 void	buf_inst(t_game *game, t_inst_id inst)
@@ -87,8 +92,9 @@ void	buf_inst(t_game *game, t_inst_id inst)
 	static int			load;
 	t_inst_id			substitute;
 
-	if (load == 2)
+	if (load == 2 || inst == END)
 	{
+		substitute = 0;
 		if ((buf[0] == SA && buf[1] == SB) || (buf[0] == SB && buf[1] == SA))
 			substitute = SS;
 		else if ((buf[0] == RA && buf[1] == RB)
@@ -98,14 +104,10 @@ void	buf_inst(t_game *game, t_inst_id inst)
 			|| (buf[0] == RRB && buf[1] == RRA))
 			substitute = RRR;
 		else
-		{
-			unload_buf(game, switchboard(), load);
-			load = 0;
-			return ;
-		}
-		cancel_inst(game, buf, 2);
-		buf[0] = substitute;
-		load = 1;
+			unload_buf(game, switchboard(), buf, &load);
+		if (substitute)
+			join_inst(game, buf, &load, substitute);
 	}
+	(switchboard()[inst].inst)(game);
 	buf[load++] = inst;
 }
