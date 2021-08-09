@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:18:55 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/04 16:28:59 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/09 22:29:59 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,18 @@ t_error	game_setup(t_game *game)
 		wrk_set[i] = &game->set[i];
 		i++;
 	}
+	for (i = 0; i < game->info.qty; i++)
+		dprintf(1, "key : %i -- value : %i\n", wrk_set[i]->key, wrk_set[i]->val);
+	dprintf(1, "-----------\n");
 	psw_mrgsort(wrk_set, 0, game->info.qty - 1);
+	for (i = 0; i < game->info.qty; i++)
+		dprintf(1, "key : %i -- value : %i\n", wrk_set[i]->key, wrk_set[i]->val);
+	dprintf(1, "-----------\n");
 	if (assign_keys(wrk_set, game->info.qty))
 		return (PARSE);
+	for (i = 0; i < game->info.qty; i++)
+		dprintf(1, "key : %i -- value : %i\n", wrk_set[i]->key, wrk_set[i]->val);
+	dprintf(1, "-----------\n");
 	game->info.min = wrk_set[0];
 	game->info.med = wrk_set[game->info.qty / 2];
 	game->info.max = wrk_set[game->info.qty - 1];

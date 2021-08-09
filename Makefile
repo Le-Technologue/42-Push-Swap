@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/08/07 13:58:12 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/08/09 22:20:26 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,8 @@ SRCS		=	push_swap.c \
 				psw_push.c \
 				psw_swap.c \
 				psw_rotate.c \
-				psw_rev_rotate.c
+				psw_rev_rotate.c \
+				psw_algo.c
 
 ## ~~ Folders ~~ ##
 
@@ -93,7 +94,7 @@ vpath %.c $(SDIR)
 
 CC			=	gcc
 
-WRNFL		=	-Wall -Wextra -Werror
+WRNFL		=	#-Wall -Wextra -Werror
 OPTFL		=	-O3 -march=native #-fno-builtin
 DBGFL		=	-g
 CFLGS		=	$(WRNFL) $(DBGFL)#$(OPTFL)

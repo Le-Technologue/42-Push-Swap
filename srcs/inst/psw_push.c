@@ -6,11 +6,11 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/05 14:45:42 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/07 13:59:05 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/09 14:19:41 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "psw_inst.h"
 
 // push top of b to a
 void	pa(t_game *game)

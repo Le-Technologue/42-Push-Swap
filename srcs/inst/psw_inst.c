@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:43:03 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/07 13:57:03 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/09 16:39:37 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	join_inst(t_game *game, t_inst_id *buf, int *load, t_inst_id substitute)
 }
 
 //Commit latest instructions in cue sheet
-void	unload_buf(t_game *game, t_inst_swtch *inst_set,
+void	save_inst(t_game *game, t_inst_swtch *inst_set,
 				t_inst_id *buf, int *load)
 {
 	int	i;
@@ -92,22 +92,24 @@ void	buf_inst(t_game *game, t_inst_id inst)
 	static int			load;
 	t_inst_id			substitute;
 
-	if (load == 2 || inst == END)
+	if (inst == END)
+		save_inst(game, switchboard(), buf, &load);
+	else if (load == 2)
 	{
 		substitute = 0;
 		if ((buf[0] == SA && buf[1] == SB) || (buf[0] == SB && buf[1] == SA))
 			substitute = SS;
-		else if ((buf[0] == RA && buf[1] == RB)
-			|| (buf[0] == RB && buf[1] == RA))
+		else if ((*buf == RA && buf[1] == RB) || (*buf == RB && buf[1] == RA))
 			substitute = RR;
 		else if ((buf[0] == RRA && buf[1] == RRB)
 			|| (buf[0] == RRB && buf[1] == RRA))
 			substitute = RRR;
 		else
-			unload_buf(game, switchboard(), buf, &load);
+			save_inst(game, switchboard(), buf, &load);
 		if (substitute)
 			join_inst(game, buf, &load, substitute);
 	}
-	(switchboard()[inst].inst)(game);
+	if (inst != END)
+		(switchboard()[inst].inst)(game);
 	buf[load++] = inst;
 }

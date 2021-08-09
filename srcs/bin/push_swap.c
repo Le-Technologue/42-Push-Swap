@@ -6,13 +6,14 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/07 14:09:28 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/09 17:04:09 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <limits.h>
 #include "push_swap.h"
 #include "psw_parsing.h"
+#include "psw_algo.h"
 
 t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 {
@@ -23,6 +24,7 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 			ft_putendl_fd("Arguments should belong to the int set and exclude duplicates", 1);
 	if (function >= PSW_GAME)
 	{	
+		write(1, game->cue->data, game->cue->entries);
 		if (game->a.stk)
 			free(game->a.stk);
 		if (game->b.stk)
@@ -30,7 +32,8 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 		if (game->cue)
 			vctr_exit(game->cue);
 	}
-	free(game->set);
+	if (game->set)
+		free(game->set);
 	return (CLEAR);
 }
 
@@ -38,10 +41,10 @@ t_error	psw_game(t_game *game)
 {
 	size_t	i;
 
-	game->a.stk = malloc(sizeof(t_val *) * game->info.qty);
+	game->a.stk = malloc(sizeof(t_val) * game->info.qty);
 	if (!game->a.stk)
 		return (MEM_ALLOC);
-	game->b.stk = malloc(sizeof(t_val *) * game->info.qty);
+	game->b.stk = malloc(sizeof(t_val) * game->info.qty);
 	if (!game->b.stk)
 		return (MEM_ALLOC);
 	if (vctr_init(&game->cue, sizeof(char), 512))
@@ -54,7 +57,7 @@ t_error	psw_game(t_game *game)
 	}
 	game->a.top = game->info.qty - 1;
 	game->b.top = 0;
-//	psw_solver(game);
+	psw_solver(game);
 	return (CLEAR);
 }
 /*	while (game->info.qty)
@@ -109,6 +112,5 @@ int main(int ac, char **av)
 	error = psw_game(&game);
 	if (error)
 		return (psw_shutdown(&game, error, PSW_GAME));
-	write(1, &game.cue->data, game.cue->entries);
 	return (psw_shutdown(&game, CLEAR, MAIN_END));
 }

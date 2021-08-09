@@ -6,13 +6,14 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 17:01:34 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/07 13:56:02 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/09 14:18:04 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PSW_INST_H
 # define PSW_INST_H
 
+# include "push_swap.h"
 # include "psw_push.h"
 # include "psw_swap.h"
 # include "psw_rotate.h"
@@ -45,7 +46,7 @@ t_inst			fetch_inst(t_inst_swtch *inst_set, char *inst_call);
 void			buf_inst(t_game *game, t_inst_id inst);
 void			join_inst(t_game *game, t_inst_id *buf,
 					int *load, t_inst_id substitute);
-void			unload_buf(t_game *game, t_inst_swtch *inst_set,
+void			save_inst(t_game *game, t_inst_swtch *inst_set,
 					t_inst_id *buf, int *load);
 
 #endif
