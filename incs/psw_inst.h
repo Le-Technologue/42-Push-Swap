@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 17:01:34 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/09 14:18:04 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/09 22:44:12 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_inst			fetch_inst(t_inst_swtch *inst_set, char *inst_call);
 void			buf_inst(t_game *game, t_inst_id inst);
 void			join_inst(t_game *game, t_inst_id *buf,
 					int *load, t_inst_id substitute);
-void			save_inst(t_game *game, t_inst_swtch *inst_set,
+void			log_inst(t_game *game, t_inst_swtch *inst_set,
 					t_inst_id *buf, int *load);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:43:03 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/09 16:39:37 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/09 22:45:08 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	join_inst(t_game *game, t_inst_id *buf, int *load, t_inst_id substitute)
 }
 
 //Commit latest instructions in cue sheet
-void	save_inst(t_game *game, t_inst_swtch *inst_set,
+void	log_inst(t_game *game, t_inst_swtch *inst_set,
 				t_inst_id *buf, int *load)
 {
 	int	i;
@@ -93,7 +93,7 @@ void	buf_inst(t_game *game, t_inst_id inst)
 	t_inst_id			substitute;
 
 	if (inst == END)
-		save_inst(game, switchboard(), buf, &load);
+		log_inst(game, switchboard(), buf, &load);
 	else if (load == 2)
 	{
 		substitute = 0;
@@ -105,7 +105,7 @@ void	buf_inst(t_game *game, t_inst_id inst)
 			|| (buf[0] == RRB && buf[1] == RRA))
 			substitute = RRR;
 		else
-			save_inst(game, switchboard(), buf, &load);
+			log_inst(game, switchboard(), buf, &load);
 		if (substitute)
 			join_inst(game, buf, &load, substitute);
 	}
