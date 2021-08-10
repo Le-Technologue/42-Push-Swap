@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/22 10:43:12 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/07 13:41:59 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/10 18:09:12 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ typedef struct s_game {
 	t_stk		a;
 	t_stk		b;
 	t_val		*set;
-	t_vctr		*cue;
+	t_vctr		*log;
+	int			prv_mov;
 }	t_game;
 
 #endif

@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/08/09 22:20:26 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/08/10 10:51:00 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -94,7 +94,7 @@ vpath %.c $(SDIR)
 
 CC			=	gcc
 
-WRNFL		=	#-Wall -Wextra -Werror
+WRNFL		=	 -Wall -Wextra -Werror
 OPTFL		=	-O3 -march=native #-fno-builtin
 DBGFL		=	-g
 CFLGS		=	$(WRNFL) $(DBGFL)#$(OPTFL)
@@ -123,7 +123,7 @@ $(ODIR)%.o	:	%.c $(DDIR)%.d#$(LIBS) How to trigger a recompilation if the libft 
 # ~~~ Library archiving ~~~ #
 
 $(LIB)		:	$(OBJS)
-				ar rcs $(LDIR)$(LIB) $(OBJS)
+				ar rcs $(LDIR)$(LIB) $?
 
 $(LIBS)		:	make_libs
 
@@ -132,8 +132,8 @@ make_libs	:
 
 # ~~~ Executables Compiling  ~~~ #
 
-$(EXEC)		:	$(EOBJ) | $(SOBJ)
-				$(CC) $< $| -o $@ $(CLDIR) $(CLIBS)
+$(EXEC)		:	$(EOBJ) $(SOBJ)
+				$(CC) $^ -o $@ $(CLDIR) $(CLIBS)
 
 # ~~~ Actions ~~~ #
 

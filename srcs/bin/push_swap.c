@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/09 17:04:09 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/10 17:42:40 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 			ft_putendl_fd("Arguments should belong to the int set and exclude duplicates", 1);
 	if (function >= PSW_GAME)
 	{	
-		write(1, game->cue->data, game->cue->entries);
+		write(1, game->log->data, game->log->entries);
 		if (game->a.stk)
 			free(game->a.stk);
 		if (game->b.stk)
 			free(game->b.stk);
-		if (game->cue)
-			vctr_exit(game->cue);
+		if (game->log)
+			vctr_exit(game->log);
 	}
 	if (game->set)
 		free(game->set);
@@ -47,7 +47,7 @@ t_error	psw_game(t_game *game)
 	game->b.stk = malloc(sizeof(t_val) * game->info.qty);
 	if (!game->b.stk)
 		return (MEM_ALLOC);
-	if (vctr_init(&game->cue, sizeof(char), 512))
+	if (vctr_init(&game->log, sizeof(char), 512))
 		return (MEM_ALLOC);
 	i = 0;
 	while (i < game->info.qty)

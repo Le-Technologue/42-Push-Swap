@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:43:03 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/09 22:45:08 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/10 18:08:43 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ void	log_inst(t_game *game, t_inst_swtch *inst_set,
 	i = 0;
 	while (i < *load)
 	{
-		str_to_vctr(game->cue, inst_set[buf[i]].call);
-		str_to_vctr(game->cue, "\n");
+		str_to_vctr(game->log, inst_set[buf[i]].call);
+		str_to_vctr(game->log, "\n");
 		i++;
 	}
 	*load = 0;
@@ -92,9 +92,7 @@ void	buf_inst(t_game *game, t_inst_id inst)
 	static int			load;
 	t_inst_id			substitute;
 
-	if (inst == END)
-		log_inst(game, switchboard(), buf, &load);
-	else if (load == 2)
+	if (load == 2 || inst == END)
 	{
 		substitute = 0;
 		if ((buf[0] == SA && buf[1] == SB) || (buf[0] == SB && buf[1] == SA))
@@ -111,5 +109,6 @@ void	buf_inst(t_game *game, t_inst_id inst)
 	}
 	if (inst != END)
 		(switchboard()[inst].inst)(game);
+	game->prv_mov = buf[load];
 	buf[load++] = inst;
 }

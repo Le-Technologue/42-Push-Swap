@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:18:55 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/09 22:29:59 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/10 18:16:02 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ static t_error	assign_keys(t_val **set, size_t range)
 	return (CLEAR);
 }
 
-static void	mrg_both(t_val **set, t_val **buf, const size_t rift, const size_t end)
+static void	mrg_both(t_val **set, t_val **buf,
+					const size_t rift, const size_t end)
 {
 	size_t i;
 	size_t l;
@@ -41,7 +42,7 @@ static void	mrg_both(t_val **set, t_val **buf, const size_t rift, const size_t e
 	r = rift + 1;
 	while (l <= rift)
 	{
-		if (r > end || (*buf)[l].val <= (*set)[r].val)
+		if (r > end || buf[l]->val <= set[r]->val)
 			set[i++] = buf[l++];
 		else
 			set[i++] = set[r++];
@@ -75,7 +76,7 @@ t_error	psw_mrgsort(t_val **set, const size_t start, const size_t end)
 	mid = (start + end) / 2;
 	psw_mrgsort(set, start, mid);
 	psw_mrgsort(set, mid + 1, end);
-	if ((*set)[mid].val > (*set)[mid + 1].val)
+	if (set[mid]->val > set[mid + 1]->val)
 	{
 		cpy_left(buf, set, start, mid);
 		mrg_both(set + start, buf + start, mid - start, end - start);
@@ -99,18 +100,9 @@ t_error	game_setup(t_game *game)
 		wrk_set[i] = &game->set[i];
 		i++;
 	}
-	for (i = 0; i < game->info.qty; i++)
-		dprintf(1, "key : %i -- value : %i\n", wrk_set[i]->key, wrk_set[i]->val);
-	dprintf(1, "-----------\n");
 	psw_mrgsort(wrk_set, 0, game->info.qty - 1);
-	for (i = 0; i < game->info.qty; i++)
-		dprintf(1, "key : %i -- value : %i\n", wrk_set[i]->key, wrk_set[i]->val);
-	dprintf(1, "-----------\n");
 	if (assign_keys(wrk_set, game->info.qty))
 		return (PARSE);
-	for (i = 0; i < game->info.qty; i++)
-		dprintf(1, "key : %i -- value : %i\n", wrk_set[i]->key, wrk_set[i]->val);
-	dprintf(1, "-----------\n");
 	game->info.min = wrk_set[0];
 	game->info.med = wrk_set[game->info.qty / 2];
 	game->info.max = wrk_set[game->info.qty - 1];
