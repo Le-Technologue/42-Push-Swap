@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/22 10:43:12 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/10 18:09:12 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/13 13:02:45 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,6 @@ typedef struct s_val {
 	int		val;
 }	t_val;
 
-typedef struct s_metadata {
-	size_t	qty;
-	t_val	*min;
-	t_val	*med;
-	t_val	*max;
-}	t_metadata;
 
 typedef struct s_stk {
 	t_val	*stk;
@@ -41,12 +35,15 @@ typedef struct s_stk {
 }	t_stk;
 
 typedef struct s_game {
-	t_metadata	info;
+	t_val		*set;
+	size_t		qty;
 	t_stk		a;
 	t_stk		b;
-	t_val		*set;
-	t_vctr		*log;
 	int			prv_mov;
+	t_vctr		*pvt;
+	t_vctr		*log;
+	size_t		prv_log;
+	_Bool		mon;
 }	t_game;
 
 #endif

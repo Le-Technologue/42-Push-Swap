@@ -7,5 +7,5 @@ cpy
 *.a
 *.d
 *.vim
-test*
+*test*
 tags

@@ -6,12 +6,13 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:43:03 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/10 18:08:43 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/13 13:19:23 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 #include "psw_inst.h"
+#include "psw_monitor.h"
 
 t_inst_swtch	*switchboard(void)
 {
@@ -74,8 +75,10 @@ void	join_inst(t_game *game, t_inst_id *buf, int *load, t_inst_id substitute)
 void	log_inst(t_game *game, t_inst_swtch *inst_set,
 				t_inst_id *buf, int *load)
 {
-	int	i;
+	int		i;
+	size_t	log_start;
 
+	log_start = game->log->entries * game->log->unit_size;
 	i = 0;
 	while (i < *load)
 	{
@@ -83,6 +86,8 @@ void	log_inst(t_game *game, t_inst_swtch *inst_set,
 		str_to_vctr(game->log, "\n");
 		i++;
 	}
+	if (game->mon)
+		psw_monitor(game, log_start);
 	*load = 0;
 }
 
