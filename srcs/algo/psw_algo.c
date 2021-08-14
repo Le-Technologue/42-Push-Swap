@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 20:39:53 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/13 13:25:22 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/14 22:33:22 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,36 @@
 
 t_error	srt_edges(t_game *game)
 {
-	if (game->a.stk[game->a.top].key > game->a.stk[0].key
-			&& game->a.stk[game->a.top].key < game->a.stk[game->a.top - 1].key)
+	if (LOAD_A && STK_A[TOP_A].key > STK_A[0].key
+			&& STK_A[TOP_A].key < STK_A[TOP_A - 1].key)
 		buf_inst(game, RRA);
-	if (game->b.stk[game->b.top].key < game->b.stk[0].key
-			&& game->b.stk[game->b.top].key > game->b.stk[game->b.top - 1].key)
+	if (LOAD_B && STK_B[TOP_B].key < STK_B[0].key
+			&& STK_B[TOP_B].key > STK_B[TOP_B - 1].key)
 		buf_inst(game, RRB);
-	if (game->a.stk[game->a.top].key > game->a.stk[0].key)
+
+	if (LOAD_A > 3 && STK_A[TOP_A].key > STK_A[0].key)
 		buf_inst(game, RA);
-	if (game->b.stk[game->b.top].key < game->b.stk[0].key)
+	if (LOAD_B > 3 && STK_B[TOP_B].key < STK_B[0].key)
 		buf_inst(game, RB);
-	if (game->a.stk[game->a.top].key > game->a.stk[game->a.top - 1].key)
+
+	if (LOAD_A > 2 && STK_A[TOP_A].key > STK_A[TOP_A - 1].key)
 		buf_inst(game, SA);
-	if (game->b.stk[game->b.top].key < game->b.stk[game->b.top - 1].key)
+	if (LOAD_B > 2 && STK_B[TOP_B].key < STK_B[TOP_B - 1].key)
 		buf_inst(game, SB);
-	if (game->a.stk[0].key == game->a.stk[game->a.top].key + 1
+
+	if (LOAD_A > 3 && STK_A[0].key == STK_A[TOP_A].key + 1
 			&& game->qty > 2)
 		buf_inst(game, RRA);
-	if (game->b.stk[0].key == game->b.stk[game->b.top].key - 1
+	if (LOAD_B > 3 && STK_B[0].key == STK_B[TOP_B].key - 1
 			&& game->qty > 2)
 		buf_inst(game, RRB);
-	if (game->a.stk[game->a.top].key > game->a.stk[game->a.top - 1].key)
+	if (STK_A[TOP_A].key > STK_A[TOP_A - 1].key)
 		buf_inst(game, SA);
-	if (game->b.stk[game->b.top].key < game->b.stk[game->b.top - 1].key)
+	if (STK_B[TOP_B].key < STK_B[TOP_B - 1].key)
 		buf_inst(game, SB);
-	if (game->a.stk[game->a.top].key < game->a.stk[game->a.top - 1].key
-			&& game->a.stk[game->a.top - 1].key <= game->a.stk[0].key)
+
+	if (STK_A[TOP_A].key < STK_A[TOP_A - 1].key
+			&& STK_A[TOP_A - 1].key <= STK_A[0].key)
 		return (CLEAR);
 	return (ERROR);
 }
@@ -49,29 +53,40 @@ void	psw_qcksrt(t_game *game, size_t start, size_t end)
 {
 	size_t	med;
 	size_t	to_sort;
+	_Bool	restore_med;
 
 	if (start >= end)
 		return ;
+	restore_med = 0;
 	med = start + (end - start) / 2;
-	to_sort = med + 1;
+	to_sort = (end - start) / 2 + 1;
 	while (to_sort) 
 	{
-		if (game->a.stk[game->a.top].key == med)
+		if (STK_A[TOP_A].key == med)
 		{
 			buf_inst(game, PB);
-			buf_inst(game, RB);
+			to_sort--;
+			if (to_sort > 0 && to_sort != (end - start) / 2)
+			{
+				buf_inst(game, RB);
+				restore_med = 1;
+			}
 		}
-		else if (game->a.stk[game->a.top].key < med)
+		else if (STK_A[TOP_A].key < med)
+		{
 			buf_inst(game, PB);
+			to_sort--;
+		}
 		else
 			buf_inst(game, RA);
-		to_sort--;
 	}
+	if (restore_med || STK_A[0].key == med)
+		buf_inst(game, RRB);
 //	while (srt_edges(game))
 //		;
-	buf_inst(game, RRB);
-//	psw_qcksrt(game, 0, med);
+//	psw_qcksrt(game, 0, med); //inverted logic here ?
 	psw_qcksrt(game, med + 1, end);
+
 }
 
 void	psw_solver(t_game *game)
@@ -80,7 +95,7 @@ void	psw_solver(t_game *game)
 		psw_monitor(game, 0);
 //	while (srt_edges(game))
 //		;
-//	psw_qcksrt(game, 0, game->qty - 1);
-	srt_edges(game);
+	psw_qcksrt(game, 0, TOP_A);
+//	srt_edges(game);
 	buf_inst(game, END);
 }

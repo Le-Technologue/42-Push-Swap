@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/05 14:45:42 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/09 14:19:41 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/14 18:43:38 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 // push top of b to a
 void	pa(t_game *game)
 {
-	game->a.top++;
-	game->a.stk[game->a.top] = game->b.stk[game->b.top];
-	game->b.top--;
+	game->a.load++;
+	game->a.stk[TOP_A] = game->b.stk[TOP_B];
+	game->b.load--;
 }
 
 // push a summit on top of b
 void	pb(t_game *game)
 {
-	game->b.top++;
-	game->b.stk[game->b.top] = game->a.stk[game->a.top];
-	game->a.top--;
+	game->b.load++;
+	game->b.stk[TOP_B] = game->a.stk[TOP_A];
+	game->a.load--;
 }

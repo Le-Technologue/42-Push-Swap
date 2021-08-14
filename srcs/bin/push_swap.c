@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/13 11:08:15 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/14 19:53:20 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 	if (function >= PSW_GAME)
 	{	
 		write(1, game->log->data, game->log->entries);
-		if (game->a.stk)
-			free(game->a.stk);
 		if (game->b.stk)
 			free(game->b.stk);
 		if (game->log)
@@ -34,6 +32,8 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 		if (game->pvt)
 			vctr_exit(game->pvt);
 	}
+	if (game->a.stk)
+		free(game->a.stk);
 	if (game->set)
 		free(game->set);
 	return (CLEAR);
@@ -41,11 +41,6 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 
 t_error	psw_game(t_game *game)
 {
-	size_t	i;
-
-	game->a.stk = malloc(sizeof(t_val) * game->qty);
-	if (!game->a.stk)
-		return (MEM_ALLOC);
 	game->b.stk = malloc(sizeof(t_val) * game->qty);
 	if (!game->b.stk)
 		return (MEM_ALLOC);
@@ -53,14 +48,8 @@ t_error	psw_game(t_game *game)
 		return (MEM_ALLOC);
 	if (vctr_init(&game->pvt, sizeof(size_t), 32))
 		return (MEM_ALLOC);
-	i = 0;
-	while (i < game->qty)
-	{
-		game->a.stk[i] = game->set[i];
-		i++;
-	}
-	game->a.top = game->qty - 1;
-	game->b.top = 0;
+	game->a.load = game->qty;
+	game->b.load = 0;
 	psw_solver(game);
 	return (CLEAR);
 }
@@ -81,11 +70,7 @@ t_error	psw_parsing(t_game *game, char **av)
 	t_error	outcome;
 
 	i = 0;
-	if (!ft_strncmp("-m", av[1], 3))
-	{
-		game->mon = 1;
-		i++;
-	}
+	game->mon = 1; // MONITOR
 	while (i < game->qty)
 	{
 		ptr = av[i + 1];
@@ -94,7 +79,7 @@ t_error	psw_parsing(t_game *game, char **av)
 		buf = ptr_atol_base(&ptr, "0123456789");
 		if (*ptr != '\0' || INT_MIN > buf || buf > INT_MAX)
 			return (PARSE);
-		game->set[game->qty - 1 - i++].val = buf;
+		game->a.stk[game->qty - 1 - i++].val = buf;
 	}
 	outcome = game_setup(game);
 	return (outcome);
@@ -111,8 +96,8 @@ int main(int ac, char **av)
 		return (ERROR);
 	}
 	game.qty = ac - 1;
-	game.set = malloc(sizeof(t_val) * game.qty);
-	if (!game.set)
+	game.a.stk = malloc(sizeof(t_val) * game.qty);
+	if (!game.a.stk)
 		return (psw_shutdown(&game, MEM_ALLOC, MAIN_START));
 	error = psw_parsing(&game, av);
 	if (error)

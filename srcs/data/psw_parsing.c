@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:18:55 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/13 10:58:51 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/14 19:43:39 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,20 +89,18 @@ t_error	psw_mrgsort(t_val **set, const size_t start, const size_t end)
 t_error	game_setup(t_game *game)
 {
 	size_t	i;
-	t_val	**wrk_set;
 
-	wrk_set = malloc(sizeof(t_val **) * game->qty);
-	if (!wrk_set)
+	game->set = malloc(sizeof(t_val **) * game->qty);
+	if (!game->set)
 		return (MEM_ALLOC);
 	i = 0;
 	while (i < game->qty)
 	{
-		wrk_set[i] = &game->set[i];
+		game->set[i] = &game->a.stk[i];
 		i++;
 	}
-	psw_mrgsort(wrk_set, 0, game->qty - 1);
-	if (assign_keys(wrk_set, game->qty))
+	psw_mrgsort(game->set, 0, game->qty - 1);
+	if (assign_keys(game->set, game->qty))
 		return (PARSE);
-	free(wrk_set);
 	return (CLEAR);
 }
