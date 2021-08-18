@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/22 10:43:12 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/14 19:44:13 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/18 16:43:14 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef enum e_fid {
 typedef struct s_val {
 	size_t	key;
 	int		val;
+//	size_t	qutl;
 }	t_val;
 
 

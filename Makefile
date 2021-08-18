@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/08/13 12:41:00 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/08/18 16:17:34 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -96,7 +96,7 @@ vpath %.c $(SDIR)
 CC			=	gcc
 
 WRNFL		=	 -Wall -Wextra -Werror
-OPTFL		=	-O3 -march=native #-fno-builtin
+OPTFL		=-O3 -march=native #-fno-builtin
 DBGFL		=	-g
 CFLGS		=	$(WRNFL) $(DBGFL)#$(OPTFL)
 DEPFL		=	-MT $@ -MMD -MP -MF $(DDIR)$*.d
