@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/14 19:53:20 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/19 15:11:57 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 			free(game->b.stk);
 		if (game->log)
 			vctr_exit(game->log);
-		if (game->pvt)
-			vctr_exit(game->pvt);
+		if (PVT)
+			vctr_exit(PVT);
 	}
 	if (game->a.stk)
 		free(game->a.stk);
@@ -46,7 +46,7 @@ t_error	psw_game(t_game *game)
 		return (MEM_ALLOC);
 	if (vctr_init(&game->log, sizeof(char), 512))
 		return (MEM_ALLOC);
-	if (vctr_init(&game->pvt, sizeof(size_t), 32))
+	if (vctr_init(&PVT, sizeof(size_t), 32))
 		return (MEM_ALLOC);
 	game->a.load = game->qty;
 	game->b.load = 0;
@@ -70,7 +70,7 @@ t_error	psw_parsing(t_game *game, char **av)
 	t_error	outcome;
 
 	i = 0;
-	game->mon = 1; // MONITOR
+	game->info.mon = 1; // MONITOR
 	while (i < game->qty)
 	{
 		ptr = av[i + 1];

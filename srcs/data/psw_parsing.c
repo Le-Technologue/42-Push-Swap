@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:18:55 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/18 15:53:20 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/19 11:18:55 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,19 @@
 #include "libft.h"
 #include "push_swap.h"
 
-static t_error	assign_keys(t_val **set, size_t range, size_t qutl_size)
+static t_error	assign_keys(t_val **set, size_t range)
 {
 	size_t	i;
-	size_t	quantile;
 
 	i = 0;
-	quantile = qutl_size - 1;
 	while (i < range - 1)
 	{
 		if (set[i]->val == set[i + 1]->val)
 			return (ERROR);
 		set[i]->key = i;
-		if (i > quantile)
-			quantile += qutl_size;
-		set[i]->qutl = quantile;
 		i++;
 	}
 	set[i]->key = i;
-	set[i]->qutl = quantile;
 	return (CLEAR);
 }
 
@@ -106,7 +100,7 @@ t_error	game_setup(t_game *game)
 		i++;
 	}
 	psw_mrgsort(game->set, 0, game->qty - 1);
-	if (assign_keys(game->set, game->qty, game->qty / 4))
+	if (assign_keys(game->set, game->qty))
 		return (PARSE);
 	return (CLEAR);
 }
