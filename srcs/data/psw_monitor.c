@@ -6,14 +6,15 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/13 11:10:45 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/14 19:55:16 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/20 22:26:30 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h> //TENTION
 #include "push_swap.h"
+#include "psw_inst.h"
 
-void	psw_monitor(t_game *game, size_t log_start)
+void	psw_monitor(t_game *game)
 {
 	size_t	a;
 	size_t	b;
@@ -28,6 +29,7 @@ void	psw_monitor(t_game *game, size_t log_start)
 	}
 	a = game->a.load;
 	b = game->b.load;
+	dprintf(1, "\n%s\n", switchboard()[PRV_MOV].call);
 	while (a > b)
 		dprintf(1, "%*i | \n", width, game->a.stk[--a].val);
 	while (b > a)
@@ -48,5 +50,5 @@ void	psw_monitor(t_game *game, size_t log_start)
 	while (i++ < width)
 		dprintf(1, "_");
 	dprintf(1, "B\n");
-	dprintf(1, "\n%s\n", (char *)(game->log->data + log_start));
+	dprintf(1, "%lu\n\n", game->buf->entries);
 }

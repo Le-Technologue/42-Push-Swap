@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 17:01:34 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/09 22:44:12 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/20 21:50:16 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include "psw_swap.h"
 # include "psw_rotate.h"
 # include "psw_rev_rotate.h"
+
+# define INST ((t_inst_id *)(game->buf->data))
 
 typedef void	(*t_inst)(t_game *game);
 
@@ -44,9 +46,6 @@ typedef enum e_inst_id {
 t_inst_swtch	*switchboard(void);
 t_inst			fetch_inst(t_inst_swtch *inst_set, char *inst_call);
 void			buf_inst(t_game *game, t_inst_id inst);
-void			join_inst(t_game *game, t_inst_id *buf,
-					int *load, t_inst_id substitute);
-void			log_inst(t_game *game, t_inst_swtch *inst_set,
-					t_inst_id *buf, int *load);
+void			log_inst(t_game *game);
 
 #endif

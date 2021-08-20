@@ -1,13 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   psw_monitor.h                                      :+:      :+:    :+:   */
+/*   psw_opti.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/13 11:10:43 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/20 22:04:15 by wetieven         ###   ########lyon.fr   */
+/*   Created: 2021/08/20 21:48:34 by wetieven          #+#    #+#             */
+/*   Updated: 2021/08/20 21:50:00 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	psw_monitor(t_game *game);
+#ifndef PSW_OPTI_H
+# define PSW_OPTI_H
+
+# include "psw_inst.h"
+
+void	swp(t_game *game, char stk);
+void	rot(t_game *game, char stk);
+void	rrot(t_game *game, char stk);
+
+#endif

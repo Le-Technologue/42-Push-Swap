@@ -6,13 +6,14 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/20 14:33:36 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/20 21:56:39 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <limits.h>
 #include "push_swap.h"
 #include "psw_parsing.h"
+#include "psw_inst.h"
 #include "psw_algo.h"
 
 t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
@@ -27,6 +28,8 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 		write(1, game->log->data, game->log->entries);
 		if (game->b.stk)
 			free(game->b.stk);
+		if (game->buf)
+			vctr_exit(game->buf);
 		if (game->log)
 			vctr_exit(game->log);
 		if (PVT)
@@ -44,10 +47,13 @@ t_error	psw_game(t_game *game)
 	game->b.stk = malloc(sizeof(t_val) * game->qty);
 	if (!game->b.stk)
 		return (MEM_ALLOC);
+	if (vctr_init(&game->buf, sizeof(t_inst_id), 128))
+		return (MEM_ALLOC);
 	if (vctr_init(&game->log, sizeof(char), 512))
 		return (MEM_ALLOC);
-	if (vctr_init(&PVT, sizeof(size_t), 32))
-		return (MEM_ALLOC);
+	PRV_MOV = END;
+//	if (vctr_init(&PVT, sizeof(size_t), 32))
+//		return (MEM_ALLOC);
 	game->a.load = game->qty;
 	game->b.load = 0;
 	psw_solver(game);

@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:43:03 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/19 11:20:09 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/20 22:13:29 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_inst_swtch	*switchboard(void)
 	[RRA] = {.inst = &rra, .call = "rra"},
 	[RRB] = {.inst = &rrb, .call = "rrb"},
 	[RRR] = {.inst = &rrr, .call = "rrr"},
-	[END] = {.inst = NULL}
+	[END] = {.inst = NULL, .call = "END"}
 	};
 
 	return (inst_set);
@@ -45,75 +45,45 @@ t_inst	fetch_inst(t_inst_swtch *inst_set, char *inst_call)
 	return (inst_set[slot].inst);
 }
 
-void	join_inst(t_game *game, t_inst_id *buf, int *load, t_inst_id substitute)
+void	log_inst(t_game *game)
 {
-	while (--(*load) >= 0)
-	{
-		if (buf[*load] == SA)
-			sa(game);
-		else if (buf[*load] == SB)
-			sb(game);
-		else if (buf[*load] == PA)
-			pb(game);
-		else if (buf[*load] == PB)
-			pa(game);
-		else if (buf[*load] == RA)
-			rra(game);
-		else if (buf[*load] == RB)
-			rrb(game);
-		else if (buf[*load] == RRA)
-			ra(game);
-		else if (buf[*load] == RRB)
-			rb(game);
-	}
-	(switchboard()[substitute].inst)(game);
-	buf[0] = substitute;
-	*load = 1;
-}
+	size_t		i;
+	t_inst_id	substitute;
 
-//Commit latest instructions in cue sheet
-void	log_inst(t_game *game, t_inst_swtch *inst_set,
-				t_inst_id *buf, int *load)
-{
-	int		i;
-	size_t	log_start;
-
-	log_start = game->log->entries * game->log->unit_size;
 	i = 0;
-	while (i < *load)
+	while (i < game->buf->entries)
 	{
-		str_to_vctr(game->log, inst_set[buf[i]].call);
+		substitute = 0;
+		if ((INST[i] == SA && INST[i + 1] == SB)
+			|| (INST[i] == SB && INST[i + 1] == SA))
+			substitute = SS;
+		else if ((INST[i] == RA && INST[i + 1] == RB)
+			|| (INST[i] == RB && INST[i + 1] == RA))
+			substitute = RR;
+		else if ((INST[i] == RRA && INST[i + 1] == RRB)
+			|| (INST[i] == RRB && INST[i + 1] == RRA))
+			substitute = RRR;
+		else
+			str_to_vctr(game->log, switchboard()[INST[i++]].call);
+		if (substitute)
+		{
+			str_to_vctr(game->log, switchboard()[substitute].call);
+			i += 2;
+		}
 		str_to_vctr(game->log, "\n");
-		i++;
 	}
-	if (game->info.mon)
-		psw_monitor(game, log_start);
-	*load = 0;
 }
 
 void	buf_inst(t_game *game, t_inst_id inst)
 {
-	static t_inst_id	buf[2];
-	static int			load;
-	t_inst_id			substitute;
-
-	if (load == 2 || inst == END)
+	if (inst == END)
+		log_inst(game);
+	else
 	{
-		substitute = 0;
-		if ((buf[0] == SA && buf[1] == SB) || (buf[0] == SB && buf[1] == SA))
-			substitute = SS;
-		else if ((*buf == RA && buf[1] == RB) || (*buf == RB && buf[1] == RA))
-			substitute = RR;
-		else if ((buf[0] == RRA && buf[1] == RRB)
-			|| (buf[0] == RRB && buf[1] == RRA))
-			substitute = RRR;
-		else
-			log_inst(game, switchboard(), buf, &load);
-		if (substitute)
-			join_inst(game, buf, &load, substitute);
-	}
-	if (inst != END)
 		(switchboard()[inst].inst)(game);
-	PRV_MOV = buf[load];
-	buf[load++] = inst;
+		vctr_push(game->buf, &inst);
+		PRV_MOV = inst;
+	}
+	if (game->info.mon)
+		psw_monitor(game);
 }

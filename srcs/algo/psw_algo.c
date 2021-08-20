@@ -6,88 +6,22 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 20:39:53 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/20 19:24:17 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/20 22:21:11 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h> // TENTION
 #include "libft.h"
-#include "psw_inst.h"
-#include "psw_monitor.h"
+#include "psw_opti.h"
 #include "psw_algo.h"
-
-void	swp(t_game *game, char stk)
-{
-	if (stk == 'A')
-	{
-		if (LOAD_A == 2 && PRV_MOV == RB) //opti marginale ?
-			buf_inst(game, RA);
-		else if (LOAD_A == 2 && PRV_MOV == RRB)
-			buf_inst(game, RRA);
-		else
-			buf_inst(game, SA);
-	}
-	if (stk == 'B')
-	{
-		if (LOAD_B == 2 && PRV_MOV == RA)
-			buf_inst(game, RB);
-		else if (LOAD_B == 2 && PRV_MOV == RRA)
-			buf_inst(game, RRB);
-		else
-			buf_inst(game, SB);
-	}
-}
-
-void	rot(t_game *game, char stk)
-{
-	if (stk == 'A')
-	{
-		if (LOAD_A == 2 && PRV_MOV == SB) //opti marginale ?
-			buf_inst(game, SA);
-		else if (LOAD_A == 2 && PRV_MOV == RRB)
-			buf_inst(game, RRA);
-		else
-			buf_inst(game, RA);
-	}
-	if (stk == 'B')
-	{
-		if (LOAD_B == 2 && PRV_MOV == SA)
-			buf_inst(game, SB);
-		else if (LOAD_B == 2 && PRV_MOV == RRA)
-			buf_inst(game, RRB);
-		else
-			buf_inst(game, RB);
-	}
-}
-
-void	rrot(t_game *game, char stk)
-{
-	if (stk == 'A')
-	{
-		if (LOAD_A == 2 && PRV_MOV == SB) //opti marginale ?
-			buf_inst(game, SA);
-		else if (LOAD_A == 2 && PRV_MOV == RB)
-			buf_inst(game, RA);
-		else
-			buf_inst(game, RRA);
-	}
-	if (stk == 'B')
-	{
-		if (LOAD_B == 2 && PRV_MOV == SA)
-			buf_inst(game, SB);
-		else if (LOAD_B == 2 && PRV_MOV == RA)
-			buf_inst(game, RB);
-		else
-			buf_inst(game, RRB);
-	}
-}
+#include "psw_monitor.h"
 
 void	srt_tops(t_game *game, t_mode step, size_t med)
 {
 	if (LOAD_A >= 2 && (STK_A[TOP_A].key > STK_A[TOP_A - 1].key))
 	{
 		if (step == A
-			&& ((STK_A[TOP_A].key <= med && STK_A[TOP_A - 1].key <= med)
+			&& ((STK_A[TOP_A].key < med && STK_A[TOP_A - 1].key < med)
 			|| (STK_A[TOP_A].key > med && STK_A[TOP_A - 1].key > med)))
 			swp(game, 'A');
 		if (step == START
@@ -143,7 +77,7 @@ void	srt_edges(t_game *game, char stack, t_mode step, size_t med)
 		if (loop > 100)
 		{
 			dprintf(1, ">>>>>>> !!!!!  LOOP !!!!! <<<<<<<<\n\n");
-			psw_monitor(game, game->log->entries * game->log->unit_size - game->log->unit_size * 8);
+			psw_monitor(game);
 			break;
 		}
 	}
@@ -199,7 +133,7 @@ void	psw_qcksrt_A(t_game *game, size_t start, size_t end)
 			buf_inst(game, PB);
 			to_sort--;
 			if (to_sort > 0 && to_sort != (end - start) / 2)
-				buf_inst(game, RB);
+				rot(game, 'B');
 		}
 		srt_edges(game, 'A', A, med);
 		if (STK_A[TOP_A].key < med)
@@ -208,11 +142,11 @@ void	psw_qcksrt_A(t_game *game, size_t start, size_t end)
 			to_sort--;
 		}
 		else
-			buf_inst(game, RA);
+			rot(game, 'A');
 		srt_edges(game, 'A', A, med);
 	}
 	if (STK_B[0].key == med)
-		buf_inst(game, RRB);
+		rrot(game, 'B');
 //	vctr_push(game->pvt, med);
 	psw_qcksrt_A(game, med + 1, end);
 }
@@ -237,11 +171,11 @@ void	psw_qcksrt_init(t_game *game, size_t start, size_t end)
 			if (!higher_than_med_on_stack && STK_B[TOP_B].key > med / 2)
 				higher_than_med_on_stack = 1;
 			else if (higher_than_med_on_stack && STK_B[TOP_B].key <= med / 2)
-				buf_inst(game, RB);
+				rot(game, 'B');
 			to_sort--;
 		}
 		else
-			buf_inst(game, RA);
+			rot(game, 'A');
 	}
 //	vctr_push(game->pvt, med);
 	psw_qcksrt_A(game, med + 1, end);
@@ -250,7 +184,7 @@ void	psw_qcksrt_init(t_game *game, size_t start, size_t end)
 void	psw_solver(t_game *game)
 {
 	if (game->info.mon)
-		psw_monitor(game, 0);
+		psw_monitor(game);
 	psw_qcksrt_init(game, 0, TOP_A);
 //	srt_edges(game, 'C', ); //sort 3 last values in A
 //	depiler B en terminant le tri

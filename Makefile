@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/08/19 13:41:17 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/08/20 21:54:17 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRCS		=	push_swap.c \
 				psw_rotate.c \
 				psw_rev_rotate.c \
 				psw_algo.c \
+				psw_opti.c \
 				psw_monitor.c
 
 ## ~~ Folders ~~ ##
