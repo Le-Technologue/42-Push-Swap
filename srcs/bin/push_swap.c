@@ -6,10 +6,11 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/20 21:56:39 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/21 13:23:35 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h> //TENTION
 #include <limits.h>
 #include "push_swap.h"
 #include "psw_parsing.h"
@@ -26,6 +27,7 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 	if (function >= PSW_GAME)
 	{	
 		write(1, game->log->data, game->log->entries);
+		dprintf(1, "%i\n", ft_word_count(game->log->data, '\n'));
 		if (game->b.stk)
 			free(game->b.stk);
 		if (game->buf)
