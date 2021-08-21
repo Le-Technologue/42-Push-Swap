@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/13 11:10:45 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/21 13:48:15 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/21 16:54:31 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	psw_monitor(t_game *game)
 	}
 	a = game->a.load;
 	b = game->b.load;
+	dprintf(1, "v %lu - %s v\n", game->buf->entries, switchboard()[PRV_MOV].call);
 	while (a > b)
 		dprintf(1, "%*i | \n", width, game->a.stk[--a].val);
 	while (b > a)
@@ -49,5 +50,5 @@ void	psw_monitor(t_game *game)
 	while (i++ < width)
 		dprintf(1, "_");
 	dprintf(1, "B\n");
-	dprintf(1, "%lu - %s\n\n", game->buf->entries, switchboard()[PRV_MOV].call);
+	dprintf(1, "^ %lu - %s ^\n\n", game->buf->entries, switchboard()[PRV_MOV].call);
 }

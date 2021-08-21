@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/22 10:43:12 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/20 22:38:25 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/21 17:31:50 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include "libft.h"
 
 # define PRV_MOV game->info.prv_mov
-# define PVT game->info.pvt
+# define PVT ((size_t *)(game->info->pvt->data))
 # define STK_A game->a.stk
 # define LOAD_A game->a.load
 # define TOP_A (game->a.load - 1)

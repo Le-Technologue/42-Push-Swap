@@ -6,15 +6,15 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/20 21:51:07 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/21 13:54:50 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/21 18:59:14 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "psw_opti.h"
 
-void	swp(t_game *game, char stk)
+void	swp(t_game *game, t_mode mode)
 {
-	if (stk == 'A')
+	if (mode == A)
 	{
 		if (LOAD_A == 2 && PRV_MOV == RB)
 			buf_inst(game, RA);
@@ -23,7 +23,7 @@ void	swp(t_game *game, char stk)
 		else if (PRV_MOV != SA)
 			buf_inst(game, SA);
 	}
-	if (stk == 'B')
+	if (mode == B)
 	{
 		if (LOAD_B == 2 && PRV_MOV == RA)
 			buf_inst(game, RB);
@@ -34,20 +34,20 @@ void	swp(t_game *game, char stk)
 	}
 }
 
-void	rot(t_game *game, char stk)
+void	rot(t_game *game, t_mode mode)
 {
-	if (stk == 'A')
+	if (mode <= A)
 	{
-		if (LOAD_A == 2 && PRV_MOV == SB)
+		if ((LOAD_A == 2 || mode == A_INS) && PRV_MOV == SB)
 			buf_inst(game, SA);
-		else if (LOAD_A == 2 && PRV_MOV == RRB)
+		else if (LOAD_B == 2 && PRV_MOV == RRB)
 			buf_inst(game, RRA);
 		else
 			buf_inst(game, RA);
 	}
-	if (stk == 'B')
+	else if (mode <= B)
 	{
-		if (LOAD_B == 2 && PRV_MOV == SA)
+		if ((LOAD_B == 2 || mode == B_INS) && PRV_MOV == SA)
 			buf_inst(game, SB);
 		else if (LOAD_B == 2 && PRV_MOV == RRA)
 			buf_inst(game, RRB);
@@ -56,9 +56,9 @@ void	rot(t_game *game, char stk)
 	}
 }
 
-void	rrot(t_game *game, char stk)
+void	rrot(t_game *game, t_mode mode)
 {
-	if (stk == 'A')
+	if (mode == A)
 	{
 		if (LOAD_A == 2 && PRV_MOV == SB)
 			buf_inst(game, SA);
@@ -67,7 +67,7 @@ void	rrot(t_game *game, char stk)
 		else
 			buf_inst(game, RRA);
 	}
-	if (stk == 'B')
+	if (mode == B)
 	{
 		if (LOAD_B == 2 && PRV_MOV == SA)
 			buf_inst(game, SB);

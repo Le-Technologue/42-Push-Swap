@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/21 13:23:35 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/21 17:45:18 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,17 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 	if (function >= PSW_GAME)
 	{	
 		write(1, game->log->data, game->log->entries);
-		dprintf(1, "%i\n", ft_word_count(game->log->data, '\n'));
+		dprintf(1, "%lu raw instructions\n", game->buf->entries);
+		dprintf(1, "%i joint instructions\n", ft_word_count(game->log->data, '\n'));
+		dprintf(1, "%li saved instructions\n", game->buf->entries - ft_word_count(game->log->data, '\n'));
 		if (game->b.stk)
 			free(game->b.stk);
 		if (game->buf)
 			vctr_exit(game->buf);
 		if (game->log)
 			vctr_exit(game->log);
-		if (PVT)
-			vctr_exit(PVT);
+		if (game->info.pvt)
+			vctr_exit(game->info.pvt);
 	}
 	if (game->a.stk)
 		free(game->a.stk);
@@ -49,13 +51,13 @@ t_error	psw_game(t_game *game)
 	game->b.stk = malloc(sizeof(t_val) * game->qty);
 	if (!game->b.stk)
 		return (MEM_ALLOC);
-	if (vctr_init(&game->buf, sizeof(t_inst_id), 128))
+	if (vctr_init(&game->buf, sizeof(t_inst_id), 512))
 		return (MEM_ALLOC);
-	if (vctr_init(&game->log, sizeof(char), 512))
+	if (vctr_init(&game->log, sizeof(char), 2048))
 		return (MEM_ALLOC);
 	PRV_MOV = END;
-//	if (vctr_init(&PVT, sizeof(size_t), 32))
-//		return (MEM_ALLOC);
+	if (vctr_init(&game->info.pvt, sizeof(size_t), 8))
+		return (MEM_ALLOC);
 	game->a.load = game->qty;
 	game->b.load = 0;
 	psw_solver(game);
