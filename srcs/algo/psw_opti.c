@@ -6,11 +6,12 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/20 21:51:07 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/21 18:59:14 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/22 10:02:05 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "psw_opti.h"
+#include "psw_inst.h"
 
 void	swp(t_game *game, t_mode mode)
 {

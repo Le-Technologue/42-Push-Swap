@@ -6,13 +6,18 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 14:21:52 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/21 18:57:14 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/22 13:33:55 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ALGO_H
 # define ALGO_H
 
+# include "push_swap.h"
+# include "psw_srt_A.h"
+
+# define MED (low + (high - low) / 2)
+// # define TO_SORT ((high - low) / 2 + 1)
 # define PVT ((size_t *)(game->info->pvt->data))
 # define LST_PVT (game->info->pvt->entries)
 
@@ -22,10 +27,14 @@ typedef enum e_mode {
 	A,
 	B_3,
 	B_INS,
-	B
-	START,
+	B,
+	START
 }	t_mode;
 
+void	srt_tops(t_game *game, t_mode step, size_t med, _Bool *loop);
+void	srt_bottoms(t_game *game, size_t med, _Bool *loop);
+void	srt_next_to_top(t_game *game, size_t med, _Bool *loop);
+void	edge_srt(t_game *game, t_mode mode, size_t med);
 void	psw_solver(t_game *game);
 
 #endif
