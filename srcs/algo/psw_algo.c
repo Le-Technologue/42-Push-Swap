@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 20:39:53 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/22 13:48:49 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/22 14:26:38 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,14 +284,11 @@ void	psw_qcksrt_A(t_game *game, size_t low, size_t high)
 		{
 			buf_inst(game, PB);
 			to_sort--;
-			if (STK_B[TOP_B].key == MED
-				 && (to_sort > 0
-					 || (to_sort == 1 && low == 0)))
+			if (STK_B[TOP_B].key == MED && to_sort > 1)
 				rot(game, B);
 		}
 		else
 			rot(game, A);
-		edge_srt(game, A, MED);
 	}
 	if (STK_B[0].key == MED)
 		rrot(game, B);
