@@ -139,6 +139,8 @@ echo "./push_swap 3 2 5 1 4"
 echo "./push_swap 3 2 5 4 1"
 ./push_swap 3 2 5 4 1
 
+# 3 4
+
 # 3 5
 
 # 4 1
@@ -157,17 +159,17 @@ echo "./push_swap 4 1 5 3 2"
 
 # 4 2
 echo "./push_swap 4 2 1 3 5"
-./push_swap 2 4 1 3 5
+./push_swap 4 2 1 3 5
 echo "./push_swap 4 2 1 5 3"
-./push_swap 2 4 1 5 3
+./push_swap 4 2 1 5 3
 echo "./push_swap 4 2 3 1 5"
-./push_swap 2 4 3 1 5
+./push_swap 4 2 3 1 5
 echo "./push_swap 4 2 3 5 1"
-./push_swap 2 4 3 5 1
+./push_swap 4 2 3 5 1
 echo "./push_swap 4 2 5 1 3"
-./push_swap 2 4 5 1 3
+./push_swap 4 2 5 1 3
 echo "./push_swap 4 2 5 3 1"
-./push_swap 2 4 5 3 1
+./push_swap 4 2 5 3 1
 
 # 4 3
 
