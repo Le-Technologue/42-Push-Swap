@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/21 17:45:18 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/23 19:15:52 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "psw_parsing.h"
 #include "psw_inst.h"
 #include "psw_algo.h"
+#include "psw_monitor.h"
 
 t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 {
@@ -27,6 +28,7 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 	if (function >= PSW_GAME)
 	{	
 		write(1, game->log->data, game->log->entries);
+		psw_monitor(game);
 		dprintf(1, "%lu raw instructions\n", game->buf->entries);
 		dprintf(1, "%i joint instructions\n", ft_word_count(game->log->data, '\n'));
 		dprintf(1, "%li saved instructions\n", game->buf->entries - ft_word_count(game->log->data, '\n'));
@@ -80,7 +82,6 @@ t_error	psw_parsing(t_game *game, char **av)
 	t_error	outcome;
 
 	i = 0;
-	game->info.mon = 1; // MONITOR
 	while (i < game->qty)
 	{
 		ptr = av[i + 1];
@@ -100,6 +101,7 @@ int main(int ac, char **av)
 	t_error	error;
 	t_game	game;
 
+	game.info.mon = 0; // MONITOR
 	if (ac == 1)
 	{
 		ft_putendl_fd("USAGE : ./push_swap [INT LIST]", 1);

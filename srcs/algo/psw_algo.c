@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 20:39:53 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/22 14:26:38 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/23 19:11:41 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ void	srt_tops(t_game *game, t_mode step, size_t med, _Bool *loop)
 		else if (step == A
 			&& ((STK_A[TOP_A].key < med && STK_A[TOP_A - 1].key < med)
 			|| (STK_A[TOP_A].key > med && STK_A[TOP_A - 1].key > med)))
-			swp(game, A);
-		else if (step == A_3)
 			swp(game, A);
 		else
 			*loop = 1;
@@ -107,6 +105,47 @@ void	edge_srt(t_game *game, t_mode step, size_t med)
 		if (loop)
 			break;
 	}
+}
+
+void	three_srt(t_game *game)
+{
+	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[0].key
+			&& STK_A[TOP_A].key < STK_A[TOP_A - 1].key)
+		buf_inst(game, RRA);
+	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[0].key
+			&& STK_B[TOP_B].key > STK_B[TOP_B - 1].key)
+		buf_inst(game, RRB);
+	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[0].key)
+		buf_inst(game, RA);
+	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[0].key)
+		buf_inst(game, RB);
+	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[TOP_A - 1].key)
+		buf_inst(game, SA);
+	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[TOP_B - 1].key)
+		buf_inst(game, SB);
+	if (LOAD_A >= 3 && STK_A[0].key == STK_A[TOP_A].key + 1)
+		buf_inst(game, RRA);
+	if (LOAD_B >= 3 && STK_B[0].key == STK_B[TOP_B].key - 1)
+		buf_inst(game, RRB);
+	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[TOP_A - 1].key)
+		buf_inst(game, SA);
+	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[TOP_B - 1].key)
+		buf_inst(game, SB);
+}
+
+void	five_srt(t_game *game)
+{
+	buf_inst(game, PB);
+	buf_inst(game, PB);
+	three_srt(game);
+	buf_inst(game, PB);
+	three_srt(game);
+	buf_inst(game, PA);
+	three_srt(game);
+	buf_inst(game, PA);
+	three_srt(game);
+	buf_inst(game, PA);
+	three_srt(game);
 }
 
 /*
@@ -225,6 +264,52 @@ void	psw_sort_B(t_game *game, size_t high, size_t low)
 	else
 		psw_qcksrt_B(game, high, low);
 }
+
+void	psw_inssrt_B(t_game *game, size_t high, size_t low)
+{
+	size_t	nxt_key;
+	size_t	i;
+
+	i = 0;
+	while (LOAD_B > 3 && nxt_key != low)
+	{
+		nxt_key = high - i;
+		while (STK_B[TOP_B].key != nxt_key)
+		{
+			if (psw_find_key(game, B, nxt_key) >=  LOAD_B / 2 + 1)
+				rot(game, B_INS);
+			else
+				rrot(game, B);
+		}
+		buf_inst(game, PB);
+		i++;
+	}
+}
+
+void	psw_qcksrt_B(t_game *game, size_t high, size_t low)
+{
+	if (INSSRT_THRESHOLD)
+		return psw_inssrt_B(game, high, low);
+	to_sort = (high - low) / 2 + 1;
+	while (to_sort)
+	{
+		edge_srt(game, B, MED);
+		if (STK_B[TOP_B].key >= MED)
+		{
+			buf_inst(game, PA);
+			to_sort--;
+			if (STK_A[TOP_A].key == MED && to_sort > 1)
+				rot(game, A);
+		}
+		else
+			rot(game, B);
+	if (STK_A[0].key == MED)
+		rrot(game, B);
+	psw_qcksrt_A(game, high, MED);
+	psw_qcksrt_B(game, MED - 1, low);
+	psw_qcksrt_B(game, low, PVT[);
+	}
+}
 */
 
 size_t	psw_find_key(t_game *game, t_mode stk, size_t key_to_find)
@@ -249,15 +334,15 @@ size_t	psw_find_key(t_game *game, t_mode stk, size_t key_to_find)
 	return (i);
 }
 
-void	psw_insersrt_A(t_game *game, size_t start, size_t end)
+void	psw_inssrt_A(t_game *game, size_t low, size_t high)
 {
 	size_t	nxt_key;
 	size_t	i;
 
 	i = 0;
-	while (LOAD_A > 3 && nxt_key != end)
+	while (LOAD_A > 5 && nxt_key != high)
 	{
-		nxt_key = start + i;
+		nxt_key = low + i;
 		while (STK_A[TOP_A].key != nxt_key)
 		{
 			if (psw_find_key(game, A, nxt_key) >=  LOAD_A / 2 + 1)
@@ -268,6 +353,9 @@ void	psw_insersrt_A(t_game *game, size_t start, size_t end)
 		buf_inst(game, PB);
 		i++;
 	}
+	five_srt(game);
+	while (i--)
+		buf_inst(game, PA);
 }
 
 void	psw_qcksrt_A(t_game *game, size_t low, size_t high)
@@ -275,9 +363,10 @@ void	psw_qcksrt_A(t_game *game, size_t low, size_t high)
 	size_t	to_sort;
 
 	to_sort = (high - low) / 2 + 1;
-	if (high - low <= 15)
-		return psw_insersrt_A(game, low, high);
-	while (to_sort && LOAD_A > 3) 
+	vctr_push(game->info.pvt, &low);
+	if (INSSRT_THRESHOLD)
+		return psw_inssrt_A(game, low, high);
+	while (to_sort) 
 	{
 		edge_srt(game, A, MED);
 		if (STK_A[TOP_A].key <= MED)
@@ -292,35 +381,35 @@ void	psw_qcksrt_A(t_game *game, size_t low, size_t high)
 	}
 	if (STK_B[0].key == MED)
 		rrot(game, B);
-//	vctr_push(game->pvt, MED);
+	if (STK_B[TOP_B - 1].key == MED)
+		buf_inst(game, SB);
 	psw_qcksrt_A(game, MED + 1, high);
 }
 
 void	psw_qcksrt_init(t_game *game, size_t low, size_t high)
 {
 	size_t	to_sort;
-	_Bool	higher_than_med_on_stack;
+	size_t	half_med;
 
-	if (high - low <= 3)
-		return ;
+	half_med = MED / 2;
+	vctr_push(game->info.pvt, &low);
+	vctr_push(game->info.pvt, &half_med);
+	if (QCKSRT_THRESHOLD)
+		return psw_qcksrt_A(game, low, high);
 	to_sort = (high - low) / 2 + 1;
-	higher_than_med_on_stack = 0;
-	while (to_sort && LOAD_A > 3) 
+	while (to_sort) 
 	{
 		edge_srt(game, START, MED);
 		if (STK_A[TOP_A].key <= MED)
 		{
 			buf_inst(game, PB);
-			if (!higher_than_med_on_stack && STK_B[TOP_B].key > MED / 2)
-				higher_than_med_on_stack = 1;
-			else if (higher_than_med_on_stack && STK_B[TOP_B].key <= MED / 2)
+			if (STK_B[TOP_B - 1].key > half_med && STK_B[TOP_B].key <= half_med)
 				rot(game, B);
 			to_sort--;
 		}
 		else
 			rot(game, A);
 	}
-//	vctr_push(game->info.pvt, &MED);
 	psw_qcksrt_A(game, MED + 1, high);
 }
 
@@ -328,13 +417,10 @@ void	psw_solver(t_game *game)
 {
 	if (game->info.mon)
 		psw_monitor(game);
-	if (LOAD_A <= 20)
-		psw_qcksrt_A(game, 0, TOP_A);
-	else
-		psw_qcksrt_init(game, 0, TOP_A);
-//	edge_srt(game, A_3, 0); //sort 3 last values in A
+	psw_qcksrt_init(game, 0, TOP_A);
+//	edge_srt(game, A_3, TOP_A / 2); //sort 3 last values in A
 //	if (LOAD_B)
-//		psw_sort_B(game, STK_A[TOP_A].key - 1, PVT[LST_PVT]);
+//		psw_qcksort_B(game, PVT[LST_PVT] - 1, PVT[LST_PVT - 1]);
 //	depiler B en terminant le tri
 	buf_inst(game, END);
 }

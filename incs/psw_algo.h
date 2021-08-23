@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 14:21:52 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/22 13:33:55 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/23 16:47:47 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 # define ALGO_H
 
 # include "push_swap.h"
-# include "psw_srt_A.h"
 
 # define MED (low + (high - low) / 2)
 // # define TO_SORT ((high - low) / 2 + 1)
-# define PVT ((size_t *)(game->info->pvt->data))
-# define LST_PVT (game->info->pvt->entries)
+# define PVT ((size_t *)(game->info.pvt->data))
+# define LST_PVT (game->info.pvt->entries)
+# define QCKSRT_THRESHOLD (high - low < 50)
+# define INSSRT_THRESHOLD (high - low < 25)
 
 typedef enum e_mode {
 	A_3,
