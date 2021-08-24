@@ -6,19 +6,23 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 20:39:53 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/24 09:47:04 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/24 14:02:35 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h> // TENTION
 #include "libft.h"
 #include "psw_inst.h"
-#include "psw_algo.h"
 #include "psw_opti.h"
+#include "psw_five_srt.h"
+#include "psw_algo.h"
 #include "psw_monitor.h"
 
-void	srt_tops(t_game *game, t_mode step, size_t med, _Bool *loop)
+size_t	srt_tops(t_game *game, t_mode step, size_t med)
 {
+	size_t	moves;
+
+	moves = 0;
 	if (LOAD_A >= 2 && (STK_A[TOP_A].key > STK_A[TOP_A - 1].key))
 	{
 		if (step == START
@@ -27,130 +31,67 @@ void	srt_tops(t_game *game, t_mode step, size_t med, _Bool *loop)
 				&& (STK_A[TOP_A].key <= med && STK_A[TOP_A - 1].key <= med))
 			|| (STK_B[TOP_B].key <= med / 2
 				&& (STK_A[TOP_A].key <= med && STK_A[TOP_A - 1].key <= med))))
-			swp(game, A);
+			moves += swp(game, A);
 		else if (step == A
 			&& ((STK_A[TOP_A].key < med && STK_A[TOP_A - 1].key < med)
 			|| (STK_A[TOP_A].key > med && STK_A[TOP_A - 1].key > med)))
-			swp(game, A);
-		else
-			*loop = 1;
+			moves += swp(game, A);
 	}
 	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[TOP_B - 1].key
 			&& STK_B[TOP_B - 1].key != med)
-	{
-		swp(game, B);
-		*loop = 0;
-	}
+		moves += swp(game, B);
+	return (moves);
 }
 
-void	srt_bottoms(t_game *game, size_t med, _Bool *loop)
+size_t	srt_bottoms(t_game *game, size_t med)
 {
-	*loop = 1;
+	size_t	moves;
+
+	moves = 0;
 	if (PRV_MOV != RA && LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[0].key
 			&& (STK_A[TOP_A].key <= med && STK_A[0].key <= med))
-	{
-		rrot(game, A);
-		*loop = 0;
-	}
+		moves += rrot(game, A);
 	if (PRV_MOV != RB && LOAD_B >= 2 && STK_B[0].key != med
 			&& STK_B[TOP_B].key < STK_B[0].key)
-	{
-		rrot(game, B);
-		*loop = 0;
-	}
+		moves += rrot(game, B);
 	if (PRV_MOV != RRA && LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[0].key
 			&& (STK_A[TOP_A].key >= med && STK_A[0].key >= med))
-	{
-		rot(game, A);
-		*loop = 0;
-	}
+		moves += rot(game, A);
 	if (PRV_MOV != RRB && LOAD_B >= 2 && STK_B[0].key != med
 			&& STK_B[TOP_B].key < STK_B[0].key)
-	{
-		rot(game, B);
-		*loop = 0;
-	}
+		moves += rot(game, B);
+	return (moves);
 }
 
-void	srt_next_to_top(t_game *game, size_t med, _Bool *loop)
+size_t	srt_next_to_top(t_game *game, size_t med)
 {
-	*loop = 1;
+	size_t	moves;
+
+	moves = 0;
 	if (PRV_MOV != RA && LOAD_A >= 3 && STK_A[0].key == STK_A[TOP_A].key + 1
 			&& (STK_A[TOP_A].key <= med && STK_A[0].key <= med))
-	{
-		rrot(game, A);
-		*loop = 0;
-	}
+		moves += rrot(game, A);
 	if (PRV_MOV != RB && LOAD_B >= 3 && STK_B[0].key == STK_B[TOP_B].key - 1
 			&& (STK_A[TOP_A].key >= med && STK_A[0].key >= med))
-	{
-		rrot(game, B);
-		*loop = 0;
-	}
+		moves += rrot(game, B);
+	return (moves);
 }
 
 void	edge_srt(t_game *game, t_mode step, size_t med)
 {
-	_Bool loop;
+	size_t	moves;
 
-	while ((LOAD_A > 1 && (STK_A[TOP_A].key > STK_A[TOP_A - 1].key))
-			|| (LOAD_B > 1 && (STK_B[TOP_B].key < STK_B[TOP_B - 1].key)))
+	while (1)
 	{
-		loop = 0;
-		srt_tops (game, step, med, &loop);
-		srt_bottoms(game, med, &loop);
-		srt_tops (game, step, med, &loop);
-		srt_next_to_top(game, med, &loop);
-		srt_tops (game, step, med, &loop);
-		if (loop)
+		moves = 0;
+		moves += srt_tops(game, step, med);
+		moves += srt_bottoms(game, med);
+		moves += srt_tops(game, step, med);
+		moves += srt_next_to_top(game, med);
+		moves += srt_tops(game, step, med);
+		if (!moves)
 			break;
 	}
-}
-
-void	three_srt(t_game *game)
-{
-	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[0].key
-			&& STK_A[TOP_A].key < STK_A[TOP_A - 1].key)
-		rrot(game, A);
-	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[0].key
-			&& STK_B[TOP_B].key > STK_B[TOP_B - 1].key)
-		rrot(game, B);
-	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[0].key)
-		rot(game, A);
-	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[0].key)
-		rot(game, B);
-	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[TOP_A - 1].key)
-		swp(game, A);
-	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[TOP_B - 1].key)
-		swp(game, B);
-	if (LOAD_A >= 3 && STK_A[0].key == STK_A[TOP_A].key + 1)
-		rrot(game, A);
-	if (LOAD_B >= 3 && STK_B[0].key == STK_B[TOP_B].key - 1)
-		rrot(game, B);
-	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[TOP_A - 1].key)
-		swp(game, A);
-	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[TOP_B - 1].key)
-		swp(game, B);
-}
-
-void	five_srt(t_game *game)
-{
-	if (game->qty <= 3)
-		return three_srt(game);
-	if (STK_A[TOP_A].key == game->qty - 2)
-	{
-		buf_inst(game, RRA);
-		buf_inst(game, RRA);
-	}
-	three_srt(game);
-	buf_inst(game, PB);
-	three_srt(game);
-	buf_inst(game, PB);
-	three_srt(game);
-	buf_inst(game, PA);
-	three_srt(game);
-	buf_inst(game, PA);
-	three_srt(game);
 }
 
 /*
@@ -243,21 +184,21 @@ void	psw_qcksrt_B(t_game *game, size_t high, size_t low)
 		edge_srt(game, B, med);
 		if (STK_A[TOP_A].key == med)
 		{
-			buf_inst(game, PB);
+			psh(game, B);
 			to_sort--;
 			if (to_sort > 0 && to_sort != (high - low) / 2)
-				buf_inst(game, RB);
+				rot(game, B);
 		}
 		else if (STK_A[TOP_A].key < med)
 		{
-			buf_inst(game, PB);
+			psh(game, B);
 			to_sort--;
 		}
 		else
-			buf_inst(game, RA);
+			rot(game, A);
 	}
 	if (STK_B[0].key == med)
-		buf_inst(game, RRB);
+		rrot(game, B);
 	psw_qcksrt_B(game, 0, med);
 }
 */
@@ -286,7 +227,7 @@ void	psw_inssrt_B(t_game *game, size_t high, size_t low)
 			else
 				rrot(game, B);
 		}
-		buf_inst(game, PB);
+		psh(game, B);
 		i++;
 	}
 }
@@ -301,7 +242,7 @@ void	psw_qcksrt_B(t_game *game, size_t high, size_t low)
 		edge_srt(game, B, MED);
 		if (STK_B[TOP_B].key >= MED)
 		{
-			buf_inst(game, PA);
+			psh(game, A);
 			to_sort--;
 			if (STK_A[TOP_A].key == MED && to_sort > 1)
 				rot(game, A);
@@ -355,12 +296,12 @@ void	psw_inssrt_A(t_game *game, size_t low, size_t high)
 			else
 				rrot(game, A);
 		}
-		buf_inst(game, PB);
+		psh(game, B);
 		i++;
 	}
 	five_srt(game);
 	while (i--)
-		buf_inst(game, PA);
+		psh(game, A);
 }
 
 void	psw_qcksrt_A(t_game *game, size_t low, size_t high)
@@ -376,7 +317,7 @@ void	psw_qcksrt_A(t_game *game, size_t low, size_t high)
 		edge_srt(game, A, MED);
 		if (STK_A[TOP_A].key <= MED)
 		{
-			buf_inst(game, PB);
+			psh(game, B);
 			to_sort--;
 			if (STK_B[TOP_B].key == MED && to_sort > 1)
 				rot(game, B);
@@ -387,7 +328,7 @@ void	psw_qcksrt_A(t_game *game, size_t low, size_t high)
 	if (STK_B[0].key == MED)
 		rrot(game, B);
 	if (STK_B[TOP_B - 1].key == MED)
-		buf_inst(game, SB);
+		swp(game, B);
 	psw_qcksrt_A(game, MED + 1, high);
 }
 
@@ -407,7 +348,7 @@ void	psw_qcksrt_init(t_game *game, size_t low, size_t high)
 		edge_srt(game, START, MED);
 		if (STK_A[TOP_A].key <= MED)
 		{
-			buf_inst(game, PB);
+			psh(game, B);
 			if (STK_B[TOP_B - 1].key > half_med && STK_B[TOP_B].key <= half_med)
 				rot(game, B);
 			to_sort--;

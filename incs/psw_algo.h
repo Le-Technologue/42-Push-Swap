@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 14:21:52 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/23 16:47:47 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/24 14:00:06 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # define LST_PVT (game->info.pvt->entries)
 # define QCKSRT_THRESHOLD (high - low < 50)
 # define INSSRT_THRESHOLD (high - low < 25)
+//# define UNSORTED_STKS !chk_A(game) && !chk_B(game)
 
 typedef enum e_mode {
 	A_3,
@@ -32,9 +33,9 @@ typedef enum e_mode {
 	START
 }	t_mode;
 
-void	srt_tops(t_game *game, t_mode step, size_t med, _Bool *loop);
-void	srt_bottoms(t_game *game, size_t med, _Bool *loop);
-void	srt_next_to_top(t_game *game, size_t med, _Bool *loop);
+size_t	srt_tops(t_game *game, t_mode step, size_t med);
+size_t	srt_bottoms(t_game *game, size_t med);
+size_t	srt_next_to_top(t_game *game, size_t med);
 void	edge_srt(t_game *game, t_mode mode, size_t med);
 void	psw_solver(t_game *game);
 

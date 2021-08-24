@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   psw_opti.h                                         :+:      :+:    :+:   */
+/*   psw_probes.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/20 21:48:34 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/24 13:35:54 by wetieven         ###   ########lyon.fr   */
+/*   Created: 2021/08/24 11:23:14 by wetieven          #+#    #+#             */
+/*   Updated: 2021/08/24 11:28:58 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PSW_OPTI_H
-# define PSW_OPTI_H
+#ifndef PROBES_H
+# define PROBES_H
 
-# include "psw_algo.h"
+# include "push_swap.h"
 
-size_t	psh(t_game *game, t_mode mode);
-size_t	swp(t_game *game, t_mode mode);
-size_t	rot(t_game *game, t_mode mode);
-size_t	rrot(t_game *game, t_mode mode);
+_Bool	chk_A(t_game *game);
 
 #endif

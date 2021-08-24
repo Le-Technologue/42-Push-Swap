@@ -6,14 +6,29 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/20 21:51:07 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/24 09:31:35 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/24 13:56:59 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "psw_opti.h"
 #include "psw_inst.h"
 
-void	swp(t_game *game, t_mode mode)
+size_t	psh(t_game *game, t_mode mode)
+{
+	if (mode == A && LOAD_B && PRV_MOV != PB)
+	{
+		buf_inst(game, PA);
+		return (1);
+	}
+	if (mode == B && LOAD_A && PRV_MOV != PA)
+	{
+		buf_inst(game, PB);
+		return (1);
+	}
+	return (0);
+}
+
+size_t	swp(t_game *game, t_mode mode)
 {
 	if (mode == A)
 	{
@@ -23,6 +38,8 @@ void	swp(t_game *game, t_mode mode)
 			buf_inst(game, RRA);
 		else if (PRV_MOV != SA)
 			buf_inst(game, SA);
+		else
+			return (0);
 	}
 	if (mode == B)
 	{
@@ -32,10 +49,13 @@ void	swp(t_game *game, t_mode mode)
 			buf_inst(game, RRB);
 		else if (PRV_MOV != SB)
 			buf_inst(game, SB);
+		else
+			return (0);
 	}
+	return (1);
 }
 
-void	rot(t_game *game, t_mode mode)
+size_t	rot(t_game *game, t_mode mode)
 {
 	if (mode <= A)
 	{
@@ -45,6 +65,8 @@ void	rot(t_game *game, t_mode mode)
 			buf_inst(game, RRA);
 		else if (PRV_MOV != RRA)
 			buf_inst(game, RA);
+		else
+			return (0);
 	}
 	else if (mode <= B)
 	{
@@ -54,10 +76,13 @@ void	rot(t_game *game, t_mode mode)
 			buf_inst(game, RRB);
 		else if (PRV_MOV != RRB)
 			buf_inst(game, RB);
+		else
+			return (0);
 	}
+	return (1);
 }
 
-void	rrot(t_game *game, t_mode mode)
+size_t	rrot(t_game *game, t_mode mode)
 {
 	if (mode == A)
 	{
@@ -67,6 +92,8 @@ void	rrot(t_game *game, t_mode mode)
 			buf_inst(game, RA);
 		else if (PRV_MOV != RA)
 			buf_inst(game, RRA);
+		else
+			return (0);
 	}
 	if (mode == B)
 	{
@@ -76,5 +103,8 @@ void	rrot(t_game *game, t_mode mode)
 			buf_inst(game, RB);
 		else if (PRV_MOV != RB)
 			buf_inst(game, RRB);
+		else
+			return (0);
 	}
+	return (1);
 }

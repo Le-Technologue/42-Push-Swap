@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/24 09:38:42 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/24 14:20:27 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int main(int ac, char **av)
 	t_error	error;
 	t_game	game;
 
-	game.info.mon = 0; // MONITOR
+	game.info.mon = 1; // MONITOR
 	if (ac == 1)
 	{
 		ft_putendl_fd("USAGE : ./push_swap [INT LIST]", 1);

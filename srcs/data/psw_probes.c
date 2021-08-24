@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   psw_opti.h                                         :+:      :+:    :+:   */
+/*   psw_probes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/20 21:48:34 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/24 13:35:54 by wetieven         ###   ########lyon.fr   */
+/*   Created: 2021/08/24 11:26:41 by wetieven          #+#    #+#             */
+/*   Updated: 2021/08/24 11:29:16 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PSW_OPTI_H
-# define PSW_OPTI_H
+#include "psw_probes.h"
 
-# include "psw_algo.h"
+_Bool	chk_A(t_game *game)
+{
+	size_t i;
 
-size_t	psh(t_game *game, t_mode mode);
-size_t	swp(t_game *game, t_mode mode);
-size_t	rot(t_game *game, t_mode mode);
-size_t	rrot(t_game *game, t_mode mode);
-
-#endif
+	i = 0;
+	while (LOAD_A >= 2 && i < TOP_A && STK_A[i + 1].key < STK_A[i].key)
+		i++;
+	if (i == TOP_A)
+		return 1;
+	else
+		return 0;
+}
