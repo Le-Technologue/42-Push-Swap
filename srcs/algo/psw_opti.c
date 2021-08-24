@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/20 21:51:07 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/22 10:02:05 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/24 09:31:35 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	rot(t_game *game, t_mode mode)
 			buf_inst(game, SA);
 		else if (LOAD_B == 2 && PRV_MOV == RRB)
 			buf_inst(game, RRA);
-		else
+		else if (PRV_MOV != RRA)
 			buf_inst(game, RA);
 	}
 	else if (mode <= B)
@@ -52,7 +52,7 @@ void	rot(t_game *game, t_mode mode)
 			buf_inst(game, SB);
 		else if (LOAD_B == 2 && PRV_MOV == RRA)
 			buf_inst(game, RRB);
-		else
+		else if (PRV_MOV != RRB)
 			buf_inst(game, RB);
 	}
 }
@@ -65,7 +65,7 @@ void	rrot(t_game *game, t_mode mode)
 			buf_inst(game, SA);
 		else if (LOAD_A == 2 && PRV_MOV == RB)
 			buf_inst(game, RA);
-		else
+		else if (PRV_MOV != RA)
 			buf_inst(game, RRA);
 	}
 	if (mode == B)
@@ -74,7 +74,7 @@ void	rrot(t_game *game, t_mode mode)
 			buf_inst(game, SB);
 		else if (LOAD_B == 2 && PRV_MOV == RA)
 			buf_inst(game, RB);
-		else
+		else if (PRV_MOV != RB)
 			buf_inst(game, RRB);
 	}
 }

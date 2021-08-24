@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 20:39:53 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/23 19:11:41 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/24 09:47:04 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,36 +111,41 @@ void	three_srt(t_game *game)
 {
 	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[0].key
 			&& STK_A[TOP_A].key < STK_A[TOP_A - 1].key)
-		buf_inst(game, RRA);
+		rrot(game, A);
 	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[0].key
 			&& STK_B[TOP_B].key > STK_B[TOP_B - 1].key)
-		buf_inst(game, RRB);
+		rrot(game, B);
 	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[0].key)
-		buf_inst(game, RA);
+		rot(game, A);
 	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[0].key)
-		buf_inst(game, RB);
+		rot(game, B);
 	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[TOP_A - 1].key)
-		buf_inst(game, SA);
+		swp(game, A);
 	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[TOP_B - 1].key)
-		buf_inst(game, SB);
+		swp(game, B);
 	if (LOAD_A >= 3 && STK_A[0].key == STK_A[TOP_A].key + 1)
-		buf_inst(game, RRA);
+		rrot(game, A);
 	if (LOAD_B >= 3 && STK_B[0].key == STK_B[TOP_B].key - 1)
-		buf_inst(game, RRB);
+		rrot(game, B);
 	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[TOP_A - 1].key)
-		buf_inst(game, SA);
+		swp(game, A);
 	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[TOP_B - 1].key)
-		buf_inst(game, SB);
+		swp(game, B);
 }
 
 void	five_srt(t_game *game)
 {
-	buf_inst(game, PB);
-	buf_inst(game, PB);
+	if (game->qty <= 3)
+		return three_srt(game);
+	if (STK_A[TOP_A].key == game->qty - 2)
+	{
+		buf_inst(game, RRA);
+		buf_inst(game, RRA);
+	}
 	three_srt(game);
 	buf_inst(game, PB);
 	three_srt(game);
-	buf_inst(game, PA);
+	buf_inst(game, PB);
 	three_srt(game);
 	buf_inst(game, PA);
 	three_srt(game);
