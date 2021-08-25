@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 20:39:53 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/24 19:23:44 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/25 15:04:58 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ size_t	med_srt_tops(t_game *game, t_mode step, size_t med)
 	{
 		if (step == A && STK_B[TOP_B - 1].key != med)
 			moves += swp(game, B);
-		else if (step == A_INS)
+		else if (step != A)
 			moves += swp(game, B);
 	}
 	return (moves);
@@ -236,8 +236,13 @@ void	psw_inssrt_B(t_game *game, size_t high, size_t low)
 	}
 }
 
-void	psw_qcksrt_B(t_game *game, size_t high, size_t low)
+void	psw_qcksrt_B(t_game *game, size_t prv_pvt_idx)
 {
+	size_t	high;
+	size_t	low;
+
+	high = PVT[prv_pvt_idx] - 1;
+	low = PVT[prv_pvt_idx - 1];
 	if (INSSRT_THRESHOLD)
 		return psw_inssrt_B(game, high, low);
 	to_sort = (high - low) / 2 + 1;
@@ -255,35 +260,116 @@ void	psw_qcksrt_B(t_game *game, size_t high, size_t low)
 			rot(game, B);
 	if (STK_A[0].key == MED)
 		rrot(game, B);
-	psw_qcksrt_A(game, high, MED);
-	psw_qcksrt_B(game, MED - 1, low);
-	psw_qcksrt_B(game, low, PVT[);
+	psw_qcksrt_A(game, MED, high); //what about the added pivots ?
+	psw_qcksrt_B(game, MED + 1, low, prv_pvt_idx - 1);
+	psw_qcksrt_B(game, prv_pvt_idx - 1);
 	}
 }
 */
 
-size_t	psw_find_key(t_game *game, t_mode stk, size_t key_to_find)
+size_t	psw_key_location(t_val *ptr, size_t load, size_t key_to_find)
 {
 	size_t	i;
-	t_val	*ptr;
-	size_t	load;
 
 	i = 0;
-	if (stk == A)
-	{
-		ptr = STK_A;
-		load = LOAD_A;
-	}
-	else
-	{
-		ptr = STK_B;
-		load = LOAD_B;
-	}
-	while (ptr[i].key != key_to_find && i < load)
+	while (ptr[i].key != key_to_find && i <= load / 2 + 1)
 		i++;
 	return (i);
 }
 
+void	psw_ftch_key(t_game *game, t_stk *ptr, t_mode step, size_t key_to_fetch)
+{
+	size_t	nxt_key_to_fetch;
+
+	if (step <= A)
+		nxt_key_to_fetch = key_to_fetch + 1;
+	else
+		nxt_key_to_fetch = key_to_fetch - 1;
+	if (psw_key_location(ptr->stk, ptr->load, key_to_fetch) >= ptr->load / 2 + 1)
+	{
+		while (ptr->stk[ptr->load - 1].key != key_to_fetch)
+		{
+			if (ptr->stk[ptr->load - 1].key == nxt_key_to_fetch)
+				psh(game, step);
+			rot(game, step);
+		}
+	}
+	else
+	{
+		while (ptr->stk[ptr->load - 1].key != key_to_fetch)
+		{
+			if (ptr->stk[ptr->load - 1].key == nxt_key_to_fetch)
+				psh(game, step);
+			rrot(game, step);
+		}
+	}
+}
+
+void	psw_inssrt(t_game *game, t_mode step, size_t key_to_sort)
+{
+	t_stk	*ptr;
+
+	if (step <= A)
+		ptr = &game->a;
+	else
+		ptr = &game->b;
+	psw_ftch_key(game, ptr, step, key_to_sort);
+}
+
+void	psw_inssrt_B(t_game *game, size_t high)//, size_t low, size_t prv_pvt_idx)
+{
+	size_t	nxt_key;
+	size_t	i;
+
+	i = 0;
+	nxt_key = high;
+	while (LOAD_B)
+	{
+		nxt_key = high - i;
+		psw_inssrt(game, B_INS, nxt_key);
+//		while (STK_B[TOP_B].key != nxt_key)
+//		{
+//			srt_tops(game);
+//			if (STK_B[TOP_B].key == nxt_key - 1)
+//				psh(game, A);
+//			if (STK_B[TOP_B].key == nxt_key)
+//				break ;
+//			if (psw_find_key(game, B, nxt_key) >= LOAD_B / 2 + 1)
+//				rot(game, B_INS);
+//			else
+//				rrot(game, B_INS);
+//		}
+		psh(game, B_INS);
+		i++;
+		srt_tops(game);
+		if (STK_A[TOP_A].key == nxt_key - 1)
+			i++;
+	}
+}
+
+void	psw_inssrt_A(t_game *game, size_t low, size_t high)
+{
+	size_t	nxt_key;
+	size_t	i;
+
+	i = 0;
+	nxt_key = low;
+	while (LOAD_A > 5 && nxt_key < high && !chk_A(game) && nxt_key < high)
+	{
+		nxt_key = low + i;
+		psw_inssrt(game, A_INS, nxt_key);
+		i++;
+		if (chk_A(game))
+			break ;
+		psh(game, A_INS);
+		srt_tops(game);
+		if (STK_B[TOP_B].key == nxt_key + 1)
+			i++;
+	}
+	if (!chk_A(game) && LOAD_A <= 5)
+		five_srt(game);
+}
+/*
 void	psw_inssrt_A(t_game *game, size_t low, size_t high)
 {
 	size_t	nxt_key;
@@ -315,9 +401,10 @@ void	psw_inssrt_A(t_game *game, size_t low, size_t high)
 			i++;
 	}
 	five_srt(game);
-
+	while (i--)
+		psh(game, A);
 }
-
+*/
 void	psw_qcksrt_A(t_game *game, size_t low, size_t high)
 {
 	size_t	to_sort;
@@ -326,6 +413,8 @@ void	psw_qcksrt_A(t_game *game, size_t low, size_t high)
 	vctr_push(game->info.pvt, &low);
 	if (INSSRT_THRESHOLD)
 		return psw_inssrt_A(game, low, high);
+//	if (LOAD_A <= 5 || high - low == 0)
+//		return five_srt(game);
 	while (to_sort) 
 	{
 		edge_srt(game, A, MED);
@@ -379,7 +468,9 @@ void	psw_solver(t_game *game)
 		psw_monitor(game);
 	psw_qcksrt_init(game, 0, TOP_A - 5);
 //	edge_srt(game, A_3, TOP_A / 2); //sort 3 last values in A
-//	if (LOAD_B)
+	if (LOAD_B)
+		psw_inssrt_B(game, STK_A[TOP_A].key - 1);
+//	five_srt(game);
 //		psw_qcksort_B(game, PVT[LST_PVT] - 1, PVT[LST_PVT - 1]);
 //	depiler B en terminant le tri
 	buf_inst(game, END);

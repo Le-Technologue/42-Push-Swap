@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/20 21:51:07 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/24 16:31:59 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/25 11:39:36 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 
 size_t	psh(t_game *game, t_mode mode)
 {
-	if (mode == A && LOAD_B && PRV_MOV != PB)
+	if ((mode == A || mode == B_INS) && LOAD_B
+			&& (PRV_MOV != PB || mode == B_INS))
 	{
 		buf_inst(game, PA);
 		return (1);
 	}
-	if (mode == B && LOAD_A && PRV_MOV != PA)
+	if ((mode == B || mode == A_INS) && LOAD_A
+			&& (PRV_MOV != PA || mode == A_INS))
 	{
 		buf_inst(game, PB);
 		return (1);
