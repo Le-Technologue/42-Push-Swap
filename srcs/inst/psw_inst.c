@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:43:03 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/24 10:16:01 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 17:53:38 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,6 @@ void	buf_inst(t_game *game, t_inst_id inst)
 		vctr_push(game->buf, &inst);
 		PRV_MOV = inst;
 	}
-	if (game->info.mon)
+	if (game->info.mon) // MONITORING
 		psw_monitor(game);
 }

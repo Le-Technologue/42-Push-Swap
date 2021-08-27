@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 20:39:53 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/25 22:18:49 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 17:54:11 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -466,7 +466,7 @@ void	psw_qcksrt_init(t_game *game, size_t low, size_t high)
 
 void	psw_solver(t_game *game)
 {
-	if (game->info.mon)
+	if (game->info.mon) // MONITORING
 		psw_monitor(game);
 	psw_qcksrt_init(game, 0, TOP_A - 5);
 //	edge_srt(game, A_3, TOP_A / 2); //sort 3 last values in A

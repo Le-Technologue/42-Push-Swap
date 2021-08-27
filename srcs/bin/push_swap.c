@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/25 15:11:10 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 17:53:26 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,17 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 	if (function >= PSW_GAME)
 	{	
 		write(1, game->log->data, game->log->entries);
-		psw_monitor(game);
-		if (chk_A(game))
-			dprintf(1, "STACK SORTED :D\n");
-		else
-			dprintf(1, "STACK UNSORTED ^^\"\n");
-		dprintf(1, "%lu raw instructions\n", game->buf->entries);
-		dprintf(1, "%i joint instructions\n", ft_word_count(game->log->data, '\n'));
-		dprintf(1, "%li saved instructions\n", game->buf->entries - ft_word_count(game->log->data, '\n'));
+		if (game->info.mon) // MONITORING
+		{
+			psw_monitor(game);
+			if (chk_A(game))
+				dprintf(1, "STACK SORTED :D\n");
+			else
+				dprintf(1, "STACK UNSORTED ^^\"\n");
+			dprintf(1, "%lu raw instructions\n", game->buf->entries);
+			dprintf(1, "%i joint instructions\n", ft_word_count(game->log->data, '\n'));
+			dprintf(1, "%li saved instructions\n", game->buf->entries - ft_word_count(game->log->data, '\n'));
+		}
 		if (game->b.stk)
 			free(game->b.stk);
 		if (game->buf)
