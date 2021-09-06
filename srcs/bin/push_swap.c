@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/27 17:53:26 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/03 14:32:29 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 		if (game->info.mon) // MONITORING
 		{
 			psw_monitor(game);
-			if (chk_A(game))
+			if (sorted(game, A, 0))
 				dprintf(1, "STACK SORTED :D\n");
 			else
 				dprintf(1, "STACK UNSORTED ^^\"\n");
@@ -58,7 +58,7 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 
 t_error	psw_game(t_game *game)
 {
-	game->b.stk = malloc(sizeof(t_val) * game->qty);
+	game->b.stk = malloc(sizeof(t_val) * GAME_QTY);
 	if (!game->b.stk)
 		return (MEM_ALLOC);
 	if (vctr_init(&game->buf, sizeof(t_inst_id), 512))
@@ -68,13 +68,19 @@ t_error	psw_game(t_game *game)
 	PRV_MOV = END;
 	if (vctr_init(&game->info.pvt, sizeof(size_t), 8))
 		return (MEM_ALLOC);
-	game->a.load = game->qty;
-	game->b.load = 0;
+//	game->a.id = A;
+	LOAD_A = GAME_QTY;
+	LOAD_B = 0;
+	OVER_A = 0;
+	UNDR_A = 0;
+//	game->b.id = B;
+	OVER_B = 0;
+	UNDR_B = 0;
 	psw_solver(game);
 	return (CLEAR);
 }
-/*	while (game->qty)
-	i = game->qty; // we had to start by the end when we pushed values, but it could be done otherwise
+/*	while (GAME_QTY)
+	i = GAME_QTY; // we had to start by the end when we pushed values, but it could be done otherwise
 	game->a->top = NULL; //mhh but how to initialise stack b as well?
 	dll_push(game->a->top, new_dln(game->val[i].val));
 	bottom = top;
@@ -90,7 +96,7 @@ t_error	psw_parsing(t_game *game, char **av)
 	t_error	outcome;
 
 	i = 0;
-	while (i < game->qty)
+	while (i < GAME_QTY)
 	{
 		ptr = av[i + 1];
 		if (!ft_isdigit(*ptr))
@@ -98,7 +104,7 @@ t_error	psw_parsing(t_game *game, char **av)
 		buf = ptr_atol_base(&ptr, "0123456789");
 		if (*ptr != '\0' || INT_MIN > buf || buf > INT_MAX)
 			return (PARSE);
-		game->a.stk[game->qty - 1 - i++].val = buf;
+		game->a.stk[GAME_QTY - 1 - i++].val = buf;
 	}
 	outcome = game_setup(game);
 	return (outcome);
@@ -115,8 +121,8 @@ int main(int ac, char **av)
 		ft_putendl_fd("USAGE : ./push_swap [INT LIST]", 1);
 		return (ERROR);
 	}
-	game.qty = ac - 1;
-	game.a.stk = malloc(sizeof(t_val) * game.qty);
+	game.info.qty = ac - 1;
+	game.a.stk = malloc(sizeof(t_val) * game.info.qty);
 	if (!game.a.stk)
 		return (psw_shutdown(&game, MEM_ALLOC, MAIN_START));
 	error = psw_parsing(&game, av);

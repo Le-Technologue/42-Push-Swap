@@ -9,3 +9,6 @@ cpy
 *.vim
 *test*
 tags
+pyviz.py
+todo
+push_swap

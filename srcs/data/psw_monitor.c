@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/13 11:10:45 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/22 10:51:14 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/01 10:38:11 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	psw_monitor(t_game *game)
 
 	if (!width)
 	{
-		width = (int)ft_digit_count(game->set[game->qty - 1]->val, 10);
+		width = (int)ft_digit_count(game->set[GAME_QTY - 1]->val, 10);
 		if ((int)ft_digit_count(game->set[0]->val, 10) > width)
 			width = (int)ft_digit_count(game->set[0]->val, 10);
 	}

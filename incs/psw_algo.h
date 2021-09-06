@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   algo.h                                             :+:      :+:    :+:   */
+/*   psw_algo.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/02 14:21:52 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/25 22:20:48 by wetieven         ###   ########lyon.fr   */
+/*   Created: 2021/09/03 14:13:57 by wetieven          #+#    #+#             */
+/*   Updated: 2021/09/03 14:14:04 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,39 @@
 
 # include "push_swap.h"
 
+// Calculations
 # define MED (low + (high - low) / 2)
+# define HALF_MED (MED + (high - low) / 4)
+# define SET_QTY (high - low + 1)
+# define RMNG (high - low - pushes)
 // # define TO_SORT ((high - low) / 2 + 1)
+
+// Placeholders
 # define PVT ((size_t *)(game->info.pvt->data))
 # define LST_PVT (game->info.pvt->entries)
+
+// Conditions
 # define QCKSRT_THRESHOLD (high - low < 50)
-# define INSSRT_THRESHOLD (high - low < 25)
+# define INSSRT_THRESHOLD (high - low < 15)
 //# define UNSORTED_STKS !chk_A(game) && !chk_B(game)
 
 typedef enum e_mode {
-	A_3,
+	A_SPLT,
+	A_SEC,
+	A_STOR,
 	A_INS,
 	A,
-	B_3,
+	B_SPLT,
+	B_SEC,
+	B_STOR,
 	B_INS,
 	B,
-	START
 }	t_mode;
 
-size_t	med_srt_tops(t_game *game, t_mode step, size_t med);
-size_t	srt_bottoms(t_game *game, size_t med);
-size_t	srt_next_to_top(t_game *game, size_t med);
-void	edge_srt(t_game *game, t_mode mode, size_t med);
+t_stk	*stk_ptr(t_game *game, t_mode step);
 void	psw_qcksrt_A(t_game *game, size_t low, size_t high);
+void	psw_qcksrt_init_A(t_game *game, size_t low, size_t high);
+void	psw_qcksrt_init_B(t_game *game, size_t low, size_t high);
 void	psw_solver(t_game *game);
 
 #endif

@@ -6,22 +6,40 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 09:59:10 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/24 14:38:53 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/03 14:34:50 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "psw_opti.h"
-# include "psw_probes.h"
+#include "psw_inst_mngr.h"
+#include "psw_probes.h"
+
+size_t	srt_top_A(t_game *game)
+{
+	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[TOP_A - 1].key)
+	{
+		swp(game, A);
+		return (1);
+	}
+	return (0);
+}
+
+size_t	srt_top_B(t_game *game)
+{
+	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[TOP_B - 1].key)
+	{
+		swp(game, B);
+		return (1);
+	}
+	return (0);
+}
 
 size_t	srt_tops(t_game *game)
 {
 	size_t	moves;
 
 	moves = 0;
-	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[TOP_A - 1].key)
-		moves += swp(game, A);
-	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[TOP_B - 1].key)
-		moves += swp(game, B);
+	moves += srt_top_A(game);
+	moves += srt_top_B(game);
 	return (moves);
 }
 
@@ -53,23 +71,53 @@ void	three_srt(t_game *game)
 	}
 }
 
-void	five_srt(t_game *game)
+void	five_srt_B(t_game *game)
 {
 	int i;
 
-	if (game->qty <= 3)
+	if (LOAD_B <= 3)
 		return three_srt(game);
-	if (STK_A[TOP_A].key == game->qty - 2)
+	if (STK_B[TOP_B].key == 1)
+	{
+		rrot(game, B);
+		three_srt(game);
+		rrot(game, B);
+	}
+	i = 0;
+	while (sorted(game, B, 0) && i < 2)
+	{
+		three_srt(game);
+		if (sorted(game, B, 0))
+			break ;
+		psh(game, A);
+		i++;
+	}
+	while (i)
+	{
+		three_srt(game);
+		psh(game, B);
+		i--;
+	}
+	three_srt(game);
+}
+
+void	five_srt_A(t_game *game)
+{
+	int i;
+
+	if (LOAD_A <= 3)
+		return three_srt(game);
+	if (STK_A[TOP_A].key == GAME_QTY - 2)
 	{
 		rrot(game, A);
 		three_srt(game);
 		rrot(game, A);
 	}
 	i = 0;
-	while (!chk_A(game) && i < 2)
+	while (sorted(game, A, 0) && i < 2)
 	{
 		three_srt(game);
-		if (chk_A(game))
+		if (sorted(game, A, 0))
 			break ;
 		psh(game, B);
 		i++;

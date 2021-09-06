@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/22 10:43:12 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/24 10:06:51 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/03 12:36:23 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,25 @@
 # include <stdlib.h>
 # include "libft.h"
 
+// Metadata
+# define GAME_QTY game->info.qty
 # define PRV_MOV game->info.prv_mov
-# define STK_A game->a.stk
+
+// Stack A
 # define LOAD_A game->a.load
 # define TOP_A (game->a.load - 1)
-# define STK_B game->b.stk
+
+# define OVER_A game->a.over
+# define STK_A game->a.stk
+# define UNDR_A game->a.under
+
+// Stack B
 # define LOAD_B game->b.load
 # define TOP_B (game->b.load - 1)
+
+# define OVER_B game->b.over
+# define STK_B game->b.stk
+# define UNDR_B game->b.under
 
 typedef enum e_fid {
 	MAIN_START,
@@ -38,11 +50,15 @@ typedef struct s_val {
 
 
 typedef struct s_stk {
+//	t_mode	id;
 	t_val	*stk;
+	size_t	over;
+	size_t	under;
 	size_t	load;
 }	t_stk;
 
 typedef struct s_metadata {
+	size_t		qty;
 	int			prv_mov;
 	t_vctr		*pvt;
 	_Bool		mon;
@@ -50,7 +66,6 @@ typedef struct s_metadata {
 
 typedef struct s_game {
 	t_metadata	info;
-	size_t		qty;
 	t_val		**set;
 	t_stk		a;
 	t_stk		b;
