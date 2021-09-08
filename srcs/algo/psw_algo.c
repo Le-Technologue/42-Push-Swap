@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 20:39:53 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/03 14:33:10 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/08 22:16:19 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,6 @@ void	inssrt_a(t_game *game, size_t low, size_t high)
 	while (i--)
 		psh(game, A);
 }
-*/
 
 void	psw_qcksrt_B(t_game *game, size_t high, size_t low)
 {
@@ -248,45 +247,110 @@ void	psw_qcksrt_A(t_game *game, size_t low, size_t high)
 	psw_qcksrt_B(game, MED, low);
 	psw_qcksrt_A(game, MED + 1, high);
 }
+*/
+void	mrg_to_b(t_game *game, size_t low, size_t high)
+{
+	size_t	i;
+
+	i = 0;
+	while (UNDR_B)
+	{
+		while (UNDR_B + i <= high - low
+				&& STK_A[TOP_A].key > high && STK_A[TOP_A].key < low)
+			rot(game, A_STOR);
+		if (STK_B[0].key > STK_A[TOP_A].key || UNDR_B + i >= high - low)
+			rrot(game, B_STOR);
+		else
+			psh(game, B);
+		i++;
+		//edge_srt/top_srt_A
+	}
+}
+
 
 void	mrg_to_a(t_game *game, size_t low, size_t high)
 {
 	size_t	i;
 
-	(void)high;
 	i = 0;
 	while (UNDR_A)
 	{
-		while (UNDR_A + i <= high - low && STK_B[TOP_B].key < low)
+		while (UNDR_A + i <= high - low
+				&& STK_B[TOP_B].key > high && STK_B[TOP_B].key < low)
 			rot(game, B_STOR);
-		if (STK_B[TOP_B].key > STK_A[0].key)
-			psh(game, A);
-		else
+		if (STK_A[0].key > STK_B[TOP_B].key || UNDR_A + i >= high - low)
 			rrot(game, A_STOR);
+		else
+			psh(game, A);
 		i++;
+		//edge_srt/top_srt_A
 	}
-//	while (stored)
-//		rrot(game, A_INS);
 }
 
-void	psw_qcksrt_init_B(t_game *game, size_t high, size_t low)
+void	final_srt_a(t_game *game, size_t low, size_t high)
+{
+	qcksrt_a(game, low, high, FINAL);
+	qcksrt_b(game, MED, low, FINAL);
+}
+
+void	final_srt_b(t_game *game, size_t high, size_t low)
+{
+	qcksrt_b(game, high, low, FINAL);
+	qcksrt_b(game, MED, low, FINAL);
+}
+
+void	qcksrt_a(t_game *game, size_t low, size_t high, t_mode step)
+{
+	size_t	to_sort;
+	size_t	over_b;
+
+	if (INSSRT_THRESHOLD)
+		return (inssrt_a(game, low, high));
+	if (step != FINAL && INSSRT_THRESHOLD * 4)
+		return (final_srt_a(game, low, high));
+	to_sort = (high - low) / 2;
+	over_b = 0;
+	while (to_sort && over_b < MED - L_HLFMED) 
+	{
+//		edge_srt(game, A_SPLT, MED);
+		if (STK_A[TOP_A].key <= MED)
+		{
+			psh(game, B);
+			if (STK_B[TOP_B].key > L_HLFMED)
+				rot(game, B_STOR);
+			else
+				over_b++;
+			to_sort--;
+		}
+		else
+			rot(game, A_STOR);
+	}
+//	edge_srt(game, A_SPLT, MED);
+	mrg_to_b(game, L_HLFMED + 1, MED);
+	qcksrt_a(game, MED + 1, high, A);
+//	if (step != FINAL && LOAD_B)
+//		qcksrt_b(game, MED, low);
+//	psw_qcksrt_init(game, low, MED - 1);
+}
+
+void	qcksrt_b(t_game *game, size_t high, size_t low, t_mode step)
 {
 	size_t	to_sort;
 	size_t	over_a;
 
-	if (LOAD_A <= 5)
-		return (five_srt_B(game));
 	if (INSSRT_THRESHOLD)
 		return (inssrt_b(game, high, low));
+	if (step != FINAL && INSSRT_THRESHOLD * 4)
+		return (final_srt_b(game, low, high));
 	over_a = 0;
-	to_sort = (high - low) / 2 + 1;
-	while (to_sort && over_a <= high - HALF_MED)
+	to_sort = (high - low) / 2;
+	while (to_sort && over_a < high - H_HLFMED)
 	{
 //		edge_srt(game, START, MED);
-		if (STK_B[TOP_B].key >= MED)
+		if (STK_B[TOP_B].key > MED)
 		{
 			psh(game, A);
-			if (STK_A[TOP_A].key <= HALF_MED)
+			if (STK_A[TOP_A].key <= H_HLFMED)
 				rot(game, A_STOR);
 			else
 				over_a++;
@@ -295,45 +359,40 @@ void	psw_qcksrt_init_B(t_game *game, size_t high, size_t low)
 		else
 			rot(game, B_STOR);
 	}
-	inssrt_a(game, HALF_MED + 1, high);
-	mrg_to_a(game, MED, HALF_MED);
-	inssrt_a(game, MED, HALF_MED);
-	mrg_to_a(game, low, MED - 1);
-	inssrt_b(game, MED - 1, low);
-//	psw_qcksrt_init_B(game, MED, low);
-//	edge_srt(game, START, MED);
-//	psw_qcksrt_init_B(game, MED, HALF_MED + 1);
-//	psw_qcksrt_init_B(game, HALF_MED, low);
-//	psw_qcksrt_init_A(game, HALF_MED + 1, high);
-//	psw_qcksrt_init_A(game, MED, HALF_MED);
+	mrg_to_a(game, MED + 1, H_HLFMED);
+	qcksrt_a(game, MED + 1, high, B);
+	if (step != FINAL && LOAD_B)
+		qcksrt_b(game, MED, low, B);
 }
 
 void	psw_qcksrt_init(t_game *game, size_t low, size_t high)
 {
 	size_t	to_sort;
 
-	if (LOAD_A <= 5)
-		return (five_srt_A(game));
 	if (INSSRT_THRESHOLD)
 		return (inssrt_a(game, low, high));
+	if (INSSRT_THRESHOLD * 4)
+		return (final_srt_a(game, low, high));
 	to_sort = (high - low) / 2 + 1;
 	while (to_sort) 
 	{
-//		edge_srt(game, START, MED);
-		if (STK_A[TOP_A].key > MED)
+		edge_srt(game, A_SPLT, MED);
+		if (STK_A[TOP_A].key <= MED)
 		{
 			psh(game, B);
-			if (STK_B[TOP_B - 1].key > HALF_MED && STK_B[TOP_B].key <= HALF_MED)
+			if (STK_B[TOP_B - 1].key > L_HLFMED && STK_B[TOP_B].key <= L_HLFMED)
 				rot(game, B);
 			to_sort--;
 		}
 		else
 			rot(game, A);
 	}
-//	edge_srt(game, START, MED);
-	psw_qcksrt_init_B(game, high, HALF_MED + 1);
-	psw_qcksrt_init(game, low, MED - 1);
+	edge_srt(game, A_SPLT, MED);
+	qcksrt_a(game, MED + 1, high, A_SPLT);
+	qcksrt_b(game, MED, L_HLFMED + 1, A_SPLT);
+	qcksrt_b(game, L_HLFMED, low, A_SPLT);
 }
+
 /*
 void	psw_qcksrt_init_A(t_game *game, size_t low, size_t high)
 {

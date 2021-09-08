@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:13:57 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/03 14:14:04 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/08 22:10:38 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 
 // Calculations
 # define MED (low + (high - low) / 2)
-# define HALF_MED (MED + (high - low) / 4)
+# define L_HLFMED (low + (MED - low) / 2)
+# define H_HLFMED (MED + (high - MED) / 2)
 # define SET_QTY (high - low + 1)
 # define RMNG (high - low - pushes)
 // # define TO_SORT ((high - low) / 2 + 1)
@@ -28,7 +29,7 @@
 
 // Conditions
 # define QCKSRT_THRESHOLD (high - low < 50)
-# define INSSRT_THRESHOLD (high - low < 15)
+# define INSSRT_THRESHOLD high - low < 15
 //# define UNSORTED_STKS !chk_A(game) && !chk_B(game)
 
 typedef enum e_mode {
@@ -42,12 +43,12 @@ typedef enum e_mode {
 	B_STOR,
 	B_INS,
 	B,
+	FINAL
 }	t_mode;
 
 t_stk	*stk_ptr(t_game *game, t_mode step);
-void	psw_qcksrt_A(t_game *game, size_t low, size_t high);
-void	psw_qcksrt_init_A(t_game *game, size_t low, size_t high);
-void	psw_qcksrt_init_B(t_game *game, size_t low, size_t high);
+void	qcksrt_b(t_game *game, size_t high, size_t low, t_mode step);
+void	qcksrt_a(t_game *game, size_t low, size_t high, t_mode step);
 void	psw_solver(t_game *game);
 
 #endif
