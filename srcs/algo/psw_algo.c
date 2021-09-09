@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 20:39:53 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/09 16:33:05 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/09 17:08:43 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,11 @@ void	inssrt_b(t_game *game, size_t high, size_t low)
 	size_t	pushes;
 
 	pushes = 0;
-	while (LOAD_B > 5 && pushes <= SET_QTY)// && !sorted(game, B, TOP_B - RMNG))
+	while (LOAD_B > 5 && STK_A[TOP_A].key > low)// || pushes <= SET_QTY) && !sorted(game, B, TOP_B - RMNG))
 	{
 		sought_key = high - pushes;
-		if (sought_key <= low)
-			break ;
+//		if (sought_key <= low)
+//			break ;
 		psw_ftch_key(game, &game->b, B_INS, sought_key);
 		psh(game, B_INS);
 		pushes++;
@@ -121,11 +121,11 @@ void	inssrt_a(t_game *game, size_t low, size_t high)
 	size_t	pushes;
 
 	pushes = 0;
-	while (LOAD_A > 5 && pushes < SET_QTY)// && !sorted(game, A, TOP_A - RMNG))
+	while (LOAD_A > 5 && STK_B[TOP_B].key < high)// || pushes < SET_QTY) && !sorted(game, A, TOP_A - RMNG))
 	{
 		sought_key = low + pushes;
-		if (sought_key > high)
-			break ;
+//		if (sought_key > high)
+//			break ;
 		psw_ftch_key(game, &game->a, A_INS, sought_key);
 //		if (TOP_A >= low && TOP_A < high)
 //		{
