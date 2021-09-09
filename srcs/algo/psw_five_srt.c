@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 09:59:10 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/09 16:40:04 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/09 22:12:08 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,9 @@ void	five_srt_B(t_game *game)
 		i--;
 	}
 	three_srt(game);
+	i = LOAD_B + 1;
+	while (--i)
+		psh(game, B_INS);
 }
 
 void	five_srt_A(t_game *game)

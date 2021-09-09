@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 11:26:41 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/03 14:29:05 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/09 22:21:25 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,16 @@ _Bool	sorted(t_game *game, t_mode stack, size_t low)
 
 	ptr = stk_ptr(game, stack);
 	i = low;
-	while (i < (ptr->load - 1) && ptr->stk[i + 1].key == ptr->stk[i].key + 1)
-		i++;
+	if (stack <= A)
+	{
+		while (i < (ptr->load - 1)
+				&& ptr->stk[i + 1].key == ptr->stk[i].key - 1)
+			i++;
+	}
+	else
+		while (i < (ptr->load - 1)
+				&& ptr->stk[i + 1].key == ptr->stk[i].key + 1)
+			i++;
 	if (i == (ptr->load - 1) || (ptr->load - 1) - low == 0)
 		return 1;
 	else

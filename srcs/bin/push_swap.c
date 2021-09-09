@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/03 14:32:29 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/09 22:22:07 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 		if (game->info.mon) // MONITORING
 		{
 			psw_monitor(game);
-			if (sorted(game, A, 0))
+			if (sorted(game, A, 0) && !LOAD_B)
 				dprintf(1, "STACK SORTED :D\n");
 			else
 				dprintf(1, "STACK UNSORTED ^^\"\n");

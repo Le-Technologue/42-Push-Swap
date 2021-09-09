@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:13:57 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/09 16:28:46 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/09 18:56:27 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // Calculations
 # define MED (low + (high - low) / 2)
 # define L_HLFMED (low + (MED - low) / 2)
-# define H_HLFMED (MED + 1 + (high - (MED + 1)) / 2)
+# define H_HLFMED (MED + (high - MED) / 2)
 # define SET_QTY (high - low + 1)
 # define RMNG (high - low - pushes + 1)
 # define TO_SORT_OVER_MED (high - MED)
