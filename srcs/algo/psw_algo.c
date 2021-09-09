@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 20:39:53 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/08 22:16:19 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/09 16:33:05 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,21 +93,21 @@ void	psw_inssrt(t_game *game, t_mode step, size_t key_to_sort)
 }
 */
 
-void	inssrt_b(t_game *game, size_t high, size_t low)//, size_t prv_pvt_idx)
+void	inssrt_b(t_game *game, size_t high, size_t low)
 {
 	size_t	sought_key;
 	size_t	pushes;
 
 	pushes = 0;
-	while (LOAD_B > 5 && !sorted(game, B, TOP_B - RMNG))
+	while (LOAD_B > 5 && pushes <= SET_QTY)// && !sorted(game, B, TOP_B - RMNG))
 	{
 		sought_key = high - pushes;
 		if (sought_key <= low)
 			break ;
 		psw_ftch_key(game, &game->b, B_INS, sought_key);
-		pushes++;
 		psh(game, B_INS);
-		srt_top_A(game);
+		pushes++;
+		srt_tops(game);
 		if (STK_A[TOP_A].key == sought_key - 1)
 			pushes++;
 		if (!sorted(game, B, 0) && LOAD_B <= 5)
@@ -121,20 +121,20 @@ void	inssrt_a(t_game *game, size_t low, size_t high)
 	size_t	pushes;
 
 	pushes = 0;
-	while (LOAD_A > 5 && pushes < SET_QTY && !sorted(game, A, TOP_A - RMNG))
+	while (LOAD_A > 5 && pushes < SET_QTY)// && !sorted(game, A, TOP_A - RMNG))
 	{
 		sought_key = low + pushes;
 		if (sought_key > high)
 			break ;
 		psw_ftch_key(game, &game->a, A_INS, sought_key);
-		if (TOP_A >= low && TOP_A < high)
-		{
+//		if (TOP_A >= low && TOP_A < high)
+//		{
 			psh(game, A_INS);
 			pushes++;
-		}
+//		}
 //		if (sorted(game, A, TOP_A - RMNG, TOP_A))
 //			break ;
-		srt_top_B(game);
+		srt_tops(game);
 		if (STK_B[TOP_B].key == sought_key + 1)
 			pushes++;
 	}
@@ -143,6 +143,13 @@ void	inssrt_a(t_game *game, size_t low, size_t high)
 	while (pushes--)
 		psh(game, B_INS);
 }
+
+void	twin_inssrt(t_game *game, size_t low, size_t high)
+{
+	inssrt_a(game, MED + 1, high);
+	inssrt_b(game, MED, low);
+}
+
 /*
 void	inssrt_a(t_game *game, size_t low, size_t high)
 {
@@ -248,71 +255,70 @@ void	psw_qcksrt_A(t_game *game, size_t low, size_t high)
 	psw_qcksrt_A(game, MED + 1, high);
 }
 */
-void	mrg_to_b(t_game *game, size_t low, size_t high)
+void	mrg_to_b(t_game *game, size_t low, size_t high, size_t to_sort)
 {
-	size_t	i;
-
-	i = 0;
-	while (UNDR_B)
+	while (UNDR_B || to_sort)
 	{
-		while (UNDR_B + i <= high - low
-				&& STK_A[TOP_A].key > high && STK_A[TOP_A].key < low)
+		while (to_sort && (STK_A[TOP_A].key > high || STK_A[TOP_A].key < low))
 			rot(game, A_STOR);
-		if (STK_B[0].key > STK_A[TOP_A].key || UNDR_B + i >= high - low)
-			rrot(game, B_STOR);
-		else
+		if (STK_A[TOP_A].key < STK_B[0].key || !UNDR_B)
+		{
 			psh(game, B);
-		i++;
+			to_sort--;
+		}
+		else if (UNDR_B)
+			rrot(game, B_STOR);
 		//edge_srt/top_srt_A
 	}
 }
 
 
-void	mrg_to_a(t_game *game, size_t low, size_t high)
+void	mrg_to_a(t_game *game, size_t high, size_t low, size_t to_sort)
 {
-	size_t	i;
-
-	i = 0;
-	while (UNDR_A)
+	while (UNDR_A || to_sort)
 	{
-		while (UNDR_A + i <= high - low
-				&& STK_B[TOP_B].key > high && STK_B[TOP_B].key < low)
+		while (to_sort //UNDR_A + i <= H_HLFMED - MED + 1
+				&& (STK_B[TOP_B].key > high || STK_B[TOP_B].key < low))
 			rot(game, B_STOR);
-		if (STK_A[0].key > STK_B[TOP_B].key || UNDR_A + i >= high - low)
-			rrot(game, A_STOR);
-		else
+		if (STK_B[TOP_B].key > STK_A[0].key || !UNDR_A) //ouch
+		{
 			psh(game, A);
-		i++;
+			to_sort--;
+		}
+		else if (UNDR_A) //ouch
+			rrot(game, A_STOR);
 		//edge_srt/top_srt_A
 	}
 }
 
-void	final_srt_a(t_game *game, size_t low, size_t high)
+void	last_srt_a(t_game *game, size_t low, size_t high)
 {
-	qcksrt_a(game, low, high, FINAL);
-	qcksrt_b(game, MED, low, FINAL);
+	if (INSSRT_THRESHOLD)
+		inssrt_a(game, low, high);
+	else
+		qcksrt_a(game, low, high, LAST);
+	qcksrt_b(game, MED, low, LAST);
 }
 
-void	final_srt_b(t_game *game, size_t high, size_t low)
+void	last_srt_b(t_game *game, size_t high, size_t low)
 {
-	qcksrt_b(game, high, low, FINAL);
-	qcksrt_b(game, MED, low, FINAL);
+	if (INSSRT_THRESHOLD)
+		inssrt_b(game, low, high);
+	else
+		qcksrt_b(game, high, low, LAST);
+	qcksrt_b(game, MED, low, LAST);
 }
 
 void	qcksrt_a(t_game *game, size_t low, size_t high, t_mode step)
 {
-	size_t	to_sort;
 	size_t	over_b;
 
-	if (INSSRT_THRESHOLD)
-		return (inssrt_a(game, low, high));
-	if (step != FINAL && INSSRT_THRESHOLD * 4)
-		return (final_srt_a(game, low, high));
-	to_sort = (high - low) / 2;
+	if (step != LAST && LASTSRT_THRESHOLD)
+		return (last_srt_a(game, low, high));
 	over_b = 0;
-	while (to_sort && over_b < MED - L_HLFMED) 
+	while (over_b < MED - L_HLFMED) 
 	{
-//		edge_srt(game, A_SPLT, MED);
+//		edge_srt(game, A_SPLT, MED); //should account for stored values now
 		if (STK_A[TOP_A].key <= MED)
 		{
 			psh(game, B);
@@ -320,33 +326,29 @@ void	qcksrt_a(t_game *game, size_t low, size_t high, t_mode step)
 				rot(game, B_STOR);
 			else
 				over_b++;
-			to_sort--;
 		}
 		else
 			rot(game, A_STOR);
 	}
-//	edge_srt(game, A_SPLT, MED);
-	mrg_to_b(game, L_HLFMED + 1, MED);
-	qcksrt_a(game, MED + 1, high, A);
-//	if (step != FINAL && LOAD_B)
-//		qcksrt_b(game, MED, low);
-//	psw_qcksrt_init(game, low, MED - 1);
+//	edge_srt(game, A_SPLT, MED); //should account for stored values now
+	mrg_to_b(game, low, MED, TO_SORT_UNDR_MED + 1 - over_b - UNDR_B);
+	if (TWIN_INSSRT_THRSHLD)
+		twin_inssrt(game, low, high);
+	else
+		qcksrt_a(game, MED + 1, high, step);
+	if (step != LAST && LOAD_B)
+		qcksrt_b(game, MED, low, B);
 }
 
-void	qcksrt_b(t_game *game, size_t high, size_t low, t_mode step)
+void	qcksrt_b(t_game *game, size_t high, size_t low, t_mode step) //edge_srt?
 {
-	size_t	to_sort;
 	size_t	over_a;
 
-	if (INSSRT_THRESHOLD)
-		return (inssrt_b(game, high, low));
-	if (step != FINAL && INSSRT_THRESHOLD * 4)
-		return (final_srt_b(game, low, high));
+	if (step != LAST && LASTSRT_THRESHOLD)
+		return (last_srt_b(game, low, high));
 	over_a = 0;
-	to_sort = (high - low) / 2;
-	while (to_sort && over_a < high - H_HLFMED)
+	while (over_a < H_HLFMED - MED)
 	{
-//		edge_srt(game, START, MED);
 		if (STK_B[TOP_B].key > MED)
 		{
 			psh(game, A);
@@ -354,14 +356,16 @@ void	qcksrt_b(t_game *game, size_t high, size_t low, t_mode step)
 				rot(game, A_STOR);
 			else
 				over_a++;
-			to_sort--;
 		}
 		else
 			rot(game, B_STOR);
 	}
-	mrg_to_a(game, MED + 1, H_HLFMED);
-	qcksrt_a(game, MED + 1, high, B);
-	if (step != FINAL && LOAD_B)
+	mrg_to_a(game, high, MED + 1, TO_SORT_OVER_MED - over_a - UNDR_A); // OUCH
+	if (TWIN_INSSRT_THRSHLD)
+		twin_inssrt(game, low, high);
+	else
+		qcksrt_a(game, MED + 1, high, step);
+	if (step != LAST && LOAD_B)
 		qcksrt_b(game, MED, low, B);
 }
 
@@ -369,10 +373,8 @@ void	psw_qcksrt_init(t_game *game, size_t low, size_t high)
 {
 	size_t	to_sort;
 
-	if (INSSRT_THRESHOLD)
-		return (inssrt_a(game, low, high));
-	if (INSSRT_THRESHOLD * 4)
-		return (final_srt_a(game, low, high));
+	if (LASTSRT_THRESHOLD)
+		return (last_srt_a(game, low, high));
 	to_sort = (high - low) / 2 + 1;
 	while (to_sort) 
 	{
