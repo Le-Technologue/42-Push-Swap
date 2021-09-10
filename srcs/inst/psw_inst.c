@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:43:03 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/27 19:11:09 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/10 13:28:41 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void	buf_inst(t_game *game, t_inst_id inst)
 		(switchboard()[inst].inst)(game);
 		vctr_push(game->buf, &inst);
 		PRV_MOV = inst;
+		if (MONITORING) // MONITORING
+			psw_monitor(game);
 	}
 /*	if (TIMEOUT_LOOP) //DEBUG
 	{
@@ -90,6 +92,4 @@ void	buf_inst(t_game *game, t_inst_id inst)
 		write(1, game->log->data, game->log->entries);
 		exit(1);
 	}*/
-	if (game->info.mon) // MONITORING
-		psw_monitor(game);
 }

@@ -6,12 +6,11 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 11:26:41 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/09 22:21:25 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/10 10:55:52 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "psw_inst.h"
-#include "psw_inst_mngr.h"
 #include "psw_probes.h"
 
 t_stk	*stk_ptr(t_game *game, t_mode step)

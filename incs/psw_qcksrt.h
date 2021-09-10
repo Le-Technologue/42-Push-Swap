@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   psw_parsing.h                                      :+:      :+:    :+:   */
+/*   psw_qcksrt.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/04 16:21:57 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/10 11:37:05 by wetieven         ###   ########lyon.fr   */
+/*   Created: 2021/09/10 10:03:19 by wetieven          #+#    #+#             */
+/*   Updated: 2021/09/10 10:13:22 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSING_H
-# define PARSING_H
+#ifndef PSW_QCKSRT_H
+# define PSW_QCKSRT_H
 
-t_error	game_setup(t_game *game, long *buf);
-t_error	psw_mrgsort(t_val **set, const size_t start, const size_t end);
-t_error	psw_chkdupl(t_val **set, size_t size);
-t_error	assign_keys(t_val **set, size_t range);
+# include "psw_algo.h"
+
+void	last_srt_a(t_game *game, size_t low, size_t high);
+void	last_srt_b(t_game *game, size_t high, size_t low);
+void	qcksrt_b(t_game *game, size_t high, size_t low, t_mode step);
+void	qcksrt_a(t_game *game, size_t low, size_t high, t_mode step);
+void	psw_qcksrt_init(t_game *game, size_t low, size_t high);
 
 #endif

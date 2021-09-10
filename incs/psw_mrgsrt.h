@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   psw_parsing.h                                      :+:      :+:    :+:   */
+/*   psw_mrgsrt.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/04 16:21:57 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/10 11:37:05 by wetieven         ###   ########lyon.fr   */
+/*   Created: 2021/09/10 10:16:28 by wetieven          #+#    #+#             */
+/*   Updated: 2021/09/10 10:36:59 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSING_H
-# define PARSING_H
+#ifndef PSW_MRGSRT_H
+# define PSW_MRGSRT_H
 
-t_error	game_setup(t_game *game, long *buf);
-t_error	psw_mrgsort(t_val **set, const size_t start, const size_t end);
-t_error	psw_chkdupl(t_val **set, size_t size);
-t_error	assign_keys(t_val **set, size_t range);
+# include "psw_algo.h"
+
+void	mrg_to_b(t_game *game, size_t low, size_t high, size_t to_sort);
+void	mrg_to_a(t_game *game, size_t high, size_t low, size_t to_sort);
 
 #endif

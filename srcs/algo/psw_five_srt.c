@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 09:59:10 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/09 22:12:08 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/10 13:44:56 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,12 @@ void	five_srt_B(t_game *game)
 
 	if (LOAD_B <= 3)
 		return three_srt(game);
-	if (STK_B[TOP_B].key == 1)
-	{
-		rrot(game, B);
-		three_srt(game);
-		rrot(game, B);
-	}
+//	if (STK_B[TOP_B].key == 1)
+//	{
+//		rrot(game, B);
+//		three_srt(game);
+//		rrot(game, B);
+//	}
 	i = 0;
 	while (!sorted(game, B, 0) && i < 2)
 	{
@@ -104,12 +104,12 @@ void	five_srt_A(t_game *game)
 
 	if (LOAD_A <= 3)
 		return three_srt(game);
-	if (STK_A[TOP_A].key == GAME_QTY - 2)
-	{
-		rrot(game, A);
-		three_srt(game);
-		rrot(game, A);
-	}
+//	if (STK_A[TOP_A].key == GAME_QTY - 2)
+//	{
+//		rrot(game, A);
+//		three_srt(game);
+//		rrot(game, A);
+//	}
 	i = 0;
 	while (!sorted(game, A, 0) && i < 2)
 	{

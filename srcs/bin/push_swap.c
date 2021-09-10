@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/09 22:22:07 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/10 13:46:38 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 	if (function >= PSW_GAME)
 	{	
 		write(1, game->log->data, game->log->entries);
-		if (game->info.mon) // MONITORING
+		if (MONITORING) // MONITORING
 		{
 			psw_monitor(game);
 			if (sorted(game, A, 0) && !LOAD_B)
@@ -88,25 +88,49 @@ t_error	psw_game(t_game *game)
 	dll_push(game->a->top, new_dln(game->val[i].val));
 */
 
+t_error	psw_monitoring_toggle(t_game *game, char *first_arg, long *buf)
+{
+	if (*first_arg == 'm')
+	{
+		game->info.mon = 1; // MONITOR
+		return (CLEAR);
+	}
+	else
+	{
+		game->info.mon = 0;
+		buf[GAME_QTY - 1] = ft_atol_base(first_arg, "0123456789");
+		if (buf[GAME_QTY - 1] < INT_MIN || buf[GAME_QTY - 1] > INT_MAX)
+//				|| *first_arg != '\0')
+			return (PARSE);
+		return (CLEAR);
+	}
+}
+
 t_error	psw_parsing(t_game *game, char **av)
 {
 	size_t	i;
-	long	buf;
+	long	*buf;
 	char	*ptr;
 	t_error	outcome;
 
+	buf = malloc(sizeof(t_val) * game->info.qty);
+	if (!buf)
+		return (MEM_ALLOC);
+	if (psw_monitoring_toggle(game, av[1], buf) != CLEAR)
+		return (PARSE);
 	i = 0;
-	while (i < GAME_QTY)
+	while (++i < GAME_QTY)
 	{
 		ptr = av[i + 1];
 		if (!ft_isdigit(*ptr))
 			return (PARSE);
-		buf = ptr_atol_base(&ptr, "0123456789");
-		if (*ptr != '\0' || INT_MIN > buf || buf > INT_MAX)
+		buf[GAME_QTY - 1 - i] = ptr_atol_base(&ptr, "0123456789");
+		if (INT_MIN > buf[GAME_QTY - 1 - i] || buf[GAME_QTY - 1 - i] > INT_MAX
+				|| *ptr != '\0') // this check '\0' to avoid reading values stuck to wrong inputs but what about fake zeroes from empty arrays ?
 			return (PARSE);
-		game->a.stk[GAME_QTY - 1 - i++].val = buf;
 	}
-	outcome = game_setup(game);
+	outcome = game_setup(game, buf);
+	free(buf);
 	return (outcome);
 }
 
@@ -115,16 +139,12 @@ int main(int ac, char **av)
 	t_error	error;
 	t_game	game;
 
-	game.info.mon = 1; // MONITOR
 	if (ac == 1)
 	{
 		ft_putendl_fd("USAGE : ./push_swap [INT LIST]", 1);
 		return (ERROR);
 	}
 	game.info.qty = ac - 1;
-	game.a.stk = malloc(sizeof(t_val) * game.info.qty);
-	if (!game.a.stk)
-		return (psw_shutdown(&game, MEM_ALLOC, MAIN_START));
 	error = psw_parsing(&game, av);
 	if (error)
 		return (psw_shutdown(&game, error, PSW_PARSING));

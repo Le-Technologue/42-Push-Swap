@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:18:55 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/01 10:36:17 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/10 13:22:30 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,21 @@ t_error	psw_mrgsort(t_val **set, const size_t start, const size_t end)
 	return (CLEAR);
 }
 
-t_error	game_setup(t_game *game)
+t_error	game_setup(t_game *game, long *buf)
 {
 	size_t	i;
 
+	if (MONITORING)
+		GAME_QTY--;
+	game->a.stk = malloc(sizeof(t_val) * GAME_QTY);
+	if (!game->a.stk)
+		return (MEM_ALLOC);
+	i = 0;
+	while (i < GAME_QTY)
+	{
+		game->a.stk[i].val = buf[i];
+		i++;
+	}
 	game->set = malloc(sizeof(t_val **) * GAME_QTY);
 	if (!game->set)
 		return (MEM_ALLOC);

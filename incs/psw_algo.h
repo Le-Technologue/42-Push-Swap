@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:13:57 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/09 18:56:27 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/10 10:41:15 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,6 @@ typedef enum e_mode {
 	LAST
 }	t_mode;
 
-t_stk	*stk_ptr(t_game *game, t_mode step);
-void	qcksrt_b(t_game *game, size_t high, size_t low, t_mode step);
-void	qcksrt_a(t_game *game, size_t low, size_t high, t_mode step);
 void	psw_solver(t_game *game);
 
 #endif

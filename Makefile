@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/09/03 14:26:51 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/09/10 10:35:30 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,9 @@ SRCS		=	push_swap.c \
 				psw_five_srt.c \
 				psw_probes.c \
 				psw_inst_mngr.c \
+				psw_qcksrt.c \
+				psw_inssrt.c \
+				psw_mrgsrt.c \
 				psw_monitor.c
 
 ## ~~ Folders ~~ ##

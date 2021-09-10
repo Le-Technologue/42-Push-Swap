@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/22 10:43:12 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/03 12:36:23 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/10 11:38:36 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 // Metadata
 # define GAME_QTY game->info.qty
 # define PRV_MOV game->info.prv_mov
+# define MONITORING game->info.mon
 
 // Stack A
 # define LOAD_A game->a.load
