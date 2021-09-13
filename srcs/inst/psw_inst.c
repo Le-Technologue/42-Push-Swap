@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:43:03 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/13 10:26:41 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/13 16:39:54 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	loop(size_t *counter) // DEBUGGING
 	static size_t	i;
 
 	i++;
-	dprintf(1, "OH BOY %lu wasted instructions\n", i * 25);
+//	dprintf(1, "OH BOY %lu wasted instructions\n", i * 25);
 	*counter = 0;
 }
 

@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 10:00:16 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/10 10:41:27 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/13 16:58:00 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	last_srt_b(t_game *game, size_t high, size_t low)
 	if (high - low > 30)
 		qcksrt_b(game, MED, low, LAST);
 }
-
+/*
 void	qcksrt_b(t_game *game, size_t high, size_t low, t_mode step) //edge_srt?
 {
 	size_t	over_a;
@@ -95,7 +95,76 @@ void	qcksrt_a(t_game *game, size_t low, size_t high, t_mode step)
 	if (step != LAST && LOAD_B)
 		qcksrt_b(game, MED, low, B);
 }
+*/
+void	qcksrt_b(t_game *game, size_t high, size_t low, t_mode step)
+{
+//	size_t	high;
+//	size_t	low;
+//
+//	high = PVT[prv_pvt_idx] - 1;
+//	low = PVT[prv_pvt_idx - 1];
+	size_t	to_sort;
 
+	if (step != LAST && LASTSRT_THRESHOLD)
+		return (last_srt_b(game, high, low));
+	to_sort = high - MED;
+	while (to_sort)
+	{
+//		edge_srt(game, B, MED);
+		if (STK_B[TOP_B].key > MED)
+		{
+			psh(game, A);
+			to_sort--;
+		}
+		else
+			rot(game, B);
+	}
+//	edge_srt(game, B, MED);
+	while (STK_B[0].key >= low && low != 0)
+		rrot(game, B);
+	if (TWIN_INSSRT_THRSHLD)
+		twin_inssrt(game, low, high);
+	else
+		qcksrt_a(game, MED + 1, high, step);
+	if (step != LAST && LOAD_B)
+		qcksrt_b(game, MED, low, B);
+}
+
+void	qcksrt_a(t_game *game, size_t low, size_t high, t_mode step)
+{
+	size_t	to_sort;
+
+	if (step != LAST && LASTSRT_THRESHOLD)
+		return (last_srt_a(game, low, high));
+	to_sort = (high - low) / 2 + 1;
+//	vctr_push(game->info.pvt, &low);
+	while (to_sort) 
+	{
+//		edge_srt(game, A, MED);
+		if (STK_A[TOP_A].key <= MED)
+		{
+			psh(game, B);
+			to_sort--;
+			if (to_sort > 1 && LOAD_B >= 2 && STK_B[TOP_B].key == MED)
+				rot(game, B);
+		}
+		else
+			rot(game, A);
+	}
+	if (STK_B[0].key == MED)
+		rrot(game, B);
+	while (STK_A[0].key <= high && high != GAME_QTY - 1)
+		rrot(game, A);
+//	if (STK_B[TOP_B - 1].key == MED)
+//		swp(game, B);
+//	edge_srt(game, A, MED);
+	if (TWIN_INSSRT_THRSHLD)
+		twin_inssrt(game, low, high);
+	else
+		qcksrt_a(game, MED + 1, high, step);
+	if (step != LAST && LOAD_B)
+		qcksrt_b(game, MED, low, B);
+}
 void	psw_qcksrt_init(t_game *game, size_t low, size_t high)
 {
 	size_t	to_sort;
@@ -105,7 +174,7 @@ void	psw_qcksrt_init(t_game *game, size_t low, size_t high)
 	to_sort = (high - low) / 2 + 1;
 	while (to_sort) 
 	{
-		edge_srt(game, A_SPLT, MED);
+//		edge_srt(game, A_SPLT, MED);
 		if (STK_A[TOP_A].key <= MED)
 		{
 			psh(game, B);
@@ -116,7 +185,7 @@ void	psw_qcksrt_init(t_game *game, size_t low, size_t high)
 		else
 			rot(game, A);
 	}
-	edge_srt(game, A_SPLT, MED);
+//	edge_srt(game, A_SPLT, MED);
 	qcksrt_a(game, MED + 1, high, A_SPLT);
 	qcksrt_b(game, MED, L_HLFMED + 1, A_SPLT);
 	qcksrt_b(game, L_HLFMED, low, A_SPLT);
@@ -191,72 +260,4 @@ void	psw_qcksrt_B(t_game *game, size_t high, size_t low)
 }
 */
 /*
-void	psw_qcksrt_B(t_game *game, size_t high, size_t low)
-{
-//	size_t	high;
-//	size_t	low;
-//
-//	high = PVT[prv_pvt_idx] - 1;
-//	low = PVT[prv_pvt_idx - 1];
-	size_t	to_sort;
-	size_t	i;
-
-	i = 0;
-	to_sort = (high - low) / 2 + 1;
-	if (INSSRT_THRESHOLD)
-		return inssrt_b(game, high, low);
-	to_sort = (high - low) / 2 + 1;
-	while (to_sort)
-	{
-		edge_srt(game, B, MED);
-		if (STK_B[TOP_B].key >= MED)
-		{
-			psh(game, A);
-			to_sort--;
-			if (STK_A[TOP_A].key == MED && to_sort > 1)
-				rot(game, A);
-		}
-		else
-		{
-			rot(game, B);
-			i++;
-		}
-	if (STK_A[0].key == MED)
-		rrot(game, B);
-	}
-	while (i--)
-		rrot(game, B);
-	psw_qcksrt_A(game, MED, high);
-	psw_qcksrt_B(game, MED - 1, low);
-}
-
-void	psw_qcksrt_A(t_game *game, size_t low, size_t high)
-{
-	size_t	to_sort;
-
-	to_sort = (high - low) / 2 + 1;
-	vctr_push(game->info.pvt, &low);
-	if (INSSRT_THRESHOLD)
-		return inssrt_a(game, low, high);
-	while (to_sort) 
-	{
-//		edge_srt(game, A, MED);
-		if (STK_A[TOP_A].key <= MED)
-		{
-			psh(game, B);
-			to_sort--;
-			if (to_sort > 1 && LOAD_B >= 2 && STK_B[TOP_B].key == MED)
-				rot(game, B);
-		}
-		else
-			rot(game, A);
-	}
-	if (STK_B[0].key == MED)
-		rrot(game, B);
-	if (STK_B[TOP_B - 1].key == MED)
-		swp(game, B);
-//	edge_srt(game, A, MED);
-	psw_qcksrt_B(game, MED, low);
-	psw_qcksrt_A(game, MED + 1, high);
-}
 */
