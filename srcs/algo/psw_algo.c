@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/07 20:39:53 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/10 10:20:31 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/10 13:59:41 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 void	psw_solver(t_game *game)
 {
-	if (game->info.mon) // MONITORING
+	if (MONITORING) // MONITORING
 		psw_monitor(game);
 //	if (LOAD_A < 10)
 		psw_qcksrt_init(game, 0, TOP_A);

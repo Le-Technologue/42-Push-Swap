@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:13:57 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/10 10:41:15 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/10 15:04:30 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 // Conditions
 //# define QCKSRT_THRESHOLD (high - low < 50)
 # define LASTSRT_THRESHOLD (high - low <= 63)
-# define TWIN_INSSRT_THRSHLD (high - low <= 30)
+# define TWIN_INSSRT_THRSHLD (high - low <= 31)
 # define INSSRT_THRESHOLD (high - low <= 15)
 //# define UNSORTED_STKS !chk_A(game) && !chk_B(game)
 

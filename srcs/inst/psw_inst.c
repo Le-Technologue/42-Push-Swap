@@ -6,10 +6,11 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:43:03 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/10 13:28:41 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/13 10:26:41 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>//DBG
 #include "push_swap.h"
 #include "psw_inst.h"
 #include "psw_monitor.h"
@@ -74,14 +75,31 @@ void	log_inst(t_game *game)
 	}
 }
 
+void	loop(size_t *counter) // DEBUGGING
+{
+	static size_t	i;
+
+	i++;
+	dprintf(1, "OH BOY %lu wasted instructions\n", i * 25);
+	*counter = 0;
+}
+
 void	buf_inst(t_game *game, t_inst_id inst)
 {
+	static size_t repeated_inst;
+
 	if (inst == END)
 		log_inst(game);
 	else
 	{
 		(switchboard()[inst].inst)(game);
 		vctr_push(game->buf, &inst);
+		if (PRV_MOV == (int)inst)//DBG
+			repeated_inst++;
+		else
+			repeated_inst = 0;
+		if (repeated_inst >= 25)
+			loop(&repeated_inst);
 		PRV_MOV = inst;
 		if (MONITORING) // MONITORING
 			psw_monitor(game);

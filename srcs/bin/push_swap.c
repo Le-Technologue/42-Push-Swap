@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/10 13:46:38 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/13 10:21:15 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ t_error	psw_game(t_game *game)
 
 t_error	psw_monitoring_toggle(t_game *game, char *first_arg, long *buf)
 {
+	//if (!ft_strncmp(first_arg, "-m", 3))
 	if (*first_arg == 'm')
 	{
 		game->info.mon = 1; // MONITOR

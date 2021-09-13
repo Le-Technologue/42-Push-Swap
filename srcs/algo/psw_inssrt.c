@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 09:52:24 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/10 10:41:49 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/10 18:40:20 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,24 @@ void	psw_ftch_key(t_game *game, t_mode step, size_t sought, size_t nxt)
 
 	ptr = stk_ptr(game, step);
 	queried_idx = psw_srch_key(ptr, ptr->load, sought);
+	if (ptr->stk[ptr->load - 1].key == nxt)
+		psh(game, step);
 	if (queried_idx >= ptr->load / 2)// && queried_idx < ptr->load)
 	{
 		while (ptr->stk[ptr->load - 1].key != sought)
 		{
+			rot(game, step);
 			if (ptr->stk[ptr->load - 1].key == nxt)
 				psh(game, step);
-			rot(game, step);
 		}
 	}
 	else// if (queried_idx < ptr->load / 2)
 	{
 		while (ptr->stk[ptr->load - 1].key != sought)
 		{
+			rrot(game, step);
 			if (ptr->stk[ptr->load - 1].key == nxt)
 				psh(game, step);
-			rrot(game, step);
 		}
 	}
 }
@@ -73,11 +75,11 @@ void	inssrt_a(t_game *game, size_t low, size_t high)
 	size_t	pushes;
 
 	pushes = 0;
-	while (LOAD_A > 5 && STK_A[TOP_A].key != high)// || pushes < SET_QTY) && !sorted(game, A, TOP_A - RMNG))
+	while (LOAD_A > 5 && STK_B[TOP_B].key <= high - 1 && !sorted(game, A, TOP_A - RMNG))
 	{
 		sought_key = low + pushes;
 		if (sought_key >= high)
-			psw_ftch_key(game, B_INS, sought_key, GAME_QTY);
+			psw_ftch_key(game, A_INS, sought_key, GAME_QTY);
 		else
 			psw_ftch_key(game, A_INS, sought_key, sought_key + 1);
 		if (STK_A[TOP_A].key < high)//TOP_A >= low && 
