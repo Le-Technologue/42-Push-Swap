@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 09:52:24 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/10 18:40:20 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/14 11:04:12 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,12 @@ void	inssrt_b(t_game *game, size_t high, size_t low)
 			psw_ftch_key(game, B_INS, sought_key, sought_key - 1);
 		psh(game, B_INS);
 		pushes++;
-		three_srt(game);
+		three_srt(game, low, high);
 		if (STK_A[TOP_A].key == sought_key - 1)
 			pushes++;
 	}
 	if (LOAD_B <= 5)
-		five_srt_B(game);
+		five_srt_b(game, high - pushes, low);
 }
 
 void	inssrt_a(t_game *game, size_t low, size_t high)
@@ -89,12 +89,12 @@ void	inssrt_a(t_game *game, size_t low, size_t high)
 		}
 //		if (sorted(game, A, TOP_A - RMNG, TOP_A))
 //			break ;
-		three_srt(game);
+		three_srt(game, low, high);
 		if (STK_B[TOP_B].key == sought_key + 1)
 			pushes++;
 	}
 	if (LOAD_A <= 5 && !sorted(game, A, 0))
-		five_srt_A(game);
+		five_srt_a(game, low + pushes, high);
 	while (pushes--)
 		psh(game, B_INS);
 }

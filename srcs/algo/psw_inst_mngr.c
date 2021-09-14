@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 08:09:07 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/09 16:19:02 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/14 11:25:59 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ size_t	swp(t_game *game, t_mode mode)
 		else
 			return (0);
 	}
-	if (mode <= B)
+	else if (mode <= B)
 	{
 		if (LOAD_B == 2 && PRV_MOV == RA)
 			buf_inst(game, RB);

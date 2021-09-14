@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/13 10:21:15 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/14 09:10:17 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 		write(1, game->log->data, game->log->entries);
 		if (MONITORING) // MONITORING
 		{
+		dprintf(1, "^ INSTRUCTIONS ^\n\n");
 			psw_monitor(game);
 			if (sorted(game, A, 0) && !LOAD_B)
 				dprintf(1, "STACK SORTED :D\n");
@@ -65,7 +66,7 @@ t_error	psw_game(t_game *game)
 		return (MEM_ALLOC);
 	if (vctr_init(&game->log, sizeof(char), 2048))
 		return (MEM_ALLOC);
-	PRV_MOV = END;
+	PRV_MOV = START;
 	if (vctr_init(&game->info.pvt, sizeof(size_t), 8))
 		return (MEM_ALLOC);
 //	game->a.id = A;
@@ -79,19 +80,11 @@ t_error	psw_game(t_game *game)
 	psw_solver(game);
 	return (CLEAR);
 }
-/*	while (GAME_QTY)
-	i = GAME_QTY; // we had to start by the end when we pushed values, but it could be done otherwise
-	game->a->top = NULL; //mhh but how to initialise stack b as well?
-	dll_push(game->a->top, new_dln(game->val[i].val));
-	bottom = top;
-	while (--i >= 0)
-	dll_push(game->a->top, new_dln(game->val[i].val));
-*/
 
-t_error	psw_monitoring_toggle(t_game *game, char *first_arg, long *buf)
+t_error	psw_monitoring_toggle(t_game *game, char **first_arg, long *buf)
 {
 	//if (!ft_strncmp(first_arg, "-m", 3))
-	if (*first_arg == 'm')
+	if (**first_arg == 'm')
 	{
 		game->info.mon = 1; // MONITOR
 		return (CLEAR);
@@ -99,9 +92,9 @@ t_error	psw_monitoring_toggle(t_game *game, char *first_arg, long *buf)
 	else
 	{
 		game->info.mon = 0;
-		buf[GAME_QTY - 1] = ft_atol_base(first_arg, "0123456789");
-		if (buf[GAME_QTY - 1] < INT_MIN || buf[GAME_QTY - 1] > INT_MAX)
-//				|| *first_arg != '\0')
+		buf[GAME_QTY - 1] = ptr_atol_base(first_arg, "0123456789");
+		if (buf[GAME_QTY - 1] < INT_MIN || buf[GAME_QTY - 1] > INT_MAX
+				|| **first_arg != '\0')
 			return (PARSE);
 		return (CLEAR);
 	}
@@ -117,7 +110,7 @@ t_error	psw_parsing(t_game *game, char **av)
 	buf = malloc(sizeof(t_val) * game->info.qty);
 	if (!buf)
 		return (MEM_ALLOC);
-	if (psw_monitoring_toggle(game, av[1], buf) != CLEAR)
+	if (psw_monitoring_toggle(game, &av[1], buf) != CLEAR)
 		return (PARSE);
 	i = 0;
 	while (++i < GAME_QTY)
@@ -127,7 +120,7 @@ t_error	psw_parsing(t_game *game, char **av)
 			return (PARSE);
 		buf[GAME_QTY - 1 - i] = ptr_atol_base(&ptr, "0123456789");
 		if (INT_MIN > buf[GAME_QTY - 1 - i] || buf[GAME_QTY - 1 - i] > INT_MAX
-				|| *ptr != '\0') // this check '\0' to avoid reading values stuck to wrong inputs but what about fake zeroes from empty arrays ?
+				|| *ptr != '\0')
 			return (PARSE);
 	}
 	outcome = game_setup(game, buf);

@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 10:00:16 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/13 16:58:00 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/14 10:23:27 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ void	qcksrt_a(t_game *game, size_t low, size_t high, t_mode step)
 	if (step != LAST && LOAD_B)
 		qcksrt_b(game, MED, low, B);
 }
-void	psw_qcksrt_init(t_game *game, size_t low, size_t high)
+void	qcksrt_init(t_game *game, size_t low, size_t high)
 {
 	size_t	to_sort;
 

@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 17:01:34 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/27 19:11:16 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/14 09:01:08 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include "psw_rotate.h"
 # include "psw_rev_rotate.h"
 
-// # define TIMEOUT_LOOP game->buf->entries == 5000
 # define INST ((t_inst_id *)(game->buf->data))
 
 typedef void	(*t_inst)(t_game *game);
@@ -30,6 +29,7 @@ typedef struct s_inst_swtch {
 }	t_inst_swtch;
 
 typedef enum e_inst_id {
+	START,
 	SA,
 	SB,
 	SS,

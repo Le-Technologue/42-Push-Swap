@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/22 10:43:12 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/10 11:38:36 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/14 08:51:22 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_stk {
 typedef struct s_metadata {
 	size_t		qty;
 	int			prv_mov;
-	t_vctr		*pvt;
+	t_vctr		*pvt; //dégager
 	_Bool		mon;
 }	t_metadata;
 

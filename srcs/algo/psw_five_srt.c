@@ -6,24 +6,24 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 09:59:10 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/10 13:56:43 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/14 11:14:00 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "psw_inst_mngr.h"
 #include "psw_probes.h"
 
-size_t	srt_top_A(t_game *game)
+size_t	srt_top_a(t_game *game)
 {
 	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[TOP_A - 1].key)
-		return(swp(game, A));
+		return(swp(game, A_SEC));
 	return (0);
 }
 
-size_t	srt_top_B(t_game *game)
+size_t	srt_top_b(t_game *game)
 {
 	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[TOP_B - 1].key)
-		return (swp(game, B));
+		return (swp(game, B_SEC));
 	return (0);
 }
 
@@ -32,18 +32,21 @@ size_t	srt_tops(t_game *game)
 	size_t	moves;
 
 	moves = 0;
-	moves += srt_top_A(game);
-	moves += srt_top_B(game);
+	moves += srt_top_a(game);
+	moves += srt_top_b(game);
 	return (moves);
 }
 
-void	three_srt(t_game *game)
+void	three_srt(t_game *game, size_t low, size_t high)
 {
-	size_t	moves; //SEC mode might create some troubles here...
+	size_t	moves;
 
 	while (1)
 	{
 		moves = 0;
+		if ((STK_A[TOP_A].key <= MED && STK_A[TOP_A - 1].key <= MED)
+				|| (STK_A[TOP_A].key > MED && STK_A[TOP_A - 1].key > MED))
+			moves += srt_tops(game);
 		if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[0].key
 				&& STK_A[TOP_A].key < STK_A[TOP_A - 1].key)
 			moves += rrot(game, A_SEC);
@@ -65,16 +68,16 @@ void	three_srt(t_game *game)
 	}
 }
 
-void	five_srt_B(t_game *game)
+void	five_srt_b(t_game *game, size_t high, size_t low)
 {
 	int i;
 
 	if (LOAD_B <= 3)
-		return three_srt(game);
+		return three_srt(game, low, high);
 	i = 0;
 	while (!sorted(game, B, 0) && i < 2)
 	{
-		three_srt(game);
+		three_srt(game, low, high);
 		if (sorted(game, B, 0))
 			break ;
 		psh(game, A);
@@ -82,26 +85,26 @@ void	five_srt_B(t_game *game)
 	}
 	while (i)
 	{
-		three_srt(game);
+		three_srt(game, low, high);
 		psh(game, B);
 		i--;
 	}
-	three_srt(game);
+	three_srt(game, low, high);
 	i = LOAD_B + 1;
 	while (--i)
 		psh(game, B_INS);
 }
 
-void	five_srt_A(t_game *game)
+void	five_srt_a(t_game *game, size_t low, size_t high)
 {
 	int i;
 
 	if (LOAD_A <= 3)
-		return three_srt(game);
+		return three_srt(game, low, high);
 	i = 0;
 	while (!sorted(game, A, 0) && i < 2)
 	{
-		three_srt(game);
+		three_srt(game, low, high);
 		if (sorted(game, A, 0))
 			break ;
 		psh(game, B);
@@ -109,9 +112,9 @@ void	five_srt_A(t_game *game)
 	}
 	while (i)
 	{
-		three_srt(game);
+		three_srt(game, low, high);
 		psh(game, A);
 		i--;
 	}
-	three_srt(game);
+	three_srt(game, low, high);
 }
