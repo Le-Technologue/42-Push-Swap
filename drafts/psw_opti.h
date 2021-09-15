@@ -1,19 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   psw_solver.c                                       :+:      :+:    :+:   */
+/*   psw_opti.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/06 18:33:53 by wetieven          #+#    #+#             */
-/*   Updated: 2021/08/09 14:12:17 by wetieven         ###   ########lyon.fr   */
+/*   Created: 2021/08/20 21:48:34 by wetieven          #+#    #+#             */
+/*   Updated: 2021/09/14 14:59:53 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "psw_inst.h"
-#include "psw_algo.h"
+#ifndef PSW_OPTI_H
+# define PSW_OPTI_H
 
-void	psw_solver(t_game *game)
-{
-	bble_srt(game);
-}
+# include "push_swap.h"
+# include "psw_algo.h"
+
+size_t	med_srt_tops(t_game *game, t_mode step, size_t med);
+size_t	srt_bottoms(t_game *game, size_t med);
+size_t	srt_next_to_top(t_game *game, size_t med);
+void	edge_srt(t_game *game, t_mode mode, size_t med);
+
+#endif

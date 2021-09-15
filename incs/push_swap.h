@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/22 10:43:12 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/14 08:51:22 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/15 16:49:41 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 # define LOAD_A game->a.load
 # define TOP_A (game->a.load - 1)
 
-# define OVER_A game->a.over
 # define STK_A game->a.stk
 # define UNDR_A game->a.under
 
@@ -33,7 +32,6 @@
 # define LOAD_B game->b.load
 # define TOP_B (game->b.load - 1)
 
-# define OVER_B game->b.over
 # define STK_B game->b.stk
 # define UNDR_B game->b.under
 
@@ -49,19 +47,14 @@ typedef struct s_val {
 	int		val;
 }	t_val;
 
-
 typedef struct s_stk {
-//	t_mode	id;
 	t_val	*stk;
-	size_t	over;
-	size_t	under;
 	size_t	load;
 }	t_stk;
 
 typedef struct s_metadata {
 	size_t		qty;
 	int			prv_mov;
-	t_vctr		*pvt; //dégager
 	_Bool		mon;
 }	t_metadata;
 

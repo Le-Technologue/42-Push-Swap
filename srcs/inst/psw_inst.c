@@ -6,11 +6,10 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:43:03 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/13 16:39:54 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/14 16:01:05 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>//DBG
 #include "push_swap.h"
 #include "psw_inst.h"
 #include "psw_monitor.h"
@@ -75,39 +74,16 @@ void	log_inst(t_game *game)
 	}
 }
 
-void	loop(size_t *counter) // DEBUGGING
-{
-	static size_t	i;
-
-	i++;
-//	dprintf(1, "OH BOY %lu wasted instructions\n", i * 25);
-	*counter = 0;
-}
-
 void	buf_inst(t_game *game, t_inst_id inst)
 {
-	static size_t repeated_inst;
-
 	if (inst == END)
 		log_inst(game);
 	else
 	{
 		(switchboard()[inst].inst)(game);
 		vctr_push(game->buf, &inst);
-		if (PRV_MOV == (int)inst)//DBG
-			repeated_inst++;
-		else
-			repeated_inst = 0;
-		if (repeated_inst >= 25)
-			loop(&repeated_inst);
 		PRV_MOV = inst;
-		if (MONITORING) // MONITORING
+		if (MONITORING)
 			psw_monitor(game);
 	}
-/*	if (TIMEOUT_LOOP) //DEBUG
-	{
-		log_inst(game);
-		write(1, game->log->data, game->log->entries);
-		exit(1);
-	}*/
 }

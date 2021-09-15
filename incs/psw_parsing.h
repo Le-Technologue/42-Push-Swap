@@ -6,12 +6,12 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:21:57 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/10 11:37:05 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/15 13:36:25 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSING_H
-# define PARSING_H
+#ifndef PSW_PARSING_H
+# define PSW_PARSING_H
 
 t_error	game_setup(t_game *game, long *buf);
 t_error	psw_mrgsort(t_val **set, const size_t start, const size_t end);

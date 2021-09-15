@@ -6,13 +6,12 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/14 09:10:17 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/15 17:36:03 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h> //TENTION
-#include "psw_probes.h"
 #include <limits.h>
+#include "libft.h"
 #include "push_swap.h"
 #include "psw_parsing.h"
 #include "psw_inst.h"
@@ -25,35 +24,21 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 		ft_putendl_fd("Memory is lacking, please close Google Chrome", 1);
 	if (function == PSW_PARSING)
 		if (cause == PARSE)
-			ft_putendl_fd("Arguments should belong to the int set and exclude duplicates", 1);
+			ft_putendl_fd("Error : Arguments have to belong to the int set\
+ and exclude duplicates.", 1);
 	if (function >= PSW_GAME)
 	{	
-		write(1, game->log->data, game->log->entries);
-		if (MONITORING) // MONITORING
+		if (cause == CLEAR)
 		{
-		dprintf(1, "^ INSTRUCTIONS ^\n\n");
-			psw_monitor(game);
-			if (sorted(game, A, 0) && !LOAD_B)
-				dprintf(1, "STACK SORTED :D\n");
-			else
-				dprintf(1, "STACK UNSORTED ^^\"\n");
-			dprintf(1, "%lu raw instructions\n", game->buf->entries);
-			dprintf(1, "%i joint instructions\n", ft_word_count(game->log->data, '\n'));
-			dprintf(1, "%li saved instructions\n", game->buf->entries - ft_word_count(game->log->data, '\n'));
+			write(1, game->log->data, game->log->entries);
+			psw_end_report(game);
 		}
-		if (game->b.stk)
-			free(game->b.stk);
-		if (game->buf)
-			vctr_exit(game->buf);
-		if (game->log)
-			vctr_exit(game->log);
-		if (game->info.pvt)
-			vctr_exit(game->info.pvt);
-	}
-	if (game->a.stk)
-		free(game->a.stk);
-	if (game->set)
 		free(game->set);
+		free(game->a.stk);
+		free(game->b.stk);
+		vctr_exit(game->buf);
+		vctr_exit(game->log);
+	}
 	return (CLEAR);
 }
 
@@ -67,26 +52,17 @@ t_error	psw_game(t_game *game)
 	if (vctr_init(&game->log, sizeof(char), 2048))
 		return (MEM_ALLOC);
 	PRV_MOV = START;
-	if (vctr_init(&game->info.pvt, sizeof(size_t), 8))
-		return (MEM_ALLOC);
-//	game->a.id = A;
 	LOAD_A = GAME_QTY;
 	LOAD_B = 0;
-	OVER_A = 0;
-	UNDR_A = 0;
-//	game->b.id = B;
-	OVER_B = 0;
-	UNDR_B = 0;
 	psw_solver(game);
 	return (CLEAR);
 }
 
 t_error	psw_monitoring_toggle(t_game *game, char **first_arg, long *buf)
 {
-	//if (!ft_strncmp(first_arg, "-m", 3))
 	if (**first_arg == 'm')
 	{
-		game->info.mon = 1; // MONITOR
+		game->info.mon = 1;
 		return (CLEAR);
 	}
 	else
@@ -94,7 +70,7 @@ t_error	psw_monitoring_toggle(t_game *game, char **first_arg, long *buf)
 		game->info.mon = 0;
 		buf[GAME_QTY - 1] = ptr_atol_base(first_arg, "0123456789");
 		if (buf[GAME_QTY - 1] < INT_MIN || buf[GAME_QTY - 1] > INT_MAX
-				|| **first_arg != '\0')
+			|| **first_arg != '\0')
 			return (PARSE);
 		return (CLEAR);
 	}
@@ -120,7 +96,7 @@ t_error	psw_parsing(t_game *game, char **av)
 			return (PARSE);
 		buf[GAME_QTY - 1 - i] = ptr_atol_base(&ptr, "0123456789");
 		if (INT_MIN > buf[GAME_QTY - 1 - i] || buf[GAME_QTY - 1 - i] > INT_MAX
-				|| *ptr != '\0')
+			|| *ptr != '\0')
 			return (PARSE);
 	}
 	outcome = game_setup(game, buf);
@@ -128,7 +104,7 @@ t_error	psw_parsing(t_game *game, char **av)
 	return (outcome);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	t_error	error;
 	t_game	game;

@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/20 21:51:07 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/04 17:43:10 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/14 14:59:41 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,18 @@ size_t	med_srt_tops(t_game *game, t_mode step, size_t med)
 				&& (STK_A[TOP_A].key <= med && STK_A[TOP_A - 1].key <= med))
 			|| (STK_B[TOP_B].key <= med / 2
 				&& (STK_A[TOP_A].key <= med && STK_A[TOP_A - 1].key <= med))))
-			moves += swp(game, A);
+			moves += swp(game, A_SEC);
 		else if (step <= A
 			&& ((STK_A[TOP_A].key < med && STK_A[TOP_A - 1].key < med)
 			|| (STK_A[TOP_A].key > med && STK_A[TOP_A - 1].key > med)))
-			moves += swp(game, A);
+			moves += swp(game, A_SEC);
 	}
 	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[TOP_B - 1].key)
 	{
 		if (step == A && STK_B[TOP_B - 1].key != med)
-			moves += swp(game, B);
+			moves += swp(game, B_SEC);
 		else if (step != A)
-			moves += swp(game, B);
+			moves += swp(game, B_SEC);
 	}
 	return (moves);
 }
@@ -50,16 +50,16 @@ size_t	srt_bottoms(t_game *game, size_t med)
 	moves = 0;
 	if (PRV_MOV != RA && LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[0].key
 			&& (STK_A[TOP_A].key <= med && STK_A[0].key <= med))
-		moves += rrot(game, A);
+		moves += rrot(game, A_SEC);
 	if (PRV_MOV != RB && LOAD_B >= 2 && STK_B[0].key != med
 			&& STK_B[TOP_B].key < STK_B[0].key)
-		moves += rrot(game, B);
+		moves += rrot(game, B_SEC);
 	if (PRV_MOV != RRA && LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[0].key
 			&& (STK_A[TOP_A].key > med && STK_A[0].key > med))
-		moves += rot(game, A);
+		moves += rot(game, A_SEC);
 	if (PRV_MOV != RRB && LOAD_B >= 2 && STK_B[0].key != med
 			&& STK_B[TOP_B].key < STK_B[0].key)
-		moves += rot(game, B);
+		moves += rot(game, B_SEC);
 	return (moves);
 }
 
@@ -70,10 +70,10 @@ size_t	srt_next_to_tops(t_game *game, size_t med)
 	moves = 0;
 	if (PRV_MOV != RA && LOAD_A >= 3 && STK_A[0].key == STK_A[TOP_A].key + 1
 			&& (STK_A[TOP_A].key <= med && STK_A[0].key <= med))
-		moves += rrot(game, A);
+		moves += rrot(game, A_SEC);
 	if (PRV_MOV != RB && LOAD_B >= 3 && STK_B[0].key == STK_B[TOP_B].key - 1
 			&& (STK_A[TOP_A].key >= med && STK_A[0].key >= med))
-		moves += rrot(game, B);
+		moves += rrot(game, B_SEC);
 	return (moves);
 }
 
@@ -103,26 +103,26 @@ void	srt_bottoms(t_game *game, t_mode step, size_t med, _Bool *loop)
 //			&& (STK_A[0].key != med || step == A_3)
 //			&& STK_A[TOP_A].key < STK_A[TOP_A - 1].key
 	{
-		rrot(game, A);
+		rrot(game, A_SEC);
 		*loop = 0;
 	}
 	if (PRV_MOV != RB && STK_B[0].key != med // && step != A 
 			&& LOAD_B >= 3 && STK_B[TOP_B].key < STK_B[0].key
 			&& STK_B[TOP_B].key > STK_B[TOP_B - 1].key)
 	{
-		rrot(game, B);
+		rrot(game, B_SEC);
 		*loop = 0;
 	}
 	if (PRV_MOV != RRA && LOAD_A >= 3 && STK_A[TOP_A].key > STK_A[0].key
 			&& (STK_A[TOP_A].key >= med && STK_A[0].key >= med))
 	{
-		rot(game, A);
+		rot(game, A_SEC);
 		*loop = 0;
 	}
 	if (PRV_MOV != RRB && STK_B[0].key != med // && step != A
 			&& LOAD_B >= 3 && STK_B[TOP_B].key < STK_B[0].key)
 	{
-		rot(game, B);
+		rot(game, B_SEC);
 		*loop = 0;
 	}
 }
@@ -132,13 +132,13 @@ void	srt_next_to_top(t_game *game, t_mode step, size_t med, _Bool *loop)
 	if (PRV_MOV != RA && LOAD_A >= 3 && STK_A[0].key == STK_A[TOP_A].key + 1
 			&& (STK_A[TOP_A].key <= med && STK_A[0].key <= med))
 	{
-		rrot(game, A);
+		rrot(game, A_SEC);
 		*loop = 0;
 	}
 	if (PRV_MOV != RB && LOAD_B >= 3 && STK_B[0].key == STK_B[TOP_B].key - 1
 			&& (STK_A[TOP_A].key >= med && STK_A[0].key >= med))
 	{
-		rrot(game, B);
+		rrot(game, B_SEC);
 		*loop = 0;
 	}
 	med_srt_tops(game, step, med, loop);

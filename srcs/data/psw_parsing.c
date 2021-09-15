@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:18:55 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/10 13:22:30 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/15 17:24:53 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ static t_error	assign_keys(t_val **set, size_t range)
 static void	mrg_both(t_val **set, t_val **buf,
 					const size_t rift, const size_t end)
 {
-	size_t i;
-	size_t l;
-	size_t r;
+	size_t	i;
+	size_t	l;
+	size_t	r;
 
 	i = 0;
 	l = 0;
@@ -86,32 +86,30 @@ t_error	psw_mrgsort(t_val **set, const size_t start, const size_t end)
 	return (CLEAR);
 }
 
+// Thank the norm for that signed counter. A long should be enough
+// knowing we're not dealing with anything other than ints though.
 t_error	game_setup(t_game *game, long *buf)
 {
-	size_t	i;
+	long	i;
 
 	if (MONITORING)
 		GAME_QTY--;
 	game->a.stk = malloc(sizeof(t_val) * GAME_QTY);
 	if (!game->a.stk)
 		return (MEM_ALLOC);
-	i = 0;
-	while (i < GAME_QTY)
-	{
+	i = -1;
+	while (++i < (long)GAME_QTY)
 		game->a.stk[i].val = buf[i];
-		i++;
-	}
 	game->set = malloc(sizeof(t_val **) * GAME_QTY);
 	if (!game->set)
 		return (MEM_ALLOC);
-	i = 0;
-	while (i < GAME_QTY)
-	{
+	i = -1;
+	while (++i < (long)GAME_QTY)
 		game->set[i] = &game->a.stk[i];
-		i++;
-	}
 	psw_mrgsort(game->set, 0, GAME_QTY - 1);
-	if (assign_keys(game->set, GAME_QTY))
-		return (PARSE);
-	return (CLEAR);
+	if (assign_keys(game->set, GAME_QTY) == CLEAR)
+		return (CLEAR);
+	free(game->a.stk);
+	free(game->set);
+	return (PARSE);
 }
