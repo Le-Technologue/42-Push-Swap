@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 10:00:16 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/15 14:02:12 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/15 17:57:45 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	lastsrt_b(t_game *game, size_t high, size_t low)
 		qcksrt_b(game, MED, low, LAST);
 }
 
-static void	nxtsrt(t_game *game, size_t low, size_t high, t_mode step)
+static void	nxtsrt(t_game *game, size_t low, size_t high, t_step step)
 {
 	if (TWIN_INSSRT_THRSHLD)
 		twin_inssrt(game, low, high);
@@ -44,7 +44,7 @@ static void	nxtsrt(t_game *game, size_t low, size_t high, t_mode step)
 		qcksrt_b(game, MED, low, B);
 }
 
-void	qcksrt_b(t_game *game, size_t high, size_t low, t_mode step)
+void	qcksrt_b(t_game *game, size_t high, size_t low, t_step step)
 {
 	size_t	to_sort;
 
@@ -66,7 +66,7 @@ void	qcksrt_b(t_game *game, size_t high, size_t low, t_mode step)
 	nxtsrt(game, low, high, step);
 }
 
-void	qcksrt_a(t_game *game, size_t low, size_t high, t_mode step)
+void	qcksrt_a(t_game *game, size_t low, size_t high, t_step step)
 {
 	size_t	to_sort;
 

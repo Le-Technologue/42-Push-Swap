@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/15 17:36:03 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/15 19:28:47 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,15 @@
 #include "psw_algo.h"
 #include "psw_monitor.h"
 
-t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
+static t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 {
+	if (cause != CLEAR)
+		ft_putendl_fd("Error", 2);
 	if (cause == MEM_ALLOC)
 		ft_putendl_fd("Memory is lacking, please close Google Chrome", 1);
 	if (function == PSW_PARSING)
 		if (cause == PARSE)
-			ft_putendl_fd("Error : Arguments have to belong to the int set\
+			ft_putendl_fd("Arguments have to belong to the int set\
  and exclude duplicates.", 1);
 	if (function >= PSW_GAME)
 	{	
@@ -39,7 +41,7 @@ t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 		vctr_exit(game->buf);
 		vctr_exit(game->log);
 	}
-	return (CLEAR);
+	return (cause);
 }
 
 t_error	psw_game(t_game *game)

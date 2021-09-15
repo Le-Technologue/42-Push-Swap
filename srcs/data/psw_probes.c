@@ -6,14 +6,14 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 11:26:41 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/14 15:53:49 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/15 17:58:13 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "psw_inst.h"
 #include "psw_probes.h"
 
-t_stk	*stk_ptr(t_game *game, t_mode step)
+t_stk	*stk_ptr(t_game *game, t_step step)
 {
 	t_stk	*ptr;
 
@@ -44,7 +44,7 @@ t_stk	*psw_key_locat(t_game *game, size_t sought)
 		return (&game->b);
 }
 
-_Bool	sorted(t_game *game, t_mode stack, size_t low)
+_Bool	sorted(t_game *game, t_step stack, size_t low)
 {
 	size_t	i;
 	t_stk	*ptr;

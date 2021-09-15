@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:13:57 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/14 15:27:04 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/15 17:54:49 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 
 // Sorting mode enum allowing adaptative functions
 // for each step of the sorting algorithm
-typedef enum e_mode {
+typedef enum e_step {
 	A_SPLT,
 	A_SEC,
 	A_INS,
@@ -40,7 +40,7 @@ typedef enum e_mode {
 	B_INS,
 	B,
 	LAST
-}	t_mode;
+}	t_step;
 
 void	psw_solver(t_game *game);
 

@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:18:55 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/15 17:24:53 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/15 19:39:49 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,10 @@ t_error	game_setup(t_game *game, long *buf)
 		game->a.stk[i].val = buf[i];
 	game->set = malloc(sizeof(t_val **) * GAME_QTY);
 	if (!game->set)
+	{
+		free(game->a.stk);
 		return (MEM_ALLOC);
+	}
 	i = -1;
 	while (++i < (long)GAME_QTY)
 		game->set[i] = &game->a.stk[i];

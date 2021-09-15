@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 09:52:24 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/14 15:57:18 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/15 17:58:40 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "psw_five_srt.h"
 #include "psw_inssrt.h"
 
-static void	psw_ftch_key(t_game *game, t_mode step, size_t sought, size_t nxt)
+static void	psw_ftch_key(t_game *game, t_step step, size_t sought, size_t nxt)
 {
 	t_stk	*ptr;
 	size_t	queried_idx;
