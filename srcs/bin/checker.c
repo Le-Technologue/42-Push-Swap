@@ -6,15 +6,14 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 17:49:27 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/15 19:48:37 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/15 21:13:15 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 #include "psw_parsing.h"
 #include "psw_inst.h"
-
-ft_putendl_fd("Error", 2);
+#include "psw_probes.h"
 
 static t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 {
@@ -32,6 +31,7 @@ static t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 		free(game->a.stk);
 		free(game->b.stk);
 	}
+	return (cause);
 }
 
 t_error	psw_checker(t_game *game)
@@ -45,7 +45,7 @@ t_error	psw_checker(t_game *game)
 	while (get_next_line(0, &call))
 	{
 		inst = fetch_inst(switchboard(), call);
-		if (inst == END)
+		if (inst == NULL)
 			return (PARSE);
 		(inst)(game);
 	}
@@ -62,11 +62,11 @@ int	main(int ac, char **av)
 	game.info.qty = ac - 1;
 	error = psw_parsing(&game, av);
 	if (error)
-		return (psw_shutdown(game, error, PSW_PARSING));
+		return (psw_shutdown(&game, error, PSW_PARSING));
 	psw_checker(&game);
-	if (!LOAD_B && sorted(game, A, 0))
+	if (!game.b.load && sorted(&game, A, 0))
 		ft_putendl_fd("OK", 1);
 	else
 		ft_putendl_fd("KO", 1);
-	return (psw_shutdown(game, CLEAR, MAIN_END));
+	return (psw_shutdown(&game, CLEAR, MAIN_END));
 }

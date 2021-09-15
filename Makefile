@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/09/15 18:43:36 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/09/15 21:21:48 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,9 @@ OBJS		=	$(SRCS:%.c=$(ODIR)%.o)
 LIBS		=	$(shell find $(LDIR) -name '*.a' -exec basename {} ';')
 
 EOBJ		=	$(EXEC:%=$(ODIR)%.o)
+BOBJ		=	$(BSRC:%.c=$(ODIR)%.o)
 SOBJ		=	$(filter-out $(EOBJ),$(OBJS))
+SOBJ		+=	$(filter-out $(BOBJ),$(OBJS))
 
 ## ~~ Folders ~~ ##
 
@@ -105,7 +107,7 @@ CC			=	gcc
 WRNFL		=	 -Wall -Wextra -Werror
 OPTFL		=-O3 -march=native #-fno-builtin
 DBGFL		=	-g
-CFLGS		=	$(WRNFL) $(DBGFL)#$(OPTFL)
+CFLGS		=	$(WRNFL) $(DBGFL) $(OPTFL)
 DEPFL		=	-MT $@ -MMD -MP -MF $(DDIR)$*.d
 
 CINCS		=	$(addprefix -I, $(HDIR))
@@ -118,7 +120,7 @@ CLIBS		=	$(LIBS:lib%.a=-l%)
 
 # ~~~ Default ~~~ #
 
-all			:	make_libs $(SUBDIRS) $(OBJS) $(EXEC)
+all			:	make_libs $(LIBS) $(SUBDIRS) $(OBJS) $(EXEC)
 
 $(SUBDIRS)	:
 				mkdir -p $(SUBDIRS)
@@ -127,6 +129,9 @@ $(SUBDIRS)	:
 
 $(ODIR)%.o	:	%.c $(DDIR)%.d#$(LIBS) How to trigger a recompilation if the libft is modified ? Check older, simpler makefiles
 				$(CC) $(CFLGS) $(CINCS) $(DEPFL) -c $< -o $@
+
+$(ODIR)$(BOBJ)%.o	:	%.c $(DDIR)%.d#$(LIBS) How to trigger a recompilation if the libft is modified ? Check older, simpler makefiles
+						$(CC) $(CFLGS) $(CINCS) $(DEPFL) -c $< -o $@
 
 # ~~~ Library archiving ~~~ #
 
@@ -143,7 +148,12 @@ make_libs	:
 $(EXEC)		:	$(EOBJ) $(SOBJ)
 				$(CC) $^ -o $@ $(CLDIR) $(CLIBS)
 
+$(BONUS)	:	$(BOBJ) $(SOBJ)
+				$(CC) $^ -o $@ $(CLDIR) $(CLIBS)
+
 # ~~~ Actions ~~~ #
+
+bonus		:	make_libs $(LIBS) $(SUBDIRS) $(OBJS) $(BOBJ) $(BONUS)
 
 norm		:
 				norminette incs srcs
@@ -156,7 +166,7 @@ fclean		:	clean
 				rm -rf $(DDIR)
 				$(MAKE) -C $(LDIR) fclean
 				$(RM) $(EXEC)
-#				$(RM) $(LIBS)
+				$(RM) $(LIBS)
 
 re			:	fclean all
 
