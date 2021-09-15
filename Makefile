@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/09/15 21:21:48 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/09/15 21:43:54 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,8 +75,8 @@ SOBJ		+=	$(filter-out $(BOBJ),$(OBJS))
 
 LDIR		:=	$(shell find $(LDIR) -mindepth 1 -maxdepth 1 -type d)
 
-#SUBDIRS		=	$(SDIR:srcs/%=$(ODIR)%) $(SDIR:srcs/%=$(DDIR)%)
 SUBDIRS		=	$(ODIR) $(DDIR)
+#SUBDIRS		=	$(SDIR:srcs/%=$(ODIR)%) $(SDIR:srcs/%=$(DDIR)%)
 
 ### ~~~ SOURCES ~~~ ###
 
@@ -104,10 +104,10 @@ vpath %.c $(SDIR)
 
 
 CC			=	gcc
-WRNFL		=	 -Wall -Wextra -Werror
-OPTFL		=-O3 -march=native #-fno-builtin
+WRNFL		=	-Wall -Wextra -Werror
+OPTFL		=	-O3 -march=native #-fno-builtin
 DBGFL		=	-g
-CFLGS		=	$(WRNFL) $(DBGFL) $(OPTFL)
+CFLGS		=	$(WRNFL) $(DBGFL)#$(OPTFL)
 DEPFL		=	-MT $@ -MMD -MP -MF $(DDIR)$*.d
 
 CINCS		=	$(addprefix -I, $(HDIR))
@@ -127,11 +127,8 @@ $(SUBDIRS)	:
 
 # ~~~ Objects Compiling  ~~~ #
 
-$(ODIR)%.o	:	%.c $(DDIR)%.d#$(LIBS) How to trigger a recompilation if the libft is modified ? Check older, simpler makefiles
+$(ODIR)%.o	:	%.c $(DDIR)%.d
 				$(CC) $(CFLGS) $(CINCS) $(DEPFL) -c $< -o $@
-
-$(ODIR)$(BOBJ)%.o	:	%.c $(DDIR)%.d#$(LIBS) How to trigger a recompilation if the libft is modified ? Check older, simpler makefiles
-						$(CC) $(CFLGS) $(CINCS) $(DEPFL) -c $< -o $@
 
 # ~~~ Library archiving ~~~ #
 
@@ -153,7 +150,7 @@ $(BONUS)	:	$(BOBJ) $(SOBJ)
 
 # ~~~ Actions ~~~ #
 
-bonus		:	make_libs $(LIBS) $(SUBDIRS) $(OBJS) $(BOBJ) $(BONUS)
+bonus		:	make_libs $(LIBS) $(SUBDIRS) $(OBJS) $(BONUS)
 
 norm		:
 				norminette incs srcs

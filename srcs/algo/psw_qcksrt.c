@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 10:00:16 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/15 17:57:45 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/15 21:54:17 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	lastsrt_a(t_game *game, size_t low, size_t high)
 		inssrt_a(game, low, high);
 	else
 		qcksrt_a(game, low, high, LAST);
-	if (high - low > 30)
+	if (high - low > 31)
 		qcksrt_b(game, MED, low, LAST);
 }
 
@@ -30,7 +30,7 @@ static void	lastsrt_b(t_game *game, size_t high, size_t low)
 		inssrt_b(game, low, high);
 	else
 		qcksrt_b(game, high, low, LAST);
-	if (high - low > 30)
+	if (high - low > 31)
 		qcksrt_b(game, MED, low, LAST);
 }
 
