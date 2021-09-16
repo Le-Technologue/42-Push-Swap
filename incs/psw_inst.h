@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 17:01:34 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 17:08:21 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/16 19:27:52 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef enum e_inst_id {
 }	t_inst_id;
 
 t_inst_swtch	*switchboard(void);
-t_inst			fetch_inst(t_inst_swtch *inst_set, char *inst_call);
+t_inst_id		fetch_inst_id(t_inst_swtch *inst_set, char *inst_call);
 void			buf_inst(t_game *game, t_inst_id inst);
 void			log_inst(t_game *game);
 

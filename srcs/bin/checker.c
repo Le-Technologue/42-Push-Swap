@@ -6,10 +6,11 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 17:49:27 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 18:46:03 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/16 19:39:07 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "push_swap.h"
 #include "psw_parsing.h"
 #include "psw_inst.h"
@@ -28,16 +29,21 @@ static t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 	if (function >= CHECKER)
 	{
 		free(game->set);
-		free(game->a.stk);
-		free(game->b.stk);
+		if (cause != MEM_ALLOC)
+		{
+			free(game->a.stk);
+			free(game->b.stk);
+		}
 	}
+	vctr_exit(game->buf);
+	vctr_exit(game->log);
 	return (cause);
 }
 
 t_error	psw_checker(t_game *game)
 {
-	char	*call;
-	t_inst	inst;
+	char		*call;
+	t_inst_id	inst;
 
 	game->b.stk = malloc(sizeof(t_val) * GAME_QTY);
 	if (!game->b.stk)
@@ -46,13 +52,14 @@ t_error	psw_checker(t_game *game)
 	LOAD_B = 0;
 	while (get_next_line(0, &call) > 0)
 	{
-		inst = fetch_inst(switchboard(), call);
+		inst = fetch_inst_id(switchboard(), call);
 		free(call);
-		if (inst == NULL)
+		if (inst == END)
 			return (PARSE);
-		(inst)(game);
+		buf_inst(game, inst);
 	}
 	free(call);
+	buf_inst(game, END);
 	return (CLEAR);
 }
 
@@ -64,6 +71,13 @@ int	main(int ac, char **av)
 	if (ac <= 1)
 		return (PARSE);
 	game.info.qty = ac - 1;
+	if (vctr_init(&game.buf, sizeof(t_inst_id), 512))
+		return (MEM_ALLOC);
+	if (vctr_init(&game.log, sizeof(char), 2048))
+	{
+		vctr_exit(game.buf);
+		return (MEM_ALLOC);
+	}
 	error = psw_parsing(&game, av);
 	if (error)
 		return (psw_shutdown(&game, error, PSW_PARSING));
