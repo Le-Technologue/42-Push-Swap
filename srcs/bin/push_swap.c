@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 11:27:50 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/16 18:56:03 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static t_error	psw_game(t_game *game)
 		return (MEM_ALLOC);
 	if (vctr_init(&game->log, sizeof(char), 2048))
 		return (MEM_ALLOC);
-	PRV_MOV = START;
+	PRV_MOV = END;
 	LOAD_A = GAME_QTY;
 	LOAD_B = 0;
 	psw_solver(game);

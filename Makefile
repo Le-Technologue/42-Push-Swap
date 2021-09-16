@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/09/16 10:56:45 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/09/16 19:00:54 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 # === TARGETS === #
 # =============== #
 
-#LIB		=	libpsw.a
+#LIB			=	libpsw.a
 EXEC		=	push_swap
 BONUS		=	checker
 
@@ -41,9 +41,8 @@ SRCS		=	push_swap.c \
 				psw_qcksrt.c \
 				psw_inssrt.c \
 				psw_monitor.c \
-				psw_chk_dupl.c
-
-BSRC		=	checker.c
+				psw_chk_dupl.c \
+				checker.c
 
 ## ~~ Folders ~~ ##
 
@@ -63,14 +62,16 @@ RSRC		=	libs/
 
 ### ~~~ TARGETS ~~~ ###
 
-DEPS		=	$(SRCS:%.c=$(DDIR)%.d)
 OBJS		=	$(SRCS:%.c=$(ODIR)%.o)
+
+DEPS		=	$(SRCS:%.c=$(DDIR)%.d)
+
 LIBS		=	$(shell find $(LDIR) -name '*.a' -exec basename {} ';')
 
 EOBJ		=	$(EXEC:%=$(ODIR)%.o)
-BOBJ		=	$(BSRC:%.c=$(ODIR)%.o)
-SOBJ		=	$(filter-out $(EOBJ),$(OBJS))
-SOBJ		+=	$(filter-out $(BOBJ),$(OBJS))
+BOBJ		=	$(BONUS:%=$(ODIR)%.o)
+
+SOBJ		:=	$(filter-out $(EOBJ) $(BOBJ),$(OBJS))
 
 ## ~~ Folders ~~ ##
 
@@ -108,7 +109,7 @@ CC			=	gcc
 WRNFL		=	-Wall -Wextra -Werror
 OPTFL		=	-O3 -march=native #-fno-builtin
 DBGFL		=	-g
-CFLGS		=	$(WRNFL) $(DBGFL)#$(OPTFL)
+CFLGS		=	$(WRNFL) $(DBGFL) $(OPTFL)
 DEPFL		=	-MT $@ -MMD -MP -MF $(DDIR)$*.d
 
 CINCS		=	$(addprefix -I, $(HDIR))
@@ -121,7 +122,7 @@ CLIBS		=	$(LIBS:lib%.a=-l%)
 
 # ~~~ Default ~~~ #
 
-all			:	make_libs $(LIBS) $(SUBDIRS) $(OBJS) $(EXEC)
+all			:	make_libs $(LIBS) $(SUBDIRS) $(SOBJ) $(EOBJ) $(EXEC)
 
 $(SUBDIRS)	:
 				mkdir -p $(SUBDIRS)
@@ -133,8 +134,8 @@ $(ODIR)%.o	:	%.c $(DDIR)%.d
 
 # ~~~ Library archiving ~~~ #
 
-$(LIB)		:	$(OBJS)
-				ar rcs $(LDIR)$(LIB) $?
+#$(LIB)		:	$(SOBJ)
+#				ar rcs $(LDIR)$(LIB) $?
 
 $(LIBS)		:	make_libs
 
@@ -151,7 +152,7 @@ $(BONUS)	:	$(BOBJ) $(SOBJ)
 
 # ~~~ Actions ~~~ #
 
-bonus		:	make_libs $(LIBS) $(SUBDIRS) $(OBJS) $(BONUS)
+bonus		:	make_libs $(LIBS) $(SUBDIRS) $(SOBJ) $(BOBJ) $(BONUS)
 
 norm		:
 				norminette incs srcs
@@ -164,6 +165,7 @@ fclean		:	clean
 				rm -rf $(DDIR)
 				$(MAKE) -C $(LDIR) fclean
 				$(RM) $(EXEC)
+				$(RM) $(BONUS)
 				$(RM) $(LIBS)
 
 re			:	fclean all

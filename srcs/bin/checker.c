@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 17:49:27 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 11:27:41 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/16 18:46:03 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,17 @@ t_error	psw_checker(t_game *game)
 	game->b.stk = malloc(sizeof(t_val) * GAME_QTY);
 	if (!game->b.stk)
 		return (psw_shutdown(game, MEM_ALLOC, CHECKER));
-	while (get_next_line(0, &call))
+	LOAD_A = GAME_QTY;
+	LOAD_B = 0;
+	while (get_next_line(0, &call) > 0)
 	{
 		inst = fetch_inst(switchboard(), call);
+		free(call);
 		if (inst == NULL)
 			return (PARSE);
 		(inst)(game);
 	}
+	free(call);
 	return (CLEAR);
 }
 
@@ -57,13 +61,14 @@ int	main(int ac, char **av)
 	t_game	game;
 	t_error	error;
 
-	if (ac == 1)
+	if (ac <= 1)
 		return (PARSE);
 	game.info.qty = ac - 1;
 	error = psw_parsing(&game, av);
 	if (error)
 		return (psw_shutdown(&game, error, PSW_PARSING));
-	psw_checker(&game);
+	if (psw_checker(&game) == PARSE)
+		return (psw_shutdown(&game, PARSE, MAIN_END));
 	if (!game.b.load && sorted(&game, A, 0))
 		ft_putendl_fd("OK", 1);
 	else
