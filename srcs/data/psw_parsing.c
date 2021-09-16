@@ -6,113 +6,77 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:18:55 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/15 19:39:49 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/16 11:28:01 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <limits.h>
 #include "libft.h"
 #include "push_swap.h"
+#include "psw_chk_dupl.h"
 
-static t_error	assign_keys(t_val **set, size_t range)
+static t_error	psw_monitoring_toggle(t_game *game, char **first_arg, long *buf)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < range - 1)
+	if (**first_arg == 'm')
 	{
-		if (set[i]->val == set[i + 1]->val)
-			return (ERROR);
-		set[i]->key = i;
-		i++;
-	}
-	set[i]->key = i;
-	return (CLEAR);
-}
-
-static void	mrg_both(t_val **set, t_val **buf,
-					const size_t rift, const size_t end)
-{
-	size_t	i;
-	size_t	l;
-	size_t	r;
-
-	i = 0;
-	l = 0;
-	r = rift + 1;
-	while (l <= rift)
-	{
-		if (r > end || buf[l]->val <= set[r]->val)
-			set[i++] = buf[l++];
-		else
-			set[i++] = set[r++];
-	}
-}
-
-static void	cpy_left(t_val **buf, t_val **set, size_t start, const size_t end)
-{
-	while (start <= end)
-	{
-		buf[start] = set[start];
-		start++;
-	}
-}
-
-t_error	psw_mrgsort(t_val **set, const size_t start, const size_t end)
-{
-	size_t			mid;
-	static size_t	buf_size;
-	static t_val	**buf = NULL;
-
-	if (start >= end)
+		game->info.mon = 1;
 		return (CLEAR);
-	if (!buf)
-	{
-		buf_size = end + 1;
-		buf = malloc(sizeof(t_val **) * (buf_size));
-		if (!buf)
-			return (MEM_ALLOC);
 	}
-	mid = (start + end) / 2;
-	psw_mrgsort(set, start, mid);
-	psw_mrgsort(set, mid + 1, end);
-	if (set[mid]->val > set[mid + 1]->val)
+	else
 	{
-		cpy_left(buf, set, start, mid);
-		mrg_both(set + start, buf + start, mid - start, end - start);
+		game->info.mon = 0;
+		buf[GAME_QTY - 1] = ptr_atol_base(first_arg, "0123456789");
+		if (buf[GAME_QTY - 1] < INT_MIN || buf[GAME_QTY - 1] > INT_MAX
+			|| **first_arg != '\0')
+			return (PARSE);
+		return (CLEAR);
 	}
-	if (end + 1 == buf_size && start == 0)
-		free(buf);
-	return (CLEAR);
 }
 
 // Thank the norm for that signed counter. A long should be enough
 // knowing we're not dealing with anything other than ints though.
-t_error	game_setup(t_game *game, long *buf)
+static t_error	game_setup(t_game *game, long *buf)
 {
-	long	i;
+	t_error	error;
 
+	error = CLEAR;
 	if (MONITORING)
 		GAME_QTY--;
-	game->a.stk = malloc(sizeof(t_val) * GAME_QTY);
-	if (!game->a.stk)
-		return (MEM_ALLOC);
-	i = -1;
-	while (++i < (long)GAME_QTY)
-		game->a.stk[i].val = buf[i];
-	game->set = malloc(sizeof(t_val **) * GAME_QTY);
-	if (!game->set)
-	{
-		free(game->a.stk);
-		return (MEM_ALLOC);
-	}
-	i = -1;
-	while (++i < (long)GAME_QTY)
-		game->set[i] = &game->a.stk[i];
-	psw_mrgsort(game->set, 0, GAME_QTY - 1);
-	if (assign_keys(game->set, GAME_QTY) == CLEAR)
-		return (CLEAR);
+	error = psw_chk_dupl(game, buf);
+	free(buf);
+	if (error != PARSE)
+		return (error);
 	free(game->a.stk);
 	free(game->set);
+	return (error);
+}
+
+t_error	psw_parsing(t_game *game, char **av)
+{
+	size_t	i;
+	long	*buf;
+	char	*ptr;
+
+	buf = malloc(sizeof(t_val) * game->info.qty);
+	if (!buf)
+		return (MEM_ALLOC);
+	if (psw_monitoring_toggle(game, &av[1], buf) == CLEAR)
+	{
+		i = 0;
+		while (++i < GAME_QTY)
+		{
+			ptr = av[i + 1];
+			if (!ft_isdigit(*ptr))
+				break ;
+			buf[GAME_QTY - 1 - i] = ptr_atol_base(&ptr, "0123456789");
+			if (*ptr != '\0' || buf[GAME_QTY - 1 - i] < INT_MIN
+				|| buf[GAME_QTY - 1 - i] > INT_MAX)
+				break ;
+		}
+	}
+	if (i == GAME_QTY)
+		return (game_setup(game, buf));
+	free(buf);
 	return (PARSE);
 }

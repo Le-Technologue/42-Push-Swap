@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/09/15 21:43:54 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/09/16 10:56:45 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,8 @@ SRCS		=	push_swap.c \
 				psw_inst_mngr.c \
 				psw_qcksrt.c \
 				psw_inssrt.c \
-				psw_monitor.c
+				psw_monitor.c \
+				psw_chk_dupl.c
 
 BSRC		=	checker.c
 
