@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:18:55 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 11:28:01 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/16 19:11:33 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ t_error	psw_parsing(t_game *game, char **av)
 	buf = malloc(sizeof(t_val) * game->info.qty);
 	if (!buf)
 		return (MEM_ALLOC);
+	i = 0;
 	if (psw_monitoring_toggle(game, &av[1], buf) == CLEAR)
 	{
-		i = 0;
 		while (++i < GAME_QTY)
 		{
 			ptr = av[i + 1];
