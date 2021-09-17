@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 09:59:10 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/14 15:57:13 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/17 12:36:31 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,13 @@ static size_t	srt_tops(t_game *game)
 	size_t	moves;
 
 	moves = 0;
-	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[TOP_A - 1].key)
+	if (game->a.load >= 2
+		&& game->a.stk[game->a.load - 1].key
+		> game->a.stk[game->a.load - 1 - 1].key)
 		moves += swp(game, A_SEC);
-	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[TOP_B - 1].key)
+	if (game->b.load >= 2
+		&& game->b.stk[game->b.load - 1].key
+		< game->b.stk[game->b.load - 1 - 1].key)
 		moves += swp(game, B_SEC);
 	return (moves);
 }
@@ -30,15 +34,21 @@ static size_t	srt_bottoms(t_game *game)
 	size_t	moves;
 
 	moves = 0;
-	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[0].key
-		&& STK_A[TOP_A].key < STK_A[TOP_A - 1].key)
+	if (game->a.load >= 2
+		&& game->a.stk[game->a.load - 1].key > game->a.stk[0].key
+		&& game->a.stk[game->a.load - 1].key
+		< game->a.stk[game->a.load - 1 - 1].key)
 		moves += rrot(game, A_SEC);
-	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[0].key
-		&& STK_B[TOP_B].key > STK_B[TOP_B - 1].key)
+	if (game->b.load >= 2 && game->b.stk[game->b.load - 1].key
+		< game->b.stk[0].key
+		&& game->b.stk[game->b.load - 1].key
+		> game->b.stk[game->b.load - 1 - 1].key)
 		moves += rrot(game, B_SEC);
-	if (LOAD_A >= 2 && STK_A[TOP_A].key > STK_A[0].key)
+	if (game->a.load >= 2
+		&& game->a.stk[game->a.load - 1].key > game->a.stk[0].key)
 		moves += rot(game, A_SEC);
-	if (LOAD_B >= 2 && STK_B[TOP_B].key < STK_B[0].key)
+	if (game->b.load >= 2
+		&& game->b.stk[game->b.load - 1].key < game->b.stk[0].key)
 		moves += rot(game, B_SEC);
 	return (moves);
 }
@@ -46,18 +56,24 @@ static size_t	srt_bottoms(t_game *game)
 void	three_srt(t_game *game, size_t low, size_t high)
 {
 	size_t	moves;
+	size_t	med;
 
+	med = low + (high - low) / 2;
 	while (1)
 	{
 		moves = 0;
-		if ((STK_A[TOP_A].key <= MED && STK_A[TOP_A - 1].key <= MED)
-			|| (STK_A[TOP_A].key > MED && STK_A[TOP_A - 1].key > MED))
+		if ((game->a.stk[game->a.load - 1].key <= med
+				&& game->a.stk[game->a.load - 1 - 1].key <= med)
+			|| (game->a.stk[game->a.load - 1].key > med
+				&& game->a.stk[game->a.load - 1 - 1].key > med))
 			moves += srt_tops(game);
 		moves += srt_bottoms(game);
 		moves += srt_tops(game);
-		if (LOAD_A >= 3 && STK_A[0].key == STK_A[TOP_A].key + 1)
+		if (game->a.load >= 3
+			&& game->a.stk[0].key == game->a.stk[game->a.load - 1].key + 1)
 			moves += rrot(game, A_SEC);
-		if (LOAD_B >= 3 && STK_B[0].key == STK_B[TOP_B].key - 1)
+		if (game->b.load >= 3
+			&& game->b.stk[0].key == game->b.stk[game->b.load - 1].key - 1)
 			moves += rrot(game, B_SEC);
 		moves += srt_tops(game);
 		if (!moves)
@@ -69,7 +85,7 @@ void	five_srt_b(t_game *game, size_t high, size_t low)
 {
 	int	i;
 
-	if (LOAD_B <= 3)
+	if (game->b.load <= 3)
 		return (three_srt(game, low, high));
 	i = 0;
 	while (!sorted(game, B, 0) && i < 2)
@@ -87,7 +103,7 @@ void	five_srt_b(t_game *game, size_t high, size_t low)
 		i--;
 	}
 	three_srt(game, low, high);
-	i = LOAD_B + 1;
+	i = game->b.load + 1;
 	while (--i)
 		psh(game, B_INS);
 }
@@ -96,7 +112,7 @@ void	five_srt_a(t_game *game, size_t low, size_t high)
 {
 	int	i;
 
-	if (LOAD_A <= 3)
+	if (game->a.load <= 3)
 		return (three_srt(game, low, high));
 	i = 0;
 	while (!sorted(game, A, 0) && i < 2)

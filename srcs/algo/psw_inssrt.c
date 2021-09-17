@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 09:52:24 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/15 17:58:40 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/17 12:36:51 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,20 @@ void	inssrt_b(t_game *game, size_t high, size_t low)
 	size_t	pushes;
 
 	pushes = 0;
-	while (LOAD_B > 5 && STK_A[TOP_A].key > low)
+	while (game->b.load > 5 && game->a.stk[game->a.load - 1].key > low)
 	{
 		sought_key = high - pushes;
 		if (sought_key <= low)
-			psw_ftch_key(game, B_INS, sought_key, GAME_QTY);
+			psw_ftch_key(game, B_INS, sought_key, game->info.qty);
 		else
 			psw_ftch_key(game, B_INS, sought_key, sought_key - 1);
 		psh(game, B_INS);
 		pushes++;
 		three_srt(game, low, high);
-		if (STK_A[TOP_A].key == sought_key - 1)
+		if (game->a.stk[game->a.load - 1].key == sought_key - 1)
 			pushes++;
 	}
-	if (LOAD_B <= 5)
+	if (game->b.load <= 5)
 		five_srt_b(game, high - pushes, low);
 }
 
@@ -73,24 +73,24 @@ void	inssrt_a(t_game *game, size_t low, size_t high)
 	size_t	pushes;
 
 	pushes = 0;
-	while (LOAD_A > 5 && STK_B[TOP_B].key <= high - 1
-		&& !sorted(game, A, TOP_A - RMNG))
+	while (game->a.load > 5 && game->b.stk[game->b.load - 1].key <= high - 1
+		&& !sorted(game, A, game->a.load - 1 - (high - low - pushes + 1)))
 	{
 		sought_key = low + pushes;
 		if (sought_key >= high)
-			psw_ftch_key(game, A_INS, sought_key, GAME_QTY);
+			psw_ftch_key(game, A_INS, sought_key, game->info.qty);
 		else
 			psw_ftch_key(game, A_INS, sought_key, sought_key + 1);
-		if (STK_A[TOP_A].key < high)
+		if (game->a.stk[game->a.load - 1].key < high)
 		{
 			psh(game, A_INS);
 			pushes++;
 		}
 		three_srt(game, low, high);
-		if (STK_B[TOP_B].key == sought_key + 1)
+		if (game->b.stk[game->b.load - 1].key == sought_key + 1)
 			pushes++;
 	}
-	if (LOAD_A <= 5 && !sorted(game, A, 0))
+	if (game->a.load <= 5 && !sorted(game, A, 0))
 		five_srt_a(game, low + pushes, high);
 	while (pushes--)
 		psh(game, B_INS);
@@ -98,6 +98,9 @@ void	inssrt_a(t_game *game, size_t low, size_t high)
 
 void	twin_inssrt(t_game *game, size_t low, size_t high)
 {
-	inssrt_a(game, MED + 1, high);
-	inssrt_b(game, MED, low);
+	size_t	med;
+
+	med = low + (high - low) / 2;
+	inssrt_a(game, med + 1, high);
+	inssrt_b(game, med, low);
 }

@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/03 14:13:57 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/15 17:54:49 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/17 11:14:18 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,9 @@
 # include "push_swap.h"
 
 // Conditions
-# define LASTSRT_THRESHOLD (high - low <= 63)
-# define TWIN_INSSRT_THRSHLD (high - low <= 31)
-# define INSSRT_THRESHOLD (high - low <= 15)
-
-// Calculations
-# define SET_QTY (high - low + 1)
-
-# define MED (low + (high - low) / 2)
-# define L_HLFMED (low + (MED - low) / 2)
-# define H_HLFMED (MED + (high - MED) / 2)
-# define RMNG (high - low - pushes + 1)
+# define LASTSRT_THRESHOLD 63
+# define TWIN_INSSRT_THRSHLD 31
+# define INSSRT_THRESHOLD 15
 
 // Sorting mode enum allowing adaptative functions
 // for each step of the sorting algorithm

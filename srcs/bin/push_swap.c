@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 18:56:03 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/17 12:18:32 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,16 @@ static t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 
 static t_error	psw_game(t_game *game)
 {
-	game->b.stk = malloc(sizeof(t_val) * GAME_QTY);
+	game->b.stk = malloc(sizeof(t_val) * game->info.qty);
 	if (!game->b.stk)
 		return (MEM_ALLOC);
 	if (vctr_init(&game->buf, sizeof(t_inst_id), 512))
 		return (MEM_ALLOC);
 	if (vctr_init(&game->log, sizeof(char), 2048))
 		return (MEM_ALLOC);
-	PRV_MOV = END;
-	LOAD_A = GAME_QTY;
-	LOAD_B = 0;
+	game->info.prv_mov = END;
+	game->a.load = game->info.qty;
+	game->b.load = 0;
 	psw_solver(game);
 	return (CLEAR);
 }

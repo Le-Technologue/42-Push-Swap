@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 11:26:41 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/15 17:58:13 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/17 12:11:57 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ size_t	psw_srch_key(t_stk *ptr, size_t load, size_t sought)
 
 t_stk	*psw_key_locat(t_game *game, size_t sought)
 {
-	if (psw_srch_key(&game->a, LOAD_A, sought) < LOAD_A)
+	if (psw_srch_key(&game->a, game->a.load, sought) < game->a.load)
 		return (&game->a);
 	else
 		return (&game->b);

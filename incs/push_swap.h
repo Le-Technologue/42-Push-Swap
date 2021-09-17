@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/22 10:43:12 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 10:49:01 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/17 12:37:17 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,6 @@
 
 # include <stdlib.h>
 # include "libft.h"
-
-// Metadata
-# define GAME_QTY game->info.qty
-# define PRV_MOV game->info.prv_mov
-# define MONITORING game->info.mon
-
-// Stack A
-# define LOAD_A game->a.load
-# define TOP_A (game->a.load - 1)
-
-# define STK_A game->a.stk
-# define UNDR_A game->a.under
-
-// Stack B
-# define LOAD_B game->b.load
-# define TOP_B (game->b.load - 1)
-
-# define STK_B game->b.stk
-# define UNDR_B game->b.under
 
 typedef enum e_fid {
 	PSW_PARSING,

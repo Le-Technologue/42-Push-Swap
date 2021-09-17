@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/05 14:34:12 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 20:25:53 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/17 12:38:03 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ static void	rot_stk_botm_up(t_val *stk, size_t top)
 void	rra(t_game *game)
 {
 	if (game->a.load >= 2)
-		rot_stk_botm_up(game->a.stk, TOP_A);
+		rot_stk_botm_up(game->a.stk, game->a.load - 1);
 }
 
 void	rrb(t_game *game)
 {
 	if (game->b.load >= 2)
-		rot_stk_botm_up(game->b.stk, TOP_B);
+		rot_stk_botm_up(game->b.stk, game->b.load - 1);
 }
 
 void	rrr(t_game *game)

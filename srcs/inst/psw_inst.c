@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:43:03 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 19:54:12 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/17 11:27:55 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,20 @@ static t_inst_id	inst_coupling(t_game *game, size_t i)
 {
 	if (game->buf->entries >= 2)
 	{
-		if ((INST[i] == SA && INST[i + 1] == SB)
-			|| (INST[i] == SB && INST[i + 1] == SA))
+		if ((((t_inst_id *)(game->buf->data))[i] == SA
+					&& ((t_inst_id *)(game->buf->data))[i + 1] == SB)
+			|| (((t_inst_id *)(game->buf->data))[i] == SB
+				&& ((t_inst_id *)(game->buf->data))[i + 1] == SA))
 			return (SS);
-		else if ((INST[i] == RA && INST[i + 1] == RB)
-			|| (INST[i] == RB && INST[i + 1] == RA))
+		else if ((((t_inst_id *)(game->buf->data))[i] == RA
+					&& ((t_inst_id *)(game->buf->data))[i + 1] == RB)
+			|| (((t_inst_id *)(game->buf->data))[i] == RB
+				&& ((t_inst_id *)(game->buf->data))[i + 1] == RA))
 			return (RR);
-		else if ((INST[i] == RRA && INST[i + 1] == RRB)
-			|| (INST[i] == RRB && INST[i + 1] == RRA))
+		else if ((((t_inst_id *)(game->buf->data))[i] == RRA
+					&& ((t_inst_id *)(game->buf->data))[i + 1] == RRB)
+			|| (((t_inst_id *)(game->buf->data))[i] == RRB
+				&& ((t_inst_id *)(game->buf->data))[i + 1] == RRA))
 			return (RRR);
 	}
 	return (0);
@@ -77,7 +83,8 @@ void	log_inst(t_game *game)
 			i += 2;
 		}
 		else
-			str_to_vctr(game->log, switchboard()[INST[i++]].call);
+			str_to_vctr(game->log,
+				switchboard()[((t_inst_id *)(game->buf->data))[i++]].call);
 		str_to_vctr(game->log, "\n");
 	}
 }
@@ -90,8 +97,8 @@ void	buf_inst(t_game *game, t_inst_id inst)
 	{
 		(switchboard()[inst].inst)(game);
 		vctr_push(game->buf, &inst);
-		PRV_MOV = inst;
-		if (MONITORING)
+		game->info.prv_mov = inst;
+		if (game->info.mon)
 			psw_monitor(game);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/13 11:10:45 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/15 16:45:06 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/17 12:20:57 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static void	psw_erect_stks(t_game *game, size_t a, size_t b, int wid)
 {
 	int			i;
 
-	ft_printf("v %lu - %s v\n", game->buf->entries, switchboard()[PRV_MOV].call);
+	ft_printf("v %lu - %s v\n",
+		game->buf->entries, switchboard()[game->info.prv_mov].call);
 	while (a > b)
 	{
 		ft_printf("%*lu - ", wid + 1, a);
@@ -48,7 +49,7 @@ void	psw_monitor(t_game *game)
 
 	if (!width)
 	{
-		width = (int)ft_digit_count(game->set[GAME_QTY - 1]->val, 10);
+		width = (int)ft_digit_count(game->set[game->info.qty - 1]->val, 10);
 		if ((int)ft_digit_count(game->set[0]->val, 10) > width)
 			width = (int)ft_digit_count(game->set[0]->val, 10);
 	}
@@ -65,24 +66,24 @@ void	psw_monitor(t_game *game)
 	while (i++ < width)
 		ft_printf("_");
 	ft_printf("B\n");
-	ft_printf("^ %lu - %s ^\n\
-			\n", game->buf->entries, switchboard()[PRV_MOV].call);
+	ft_printf("^ %lu - %s ^\n\n",
+		game->buf->entries, switchboard()[game->info.prv_mov].call);
 }
 
 void	psw_end_report(t_game *game)
 {
-	if (MONITORING)
+	if (game->info.mon)
 	{
 		ft_printf("^ SOLUTION ^\n\n");
 		psw_monitor(game);
-		if (sorted(game, A, 0) && !LOAD_B)
+		if (sorted(game, A, 0) && !game->b.load)
 			ft_printf("STACK SORTED :D\n");
 		else
 			ft_printf("STACK UNSORTED ^^\"\n");
 		ft_printf("%lu raw instructions\n", game->buf->entries);
-		ft_printf("%li joint instructions\
-				\n", game->buf->entries - ft_word_count(game->log->data, '\n'));
-		ft_printf("%i remaining instructions\
-				\n", ft_word_count(game->log->data, '\n'));
+		ft_printf("%li joint instructions\n",
+			game->buf->entries - ft_word_count(game->log->data, '\n'));
+		ft_printf("%i remaining instructions\n",
+			ft_word_count(game->log->data, '\n'));
 	}
 }

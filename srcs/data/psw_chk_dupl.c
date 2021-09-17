@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 10:42:41 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 11:28:16 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/17 11:22:18 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,26 +88,26 @@ t_error	psw_chk_dupl(t_game *game, long *buf)
 {
 	long	i;
 
-	game->a.stk = malloc(sizeof(t_val) * GAME_QTY);
+	game->a.stk = malloc(sizeof(t_val) * game->info.qty);
 	if (!game->a.stk)
 		return (MEM_ALLOC);
 	i = -1;
-	while (++i < (long)GAME_QTY)
+	while (++i < (long)game->info.qty)
 		game->a.stk[i].val = buf[i];
-	game->set = malloc(sizeof(t_val **) * GAME_QTY);
+	game->set = malloc(sizeof(t_val **) * game->info.qty);
 	if (!game->set)
 	{
 		free(game->a.stk);
 		return (MEM_ALLOC);
 	}
 	i = -1;
-	while (++i < (long)GAME_QTY)
+	while (++i < (long)game->info.qty)
 		game->set[i] = &game->a.stk[i];
-	if (psw_mrgsort(game->set, 0, GAME_QTY - 1) != CLEAR)
+	if (psw_mrgsort(game->set, 0, game->info.qty - 1) != CLEAR)
 	{
 		free(game->set);
 		free(game->a.stk);
 		return (MEM_ALLOC);
 	}
-	return (assign_keys(game->set, GAME_QTY));
+	return (assign_keys(game->set, game->info.qty));
 }

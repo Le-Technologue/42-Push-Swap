@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 17:01:34 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 19:27:52 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/17 10:36:44 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 # include "psw_swap.h"
 # include "psw_rotate.h"
 # include "psw_rev_rotate.h"
-
-# define INST ((t_inst_id *)(game->buf->data))
 
 typedef void	(*t_inst)(t_game *game);
 

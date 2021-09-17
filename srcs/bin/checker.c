@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 17:49:27 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 21:45:56 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/17 12:14:29 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,11 @@ t_error	psw_checker(t_game *game)
 	char		*call;
 	t_inst_id	inst;
 
-	game->b.stk = malloc(sizeof(t_val) * GAME_QTY);
+	game->b.stk = malloc(sizeof(t_val) * game->info.qty);
 	if (!game->b.stk)
 		return (psw_shutdown(game, MEM_ALLOC, CHECKER));
-	LOAD_A = GAME_QTY;
-	LOAD_B = 0;
+	game->a.load = game->info.qty;
+	game->b.load = 0;
 	while (stdin_gnl(&call) > 0)
 	{
 		inst = fetch_inst_id(switchboard(), call);

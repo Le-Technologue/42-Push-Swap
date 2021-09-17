@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/09/17 10:00:41 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/09/17 11:29:49 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -111,7 +111,7 @@ CC			=	gcc
 WRNFL		=	-Wall -Wextra -Werror
 OPTFL		=	-O3 -march=native#-fno-builtin
 DBGFL		=	-g
-CFLGS		=	$(WRNFL) $(OPTFL)#$(DBGFL)
+CFLGS		=	$(WRNFL) $(OPTFL) $(DBGFL)
 DEPFL		=	-MT $@ -MMD -MP -MF $(DDIR)$*.d
 
 CINCS		=	$(addprefix -I, $(HDIR))

@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:18:55 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 19:11:33 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/17 11:32:01 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,17 @@ static t_error	psw_monitoring_toggle(t_game *game, char **first_arg, long *buf)
 {
 	if (**first_arg == 'm')
 	{
+		if (game->info.qty <= 1)
+			return (PARSE);
 		game->info.mon = 1;
 		return (CLEAR);
 	}
 	else
 	{
 		game->info.mon = 0;
-		buf[GAME_QTY - 1] = ptr_atol_base(first_arg, "0123456789");
-		if (buf[GAME_QTY - 1] < INT_MIN || buf[GAME_QTY - 1] > INT_MAX
+		buf[game->info.qty - 1] = ptr_atol_base(first_arg, "0123456789");
+		if (buf[game->info.qty - 1] < INT_MIN
+			|| buf[game->info.qty - 1] > INT_MAX
 			|| **first_arg != '\0')
 			return (PARSE);
 		return (CLEAR);
@@ -41,8 +44,8 @@ static t_error	game_setup(t_game *game, long *buf)
 	t_error	error;
 
 	error = CLEAR;
-	if (MONITORING)
-		GAME_QTY--;
+	if (game->info.mon)
+		game->info.qty--;
 	error = psw_chk_dupl(game, buf);
 	free(buf);
 	if (error != PARSE)
@@ -64,18 +67,18 @@ t_error	psw_parsing(t_game *game, char **av)
 	i = 0;
 	if (psw_monitoring_toggle(game, &av[1], buf) == CLEAR)
 	{
-		while (++i < GAME_QTY)
+		while (++i < game->info.qty)
 		{
 			ptr = av[i + 1];
 			if (!ft_isdigit(*ptr))
 				break ;
-			buf[GAME_QTY - 1 - i] = ptr_atol_base(&ptr, "0123456789");
-			if (*ptr != '\0' || buf[GAME_QTY - 1 - i] < INT_MIN
-				|| buf[GAME_QTY - 1 - i] > INT_MAX)
+			buf[game->info.qty - 1 - i] = ptr_atol_base(&ptr, "0123456789");
+			if (*ptr != '\0' || buf[game->info.qty - 1 - i] < INT_MIN
+				|| buf[game->info.qty - 1 - i] > INT_MAX)
 				break ;
 		}
 	}
-	if (i == GAME_QTY)
+	if (i == game->info.qty)
 		return (game_setup(game, buf));
 	free(buf);
 	return (PARSE);
