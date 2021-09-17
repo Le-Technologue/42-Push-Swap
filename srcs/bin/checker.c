@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 17:49:27 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 19:39:07 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/16 21:45:56 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_error	psw_checker(t_game *game)
 		return (psw_shutdown(game, MEM_ALLOC, CHECKER));
 	LOAD_A = GAME_QTY;
 	LOAD_B = 0;
-	while (get_next_line(0, &call) > 0)
+	while (stdin_gnl(&call) > 0)
 	{
 		inst = fetch_inst_id(switchboard(), call);
 		free(call);

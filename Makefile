@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/09/16 20:29:54 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/09/17 10:00:41 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@
 # =============== #
 
 #LIB			=	libpsw.a
+
 EXEC		=	push_swap
 BONUS		=	checker
 
@@ -66,7 +67,8 @@ OBJS		=	$(SRCS:%.c=$(ODIR)%.o)
 
 DEPS		=	$(SRCS:%.c=$(DDIR)%.d)
 
-LIBS		=	$(shell find $(LDIR) -name '*.a' -exec basename {} ';')
+LIBS		=	$(shell find $(LDIR) -name '*.a')
+LNAMES		=	$(shell find $(LDIR) -name '*.a' -exec basename {} ';')
 
 EOBJ		=	$(EXEC:%=$(ODIR)%.o)
 BOBJ		=	$(BONUS:%=$(ODIR)%.o)
@@ -107,14 +109,14 @@ vpath %.c $(SDIR)
 
 CC			=	gcc
 WRNFL		=	-Wall -Wextra -Werror
-OPTFL		=	-O3 -march=native #-fno-builtin
+OPTFL		=	-O3 -march=native#-fno-builtin
 DBGFL		=	-g
-CFLGS		=	$(WRNFL) $(DBGFL) $(OPTFL)
+CFLGS		=	$(WRNFL) $(OPTFL)#$(DBGFL)
 DEPFL		=	-MT $@ -MMD -MP -MF $(DDIR)$*.d
 
 CINCS		=	$(addprefix -I, $(HDIR))
 CLDIR		=	$(addprefix -L, $(LDIR))
-CLIBS		=	$(LIBS:lib%.a=-l%)
+CLIBS		=	$(LNAMES:lib%.a=-l%)
 
 # ============= #
 # === RULES === #
@@ -122,7 +124,7 @@ CLIBS		=	$(LIBS:lib%.a=-l%)
 
 # ~~~ Default ~~~ #
 
-all			:	make_libs $(LIBS) $(SUBDIRS) $(SOBJ) $(EOBJ) $(EXEC)
+all			:	make_libs $(SUBDIRS) $(EXEC)
 
 $(SUBDIRS)	:
 				mkdir -p $(SUBDIRS)
@@ -144,15 +146,15 @@ make_libs	:
 
 # ~~~ Executables Compiling  ~~~ #
 
-$(EXEC)		:	$(EOBJ) $(SOBJ)
+$(EXEC)		:	$(EOBJ) $(SOBJ) $(LIBS)
 				$(CC) $^ -o $@ $(CLDIR) $(CLIBS)
 
-$(BONUS)	:	$(BOBJ) $(SOBJ)
+$(BONUS)	:	$(BOBJ) $(SOBJ) $(LIBS)
 				$(CC) $^ -o $@ $(CLDIR) $(CLIBS)
 
 # ~~~ Actions ~~~ #
 
-bonus		:	make_libs $(LIBS) $(SUBDIRS) $(SOBJ) $(BOBJ) $(BONUS)
+bonus		:	make_libs $(SUBDIRS) $(BONUS)
 
 norm		:
 				norminette incs srcs
