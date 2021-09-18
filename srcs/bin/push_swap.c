@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/17 12:18:32 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/18 07:58:14 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,8 @@ int	main(int ac, char **av)
 	t_error	error;
 	t_game	game;
 
-	if (ac == 1)
-	{
-		ft_putendl_fd("USAGE : ./push_swap [INT LIST]", 1);
-		return (ERROR);
-	}
+	if (ac <= 1)
+		return (PARSE);
 	game.info.qty = ac - 1;
 	error = psw_parsing(&game, av);
 	if (error)

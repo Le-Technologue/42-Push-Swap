@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/09/17 11:29:49 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/09/18 07:50:58 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,7 @@ SDIR		=	srcs/
 # === RESOURCES === #
 # ================= #
 
-LDIR		=	libs/
+LDIR		=	libft/
 RSRC		=	libs/
 
 # ==================== #
@@ -77,7 +77,7 @@ SOBJ		:=	$(filter-out $(EOBJ) $(BOBJ),$(OBJS))
 
 ## ~~ Folders ~~ ##
 
-LDIR		:=	$(shell find $(LDIR) -mindepth 1 -maxdepth 1 -type d)
+#LDIR		:=	$(shell find $(LDIR) -mindepth 1 -maxdepth 1 -type d)
 
 SUBDIRS		=	$(ODIR) $(DDIR)
 #SUBDIRS		=	$(SDIR:srcs/%=$(ODIR)%) $(SDIR:srcs/%=$(DDIR)%)
@@ -92,8 +92,6 @@ ESRC		=	$(EXEC:%=$(SRCS)%.c)
 ## ~~ Folders ~~ ##
 
 SDIR		:=	$(shell find $(SDIR) -mindepth 1 -maxdepth 1 -type d)
-
-SUBMAKES	=	$(shell find $(RSRC) -mindepth 1 -maxdepth 1 -type d)
 
 vpath %.d $(DDIR)
 vpath %.o $(ODIR)
@@ -111,7 +109,7 @@ CC			=	gcc
 WRNFL		=	-Wall -Wextra -Werror
 OPTFL		=	-O3 -march=native#-fno-builtin
 DBGFL		=	-g
-CFLGS		=	$(WRNFL) $(OPTFL) $(DBGFL)
+CFLGS		=	$(WRNFL) $(DBGFL)#$(OPTFL)
 DEPFL		=	-MT $@ -MMD -MP -MF $(DDIR)$*.d
 
 CINCS		=	$(addprefix -I, $(HDIR))
@@ -142,7 +140,7 @@ $(ODIR)%.o	:	%.c $(DDIR)%.d
 $(LIBS)		:	make_libs
 
 make_libs	:
-				$(MAKE) -C $(SUBMAKES)
+				$(MAKE) -C $(LDIR)
 
 # ~~~ Executables Compiling  ~~~ #
 

@@ -1,3 +1,0 @@
-[submodule "libs/libft"]
-	path = libs/libft
-	url = git@gitlab.com:42cursus-wetieven/01-libft.git
