@@ -8,6 +8,7 @@ cpy
 *.d
 *.vim
 *test*
+!testers
 tags
 pyviz.py
 todo.md
