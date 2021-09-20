@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/09/17 10:00:41 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/09/20 09:23:27 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -93,8 +93,6 @@ ESRC		=	$(EXEC:%=$(SRCS)%.c)
 
 SDIR		:=	$(shell find $(SDIR) -mindepth 1 -maxdepth 1 -type d)
 
-SUBMAKES	=	$(shell find $(RSRC) -mindepth 1 -maxdepth 1 -type d)
-
 vpath %.d $(DDIR)
 vpath %.o $(ODIR)
 vpath %.a $(LDIR)
@@ -111,7 +109,7 @@ CC			=	gcc
 WRNFL		=	-Wall -Wextra -Werror
 OPTFL		=	-O3 -march=native#-fno-builtin
 DBGFL		=	-g
-CFLGS		=	$(WRNFL) $(OPTFL)#$(DBGFL)
+CFLGS		=	$(WRNFL) $(DBGFL) $(OPTFL)
 DEPFL		=	-MT $@ -MMD -MP -MF $(DDIR)$*.d
 
 CINCS		=	$(addprefix -I, $(HDIR))
@@ -142,7 +140,7 @@ $(ODIR)%.o	:	%.c $(DDIR)%.d
 $(LIBS)		:	make_libs
 
 make_libs	:
-				$(MAKE) -C $(SUBMAKES)
+				$(MAKE) -C $(LDIR)
 
 # ~~~ Executables Compiling  ~~~ #
 

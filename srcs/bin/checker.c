@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 17:49:27 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 21:45:56 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/20 09:25:56 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "psw_parsing.h"
 #include "psw_inst.h"
 #include "psw_probes.h"
+#include "psw_monitor.h"
 
 static t_error	psw_shutdown(t_game *game, t_error cause, t_fid function)
 {
@@ -50,6 +51,8 @@ t_error	psw_checker(t_game *game)
 		return (psw_shutdown(game, MEM_ALLOC, CHECKER));
 	LOAD_A = GAME_QTY;
 	LOAD_B = 0;
+	if (MONITORING)
+		psw_monitor(game);
 	while (stdin_gnl(&call) > 0)
 	{
 		inst = fetch_inst_id(switchboard(), call);

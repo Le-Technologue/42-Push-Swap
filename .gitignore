@@ -8,9 +8,8 @@ cpy
 *.d
 *.vim
 *test*
+!testers
 tags
-pyviz.py
-todo
+todo.md
 push_swap
 checker
-complexity

@@ -1,0 +1,97 @@
+#!/bin/bash
+
+WORSE=0
+BEST=16777216
+MED=0
+COUNTER=0
+SUM=0
+OBJECTIVE=0
+OK_OBJ=0
+OK_CHK=0
+CHECKER=""
+SORTED=false
+
+trap "echo -e '\rPi\033[?25h\033[3B'; exit" INT
+
+if [[ ! -x push_swap ]]
+then
+	echo "Le fichier push_swap est absent, ou non executable."
+	exit
+fi
+
+while getopts ":s" o; do
+	case "${o}" in
+		s)
+			SORTED=true;
+			;;
+		*)
+			;;
+	esac
+done
+shift $((OPTIND-1))
+COMMAND="puts (1..$1).to_a.shuffle.join(' ')"
+if $SORTED; then
+	COMMAND=${COMMAND//".shuffle"/}
+fi
+
+if [ -n "$3" ]
+then
+	(( OBJECTIVE = $3 ))
+fi
+
+if (( OBJECTIVE < 0 ))
+then
+	OBJECTIVE=0
+fi
+if [ -n "$4" ]
+then
+	CHECKER=$4
+	if [[ ! -x $CHECKER || ! -f $CHECKER ]]
+	then
+		echo "Le fichier $CHECKER est absent, ou non executable."
+		exit
+	fi
+fi
+
+if [[ $# -gt 1 ]]
+then
+	echo -e "\033[?25l\c"
+	echo -e "\033[1;37mDémarrage du test : \033[1;35m$1\033[1;37m éléments, \033[1;35m$2\033[1;37m itérations\033[0m"
+	while [[ $COUNTER -lt $2 ]]
+	do
+		ARG=`ruby -e "$COMMAND"`
+		TMP=`./push_swap $ARG`
+		LINES=`printf "$TMP" | wc -l | sed 's/ //g'`
+		(( COUNTER++ ))
+		(( PERCENT = COUNTER * 100 / $2 ))
+		(( SUM += $LINES ))
+		(( MED = $SUM / $COUNTER ))
+		if (( $LINES > $WORSE )); then
+			WORSE=$LINES; fi
+		if (( $LINES < $BEST )); then
+			BEST=$LINES; fi
+		if (( OBJECTIVE && LINES < OBJECTIVE )); then
+			(( OK_OBJ++ )); fi
+		if [[ ! -z $TMP ]]; then
+			TMP="$TMP"\\n; fi
+		if [[ ! -z $CHECKER && `printf "$TMP" | $CHECKER $ARG 2>/dev/null` == "OK" ]]; then
+			(( OK_CHK++ )); fi
+		echo -e "\033[2KPire = \033[31m${WORSE}\033[0m instructions"
+		echo -e "\033[2KMoyenne = \033[33m${MED}\033[0m instructions"
+		echo -e "\033[2KMeilleur = \033[36m${BEST}\033[0m instructions"
+		if (( OBJECTIVE )); then
+			echo -e "\033[2KObjectif = \033[1;34m$(( $OK_OBJ * 100 / $COUNTER ))\033[0m % sous \033[1;34m$OBJECTIVE\033[0m (\033[1;31m$(($COUNTER - $OK_OBJ))\033[0m au dessus)"
+		else
+			echo -e "\033[2KObjectif = entrez un nombre en troisième argument"
+		fi
+		if [ -z $CHECKER ]; then
+			echo -e "\033[2KPrécision = entrez un testeur en quatrième argument"
+		else
+			echo -e "\033[2KPrécision = \033[1;37m$(( $OK_CHK * 100 / $COUNTER ))\033[0m % OK (\033[1;31m$(($COUNTER - $OK_CHK))\033[0m KO)"
+		fi
+		echo -e "\033[2K\033[32m${PERCENT}\033[0m % effectué\r\033[5A\c"
+	done
+	echo -e "\033[?25h\033[5B"
+else
+	echo "./complexity [stack_size] [test number]"
+fi

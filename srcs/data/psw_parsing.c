@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 16:18:55 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 19:11:33 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/20 09:23:05 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static t_error	psw_monitoring_toggle(t_game *game, char **first_arg, long *buf)
 {
 	if (**first_arg == 'm')
 	{
+		if (game->info.qty <= 1)
+			return (PARSE);
 		game->info.mon = 1;
 		return (CLEAR);
 	}
