@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 17:49:27 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/20 09:25:56 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/23 01:15:26 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_error	psw_checker(t_game *game)
 	game->b.stk = malloc(sizeof(t_val) * GAME_QTY);
 	if (!game->b.stk)
 		return (psw_shutdown(game, MEM_ALLOC, CHECKER));
+	PRV_MOV = END;
 	LOAD_A = GAME_QTY;
 	LOAD_B = 0;
 	if (MONITORING)
