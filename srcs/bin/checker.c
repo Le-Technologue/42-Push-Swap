@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 17:49:27 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/19 09:17:26 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/23 01:08:15 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	main(int ac, char **av)
 	if (ac <= 1)
 		return (PARSE);
 	game.info.qty = ac - 1;
+	game.info.prv_mov = END;
 	if (vctr_init(&game.buf, sizeof(t_inst_id), 512))
 		return (MEM_ALLOC);
 	if (vctr_init(&game.log, sizeof(char), 2048))
