@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 09:52:24 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/15 17:58:40 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/25 09:59:50 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	inssrt_b(t_game *game, size_t high, size_t low)
 	size_t	pushes;
 
 	pushes = 0;
-	while (LOAD_B > 5 && STK_A[TOP_A].key > low)
+	while (LOAD_B && STK_A[TOP_A].key > low)
 	{
 		sought_key = high - pushes;
 		if (sought_key <= low)
@@ -63,8 +63,6 @@ void	inssrt_b(t_game *game, size_t high, size_t low)
 		if (STK_A[TOP_A].key == sought_key - 1)
 			pushes++;
 	}
-	if (LOAD_B <= 5)
-		five_srt_b(game, high - pushes, low);
 }
 
 void	inssrt_a(t_game *game, size_t low, size_t high)

@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 10:00:16 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/15 21:54:17 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/25 09:47:21 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,17 @@ void	lastsrt_a(t_game *game, size_t low, size_t high)
 		inssrt_a(game, low, high);
 	else
 		qcksrt_a(game, low, high, LAST);
-	if (high - low > 31)
+	if (LOAD_B && high - low > 31)
 		qcksrt_b(game, MED, low, LAST);
 }
 
 static void	lastsrt_b(t_game *game, size_t high, size_t low)
 {
 	if (INSSRT_THRESHOLD)
-		inssrt_b(game, low, high);
+		inssrt_b(game, high, low);
 	else
 		qcksrt_b(game, high, low, LAST);
-	if (high - low > 31)
+	if (LOAD_B && high - low > 31)
 		qcksrt_b(game, MED, low, LAST);
 }
 
@@ -51,9 +51,9 @@ void	qcksrt_b(t_game *game, size_t high, size_t low, t_step step)
 	if (step != LAST && LASTSRT_THRESHOLD)
 		return (lastsrt_b(game, high, low));
 	to_sort = high - MED;
-	while (to_sort)
+	while (LOAD_B && to_sort)
 	{
-		if (LOAD_B && STK_B[TOP_B].key > MED)
+		if (STK_B[TOP_B].key > MED)
 		{
 			psh(game, A);
 			to_sort--;
@@ -61,7 +61,7 @@ void	qcksrt_b(t_game *game, size_t high, size_t low, t_step step)
 		else
 			rot(game, B);
 	}
-	while (STK_B[0].key >= low && low != 0)
+	while (LOAD_B && STK_B[0].key >= low && low != 0)
 		rrot(game, B);
 	nxtsrt(game, low, high, step);
 }
@@ -73,9 +73,9 @@ void	qcksrt_a(t_game *game, size_t low, size_t high, t_step step)
 	if (step != LAST && LASTSRT_THRESHOLD)
 		return (lastsrt_a(game, low, high));
 	to_sort = (high - low) / 2 + 1;
-	while (to_sort)
+	while (LOAD_A && to_sort)
 	{
-		if (LOAD_A && STK_A[TOP_A].key <= MED)
+		if (STK_A[TOP_A].key <= MED)
 		{
 			psh(game, B);
 			to_sort--;
@@ -85,9 +85,9 @@ void	qcksrt_a(t_game *game, size_t low, size_t high, t_step step)
 		else
 			rot(game, A);
 	}
-	if (STK_B[0].key == MED)
+	if (LOAD_B && STK_B[0].key == MED)
 		rrot(game, B);
-	while (STK_A[0].key <= high && high != GAME_QTY - 1)
+	while (LOAD_A && STK_A[0].key <= high && high != GAME_QTY - 1)
 		rrot(game, A);
 	nxtsrt(game, low, high, step);
 }
