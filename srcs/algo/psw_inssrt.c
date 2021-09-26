@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 09:52:24 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/17 12:36:51 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/24 16:01:55 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	inssrt_b(t_game *game, size_t high, size_t low)
 	size_t	pushes;
 
 	pushes = 0;
-	while (game->b.load > 5 && game->a.stk[game->a.load - 1].key > low)
+	while (game->b.load && game->a.stk[game->a.load - 1].key > low)
 	{
 		sought_key = high - pushes;
 		if (sought_key <= low)
@@ -63,8 +63,6 @@ void	inssrt_b(t_game *game, size_t high, size_t low)
 		if (game->a.stk[game->a.load - 1].key == sought_key - 1)
 			pushes++;
 	}
-	if (game->b.load <= 5)
-		five_srt_b(game, high - pushes, low);
 }
 
 void	inssrt_a(t_game *game, size_t low, size_t high)
@@ -74,7 +72,7 @@ void	inssrt_a(t_game *game, size_t low, size_t high)
 
 	pushes = 0;
 	while (game->a.load > 5 && game->b.stk[game->b.load - 1].key <= high - 1
-		&& !sorted(game, A, game->a.load - 1 - (high - low - pushes + 1)))
+		&& !sorted(game, A, game->a.load - 1 - (high - low - pushes)))
 	{
 		sought_key = low + pushes;
 		if (sought_key >= high)

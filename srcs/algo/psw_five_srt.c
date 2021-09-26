@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 09:59:10 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/17 12:36:31 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/09/24 16:05:59 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,33 +79,6 @@ void	three_srt(t_game *game, size_t low, size_t high)
 		if (!moves)
 			break ;
 	}
-}
-
-void	five_srt_b(t_game *game, size_t high, size_t low)
-{
-	int	i;
-
-	if (game->b.load <= 3)
-		return (three_srt(game, low, high));
-	i = 0;
-	while (!sorted(game, B, 0) && i < 2)
-	{
-		three_srt(game, low, high);
-		if (sorted(game, B, 0))
-			break ;
-		psh(game, A);
-		i++;
-	}
-	while (i)
-	{
-		three_srt(game, low, high);
-		psh(game, B);
-		i--;
-	}
-	three_srt(game, low, high);
-	i = game->b.load + 1;
-	while (--i)
-		psh(game, B_INS);
 }
 
 void	five_srt_a(t_game *game, size_t low, size_t high)
