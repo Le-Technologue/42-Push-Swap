@@ -6,15 +6,13 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/09/18 07:50:58 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/09/26 13:55:28 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 # =============== #
 # === TARGETS === #
 # =============== #
-
-#LIB			=	libpsw.a
 
 EXEC		=	push_swap
 BONUS		=	checker
@@ -47,7 +45,7 @@ SRCS		=	push_swap.c \
 
 ## ~~ Folders ~~ ##
 
-HDIR		=	incs/ $(LDIR)/incs
+HDIR		=	incs/ $(LDIR)incs
 SDIR		=	srcs/
 
 # ================= #
@@ -77,15 +75,11 @@ SOBJ		:=	$(filter-out $(EOBJ) $(BOBJ),$(OBJS))
 
 ## ~~ Folders ~~ ##
 
-#LDIR		:=	$(shell find $(LDIR) -mindepth 1 -maxdepth 1 -type d)
-
 SUBDIRS		=	$(ODIR) $(DDIR)
-#SUBDIRS		=	$(SDIR:srcs/%=$(ODIR)%) $(SDIR:srcs/%=$(DDIR)%)
 
 ### ~~~ SOURCES ~~~ ###
 
 INCS		=	$(shell find $(HDIR) -name '*.h')
-#SRCS		:=	$(realpath $(SRCS))
 
 ESRC		=	$(EXEC:%=$(SRCS)%.c)
 
@@ -105,16 +99,14 @@ vpath %.c $(SDIR)
 # ====================== #
 
 
-CC			=	gcc
+CC			=	clang
 WRNFL		=	-Wall -Wextra -Werror
 OPTFL		=	-O3 -march=native#-fno-builtin
-DBGFL		=	-g
-CFLGS		=	$(WRNFL) $(DBGFL)#$(OPTFL)
+#DBGFL		=	-g3 -fsanitize=address
+CFLGS		=	$(WRNFL)#$(DBGFL) $(OPTFL)
 DEPFL		=	-MT $@ -MMD -MP -MF $(DDIR)$*.d
 
 CINCS		=	$(addprefix -I, $(HDIR))
-CLDIR		=	$(addprefix -L, $(LDIR))
-CLIBS		=	$(LNAMES:lib%.a=-l%)
 
 # ============= #
 # === RULES === #
@@ -134,9 +126,6 @@ $(ODIR)%.o	:	%.c $(DDIR)%.d
 
 # ~~~ Library archiving ~~~ #
 
-#$(LIB)		:	$(SOBJ)
-#				ar rcs $(LDIR)$(LIB) $?
-
 $(LIBS)		:	make_libs
 
 make_libs	:
@@ -145,10 +134,10 @@ make_libs	:
 # ~~~ Executables Compiling  ~~~ #
 
 $(EXEC)		:	$(EOBJ) $(SOBJ) $(LIBS)
-				$(CC) $^ -o $@ $(CLDIR) $(CLIBS)
+				$(CC) $^ -o $@
 
 $(BONUS)	:	$(BOBJ) $(SOBJ) $(LIBS)
-				$(CC) $^ -o $@ $(CLDIR) $(CLIBS)
+				$(CC) $^ -o $@
 
 # ~~~ Actions ~~~ #
 
@@ -170,7 +159,7 @@ fclean		:	clean
 
 re			:	fclean all
 
-.PHONY : all make_libs norm bonus clean fclean re
+.PHONY : all make_libs bonus norm clean fclean re
 
 $(DEPS)		:
 include $(wildcard $(DEPS))
