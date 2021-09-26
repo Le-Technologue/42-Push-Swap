@@ -6,7 +6,7 @@
 #    By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/27 13:50:48 by wetieven          #+#    #+#              #
-#    Updated: 2021/09/26 13:55:28 by wetieven         ###   ########lyon.fr    #
+#    Updated: 2021/09/26 16:37:26 by wetieven         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -107,6 +107,8 @@ CFLGS		=	$(WRNFL)#$(DBGFL) $(OPTFL)
 DEPFL		=	-MT $@ -MMD -MP -MF $(DDIR)$*.d
 
 CINCS		=	$(addprefix -I, $(HDIR))
+CLDIR		=	$(addprefix -L, $(LDIR))
+CLIBS		=	$(LNAMES:lib%.a=-l%)
 
 # ============= #
 # === RULES === #
@@ -134,10 +136,10 @@ make_libs	:
 # ~~~ Executables Compiling  ~~~ #
 
 $(EXEC)		:	$(EOBJ) $(SOBJ) $(LIBS)
-				$(CC) $^ -o $@
+				$(CC) $^ -o $@ $(CLDIR) $(CLIBS)
 
 $(BONUS)	:	$(BOBJ) $(SOBJ) $(LIBS)
-				$(CC) $^ -o $@
+				$(CC) $^ -o $@ $(CLDIR) $(CLIBS)
 
 # ~~~ Actions ~~~ #
 
