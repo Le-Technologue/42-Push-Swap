@@ -6,7 +6,7 @@
 /*   By: wetieven <wetieven@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:25:56 by wetieven          #+#    #+#             */
-/*   Updated: 2021/09/16 18:56:03 by wetieven         ###   ########lyon.fr   */
+/*   Updated: 2021/10/07 17:39:49 by wetieven         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	main(int ac, char **av)
 
 	if (ac == 1)
 	{
-		ft_putendl_fd("USAGE : ./push_swap [INT LIST]", 1);
+		ft_putendl_fd("USAGE : ./push_swap [m] INT LIST", 1);
 		return (ERROR);
 	}
 	game.info.qty = ac - 1;
