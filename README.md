@@ -59,7 +59,7 @@ A single swap of their destination stack is then needed to order this "doubled d
 - A monitoring feature was implemented ( even if it isn't a considered bonus anymore ) as it proved crucial through debugging of this project.
 - Monitoring works with the checker as well, making it legible and playable ( if you ever fancy solving push swap manually ! ).
 
-## Bonuses usage
+## Checker usage
 - make bonus (compiles checker executable)
 - ./checker [m] INT LIST
 - Checker waits instruction input on stdin until shutdown is triggered by CTRL + D.
