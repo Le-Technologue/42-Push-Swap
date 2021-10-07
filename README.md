@@ -6,7 +6,7 @@
 ## Usage
 - make (compiles push_swap executable)
 - ./push_swap [m] INT LIST
-- Optional "m" flag toggles step by step monitoring.
+	- Optional "m" flag toggles step by step monitoring.
 
 ## Constraints ~ ( the catch )
 Starting with randomly ordered integers on one stack, we must order these by means of a second empty stack and a limited movements set :
@@ -19,7 +19,7 @@ Starting with randomly ordered integers on one stack, we must order these by mea
 ## Interest ~ ( now what ? )
 - Our algorithm performance is solely judged against its frugality of moves. Thus, it doesn't need to be shy about checks.  
 - While this makes it a poor candidate for unbridled digital sorting on random access memory, it may shine when physical hindrances get in the way of quick random access to whatever needs sorting.
-- Tape storage or actual logistics challenges come to mind as potentially relevant for a sequential access sorting algorithm that checks twice and sorts once.
+	- Tape storage or actual logistics challenges come to mind as potentially relevant for a sequential access sorting algorithm that checks twice and sorts once.
 - From a pedagogic standpoint, this hurdle is obviously a way to get us to apply algorithmic beyond a stale copy-pasting of ubiquitous algorithms.
 
 ## Performance ~ ( not too shabby )
@@ -43,16 +43,17 @@ Measured over 600+ random sets with the "complexity" tester thoughtfully arrange
 - Parsing uses a merge sort to check for doubles and attribute keys to each our values.
 - Said keys correspond to the position of our ordered elements. Facilitating sorting, checking and optimisation down the line.
 - Stack structure is achieved thanks to arrays.  
-This data structure was favored over linked lists since we know the maximum size of our stacks from the get go, making memory reallocations unnecessary and taking advantage of cache processor optimisation for shifting/rotation of values.
+	- This data structure was favored over linked lists since we know the maximum size of our stacks from the get go, making memory reallocations unnecessary and taking advantage of cache processor optimisation for shifting/rotation of values.
 
 ## Optimization ~ ( the bag of tricks )
 - The subsets are pushed upside down on our second stack. Limiting the need for rotations when we put them back in order on our initial stack.
-- The first quicksort pass cuts our initial set in half, as well as the subset pushed to our second stack (by rotating the smaller half of that subset under itself) : Therefore, two quartiles are defined from the get go on the bigger quicksort subset.  
-The ( up to n/4 ) added rotations save pushes between both stacks and further rotations.
+- The first quicksort pass cuts our initial set in half, as well as the subset pushed to our second stack (by rotating the smaller half of that subset under itself)
+	- Therefore, two quartiles are defined early on the bigger quicksort subset.  
+	- The ( up to n/4 ) added rotations save pushes between both stacks and further rotations.
 - My insertion sort compensates its bruteforce sequential fetching by pushing neighbouring elements encountered while drawing from a stack.  
-A single swap of their destination stack is then needed to order this "doubled draw".
+	- A single swap of their destination stack is then needed to order this "doubled draw".
 - Joint instructions ( ss, rr, rrr ) are never called during actual solving of the puzzle.  
-"Raw" instructions are instead stored in a buffer. Upon completion, this buffer is read by a function which prints the function calls and joins subsequent "joinable" calls.
+	- "Raw" instructions are instead stored in a buffer. Upon completion, this buffer is read by a function which prints the function calls and joins subsequent "joinable" calls.
 
 ## Bonuses ~ ( going further ? )
 - Thanks to a reversible array of function pointers pointing to our instruction set, and the use of keys instead of actual values, checker implementation was ridiculously breezy and largely reused the solver's code, parsing and data structures in particular.
@@ -63,4 +64,4 @@ A single swap of their destination stack is then needed to order this "doubled d
 - make bonus (compiles checker executable)
 - ./checker [m] INT LIST
 - Checker waits instruction input on stdin until shutdown is triggered by CTRL + D.
-- Optional "m" flag toggles step by step monitoring.
+	- Optional "m" flag toggles step by step monitoring.
