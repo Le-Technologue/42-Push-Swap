@@ -59,7 +59,7 @@ Measured over 600+ random sets with the "complexity" tester thoughtfully arrange
 - My insertion sort compensates its bruteforce sequential fetching by pushing neighbouring elements encountered while drawing from a stack.  
 	- A single swap of their destination stack is then needed to order this "doubled draw".
 - Joint instructions ( ss, rr, rrr ) are never called during actual solving of the puzzle.  
-	- "Raw" instructions are instead stored in a buffer. Upon completion, this buffer is read by a function which prints the function calls and joins subsequent "joinable" calls.
+	- "Raw" instructions are instead stored in a buffer. Upon completion, this buffer is read by a function which prints the function calls and joins consecutive "joinable" calls.
 
 ## Bonuses ~
 ### ~ going further ?
