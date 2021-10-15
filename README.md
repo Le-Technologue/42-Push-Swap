@@ -20,7 +20,7 @@ Starting with randomly ordered integers on one stack, we must order these by mea
 ## Interest ~
 ### ~ measure twice, cut once
 - Our algorithm performance is solely judged against its frugality of moves. Thus, it doesn't need to be shy about checks.
-	- So we can find the median of our ensemble to split it, guaranteeing the optimal performance of a quicksort algorithm.  
+	- Thus we can determine the median of our set to split it evenly, guaranteeing optimal performance of a quicksort algorithm.  
 - While this makes it a poor candidate for unbridled digital sorting on random access memory, it may shine when physical hindrances get in the way of quick random access to whatever needs sorting.
 	- Tape storage or actual logistics challenges come to mind as potentially relevant for a sequential access sorting algorithm that checks twice and sorts once.
 - From a pedagogic standpoint, this hurdle is obviously a way to get us to apply algorithmic beyond a stale copy-pasting of ubiquitous algorithms.
