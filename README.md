@@ -27,7 +27,7 @@ Starting with randomly ordered integers on one stack, we must order these by mea
 
 ## Performance ~
 ### ~ not too shabby
-Measured over 600+ random sets with the "complexity" tester thoughtfully arranged by scros https://github.com/SimonCROS/push_swap/blob/master/complexity
+Measured over 600+ random sets with the "complexity" tester thoughtfully arranged by scros https://github.com/SimonCROS/complexity
 ### 100 values sets :
 - Worst : 651 moves
 - Average :	599 moves
