@@ -67,7 +67,9 @@ Measured over 600+ random sets with the "complexity" tester thoughtfully arrange
 - The checker program takes the same arguments as push_swap, but instead of sorting them, it waits for a list of valid push swap instructions on the standard input. When the standard input is closed, it tells you if those sort the stack successfully or not (OK / KO).
 - Thanks to a reversible array of function pointers pointing to our instruction set, and the use of keys instead of actual values, checker implementation was ridiculously breezy and largely reused the solver's code, parsing and data structures in particular.
 - It even takes advantage of the step by step monitoring feature implemented for push swap. Even if it isn't a considered bonus anymore, it proved crucial to debug this project.
-- The step by step monitoring feature makes the checker legible and playable ( if you ever fancy solving push swap manually ! ).
+- The step by step monitoring feature makes the checker legible and playable ( if you ever fancy solving push swap by yourself ! ).
+
+	![image](https://user-images.githubusercontent.com/73589177/156929913-70d34cf2-5a8a-40a3-9112-be738095ec68.png)
 
 ## Checker usage
 - make bonus (compiles checker executable)
